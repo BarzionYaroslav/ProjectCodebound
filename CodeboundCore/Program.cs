@@ -1,28 +1,50 @@
-﻿// See https://aka.ms/new-console-template for more information
-using System;
+﻿using System;
 using System.Threading;
+using System.Drawing;
+using ImageMagick;
 
 class Program
 {
     static void Main()
     {
-        int r = 0;
-        bool reverse = false;
-        int change_speed = 2;
+        var imageFromFile = new MagickImageCollection(@"./assets/tenna-dancing-deltarune.gif");
+        int imageNum = imageFromFile.Count;
+        uint imageWidth = imageFromFile[0].Width;
+        uint imageHeight = 32;
+        int imageFrame = 0;
+        int fps = 60;
         Console.Clear();
+        Console.CursorVisible = false;
         while (true)
         {
-            if (reverse)
-                r += change_speed;
-            else
-                r -= change_speed;
-            if (r >= 255 || r <= 0)
-                reverse = !reverse;
-            r = Math.Clamp(r, 0, 255);
-            string text = $"\e[38;2;{r};255;0mHello, World!\n\e[38;2;{r};0;255mFine day, isn't it?\e[0m";
+            string text = "";
+            var pixels = imageFromFile[imageFrame].GetPixels();
+            for (int y=0; y<imageHeight;y++)
+            {
+                for (int x = 0; x < imageWidth; x++)
+                {
+                    var col = pixels[x, y].ToColor();
+                    if (col == null)
+                    {
+                        text += " ";
+                        break;
+                    }
+                    var arr = col.ToByteArray();
+                    if (arr[3] == 255)
+                        text += $"\e[38;2;{arr[0]};{arr[1]};{arr[2]}m██";
+                    else
+                        text += " ";
+                }
+                text += "\n";
+            }
             Console.Write(text);
+            imageFrame++;
+            if (imageFrame > imageNum)
+            {
+                imageFrame = 0;
+            }
             Console.SetCursorPosition(0, 0);
-            Thread.Sleep(5);
+            Thread.Sleep(1000/fps);
         }
     }
 }

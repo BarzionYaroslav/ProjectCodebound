@@ -3,17 +3,21 @@ using System.Threading;
 using System.Drawing;
 using System.Media;
 using ImageMagick;
+using NAudio.Wave;
 
 class Program
 {
     static void Main()
     {
+        var audioFile = new AudioFileReader(@"./assets/15. Heian Alien.mp3");
+        var outputDevice = new WaveOutEvent();
+        outputDevice.Init(audioFile);
         bool resizing = false;
         string image = @"./assets/WeirdArena.gif";
-        string enemyImage = @"./assets/Ibiruai.gif";
+        string enemyImage = @"./assets/punchy_bag.gif";
         var enemyFromFile = new MagickImageCollection(enemyImage);
         var imageFromFile = new MagickImageCollection(image);
-        int imageNum = imageFromFile.Count;
+        int imageNum = enemyFromFile.Count;
         List<uint> bufferSize = new List<uint>(
             [Convert.ToUInt16(Console.BufferWidth/2),
             Convert.ToUInt16(Console.BufferHeight-1)]
@@ -35,15 +39,19 @@ class Program
         {
             if (Console.KeyAvailable)
             {
-                var key = Console.ReadKey().Key;
+                var key = Console.ReadKey(true).Key;
                 if (key == ConsoleKey.LeftArrow)
-                fps -= 1;
+                    fps -= 1;
                 if (key == ConsoleKey.RightArrow)
                     fps += 1;
-                }
+                if (key == ConsoleKey.P && outputDevice.PlaybackState != PlaybackState.Playing)
+                    outputDevice.Play();
+                if (key == ConsoleKey.S && outputDevice.PlaybackState == PlaybackState.Playing)
+                    outputDevice.Stop();
+            }
             text = "";
             stage = new MagickImage(imageFromFile[0]);
-            stage.Composite(enemyFromFile[(imageFrame/15)%(imageNum+1)],28,7+(int)(Math.Sin((MathF.PI/180)*imageFrame)*4), CompositeOperator.Over);
+            stage.Composite(enemyFromFile[(imageFrame / 5) % imageNum], 32, -6 + (int)Math.Sin((MathF.PI / 180) * imageFrame) * 2, CompositeOperator.Over);
             var pixels = stage.GetPixels();
             uint imageWidth = stage.Width;
             var imageHeight = Math.Min(stage.Height, Console.BufferHeight);
@@ -51,7 +59,13 @@ class Program
             {
                 for (int x = 0; x < imageWidth; x++)
                 {
-                    var col = pixels[x, y].ToColor();
+                    var pix = pixels[x, y];
+                    if (pix == null)
+                    {
+                        text += "  ";
+                        break;
+                    }
+                    var col = pix.ToColor();
                     if (col == null)
                     {
                         text += "  ";
@@ -65,12 +79,13 @@ class Program
                 }
                 text += "\n";
             }
-            text += $"{fps} Frames per Second | {Console.BufferWidth} width and {Console.BufferHeight} height";
+            text += $"\e[1m{fps} Frames per Second | {Console.BufferWidth} width and {Console.BufferHeight} height";
+            text += $"\nIs music playing: {outputDevice.PlaybackState == PlaybackState.Playing}";
             Console.Write(text);
             Console.ResetColor();
             imageFrame++;
             Console.SetCursorPosition(0, 0);
-            Thread.Sleep(1000/fps);
+            Thread.Sleep(1000 / fps);
         }
     }
 }

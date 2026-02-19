@@ -14,9 +14,11 @@ class Program
         outputDevice.Init(audioFile);
         bool resizing = false;
         string image = @"./assets/WeirdArena.gif";
-        string enemyImage = @"./assets/punchy_bag.gif";
+        string enemyImage = @"./assets/punchy_bad.gif";
         var enemyFromFile = new MagickImageCollection(enemyImage);
         var imageFromFile = new MagickImageCollection(image);
+        var arm1 = new MagickImageCollection(@"./assets/bad_arm1.gif");
+        var arm2 = new MagickImageCollection(@"./assets/bad_arm2.gif");
         int imageNum = enemyFromFile.Count;
         List<uint> bufferSize = new List<uint>(
             [Convert.ToUInt16(Console.BufferWidth/2),
@@ -51,7 +53,9 @@ class Program
             }
             text = "";
             stage = new MagickImage(imageFromFile[0]);
-            stage.Composite(enemyFromFile[(imageFrame / 5) % imageNum], 32, -6 + (int)Math.Sin((MathF.PI / 180) * imageFrame) * 2, CompositeOperator.Over);
+            stage.Composite(enemyFromFile[(imageFrame / 5) % imageNum], 32, -6 + (int)(Math.Sin((MathF.PI / 180) * imageFrame*4) * 3), CompositeOperator.Over);
+            stage.Composite(arm1[0], -3 + (int)(Math.Cos((MathF.PI / 180) * imageFrame*5) * 3), -3+(int)(Math.Sin((MathF.PI / 180) * imageFrame*5)*2), CompositeOperator.Over);
+            stage.Composite(arm2[0], (90-28) - (int)(Math.Cos((MathF.PI / 180) * imageFrame*5) * 3), -3+(int)(Math.Sin((MathF.PI / 180) * imageFrame*5)*2), CompositeOperator.Over);
             var pixels = stage.GetPixels();
             uint imageWidth = stage.Width;
             var imageHeight = Math.Min(stage.Height, Console.BufferHeight);

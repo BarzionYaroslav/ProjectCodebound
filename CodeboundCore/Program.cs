@@ -36,7 +36,7 @@ class Program
         int fps = 60;
         string text;
         int choice = 0;
-        Console.Clear();
+        Console.Write("\x1b[3J");
         Console.CursorVisible = false;
         MagickImage stage;
         while (!gameStopped)
@@ -99,12 +99,14 @@ class Program
                 "INVENTORY",
                 "DEFEND",
                 "RUN"
-            ], choice, "PUNCHY BAD does nothing in particular. You feel threatened nonetheless.");
+            ], choice, $"Buffer Size: {Console.BufferWidth} X {Console.BufferHeight}");
             Console.ResetColor();
             imageFrame++;
             Console.SetCursorPosition(0, 0);
             Thread.Sleep(1000 / fps);
         }
+        Console.Clear();
+        Console.Write("\x1b[4J");
     }
 
     static void DrawUi(int width1, int width2, int height, List<string> words, int choice, string rtext)
@@ -118,7 +120,7 @@ class Program
             string starter = (i < height - 2 && i % 2 == 0) || (i >= height - 2 && (height - 2 - i) % 2 == 0) ? "\e#3" : "\e#4";
             string msg = " ";
             string txt = "";
-            string col = "\e[0m";
+            string col = "\e[m";
             if ((i - 2) / 2 < wrdCount && i > 1)
             {
                 msg += words[(i - 2) / 2];
@@ -134,7 +136,7 @@ class Program
             else if (i >= height - 2)
                 text += starter + "╚" + new string('═', width1 / 2 - 1) + "╩" + new string('═', width2 / 2 - 1) + "╝\n";
             else
-                text += starter + "║" + col + msg.PadRight(width1 / 2 - 1) + "\e[0m║ " + txt.PadRight(width2 / 2 - 2) + "║\n";
+                text += starter + "║" + col + msg.PadRight(width1 / 2 - 1) + "\e[m║ " + txt.PadRight(width2 / 2 - 2) + "║\n";
         }
         Console.Write(text);
     }

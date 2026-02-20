@@ -9,11 +9,12 @@ class Program
 {
     static void Main()
     {
+        const int nativeX = 180;
+        const int nativeY = 50;
         bool gameStopped = false;
         var audioFile = new AudioFileReader(@"./assets/15. Heian Alien.mp3");
         var outputDevice = new WaveOutEvent();
         outputDevice.Init(audioFile);
-        bool resizing = false;
         string image = @"./assets/WeirdArena.gif";
         string enemyImage = @"./assets/punchy_bad.gif";
         var enemyFromFile = new MagickImageCollection(enemyImage);
@@ -21,24 +22,20 @@ class Program
         var arm1 = new MagickImageCollection(@"./assets/bad_arm1.gif");
         var arm2 = new MagickImageCollection(@"./assets/bad_arm2.gif");
         int imageNum = enemyFromFile.Count;
-        List<uint> bufferSize = new List<uint>(
-            [Convert.ToUInt16(Console.BufferWidth/2),
-            Convert.ToUInt16(Console.BufferHeight-1)]
-            );
-        if (resizing)
-        {
-            foreach (var img in imageFromFile)
-            {
-                img.Resize(bufferSize[0], bufferSize[1], FilterType.Point);
-            }
-        }
         int imageFrame = 0;
         int fps = 60;
         string text;
         int choice = 0;
-        Console.Write("\x1b[3J");
+        Console.Clear();
         Console.CursorVisible = false;
         MagickImage stage;
+        List<uint> bufferSize=new List<uint>(
+            [Convert.ToUInt16(Math.Min(Console.BufferWidth/2,nativeX/2)),
+            Convert.ToUInt16(Math.Min(Console.BufferHeight-1,nativeY-1))]
+            );
+        uint[] bufferSizePrev = [0,0];
+        bufferSize.CopyTo(bufferSizePrev);
+        (int x, int y) pos = (0, 0);
         while (!gameStopped)
         {
             if (Console.KeyAvailable)
@@ -52,21 +49,37 @@ class Program
                     choice -= 1;
                 if (key == ConsoleKey.DownArrow)
                     choice += 1;
+                if (key == ConsoleKey.R)
+                {
+                    Console.Clear();
+                }
                 if (key == ConsoleKey.Escape)
+                {
                     gameStopped = true;
+                    break;
+                }
                 if (key == ConsoleKey.P && outputDevice.PlaybackState != PlaybackState.Playing)
                     outputDevice.Play();
                 if (key == ConsoleKey.S && outputDevice.PlaybackState == PlaybackState.Playing)
                     outputDevice.Stop();
             }
             text = "";
+            bufferSize = new List<uint>(
+            [Convert.ToUInt16(Math.Min(Console.BufferWidth/2,nativeX/2)),
+            Convert.ToUInt16(Math.Min(Console.BufferHeight-1,nativeY-1))]
+            );
+            if (!Enumerable.SequenceEqual(bufferSize, bufferSizePrev))
+                Console.Clear();
+            bufferSize.CopyTo(bufferSizePrev);
             stage = new MagickImage(imageFromFile[0]);
             stage.Composite(enemyFromFile[(imageFrame / 5) % imageNum], 32, -6 + (int)(Math.Sin((MathF.PI / 180) * imageFrame * 4) * 3), CompositeOperator.Over);
             stage.Composite(arm1[0], -3 + (int)(Math.Cos((MathF.PI / 180) * imageFrame * 5) * 3), -3 + (int)(Math.Sin((MathF.PI / 180) * imageFrame * 5) * 2), CompositeOperator.Over);
             stage.Composite(arm2[0], (90 - 28) - (int)(Math.Cos((MathF.PI / 180) * imageFrame * 5) * 3), -3 + (int)(Math.Sin((MathF.PI / 180) * imageFrame * 5) * 2), CompositeOperator.Over);
+            stage.Resize(bufferSize[0], bufferSize[1], FilterType.Point);
             var pixels = stage.GetPixels();
-            uint imageWidth = stage.Width;
-            var imageHeight = Math.Min(stage.Height, Console.BufferHeight);
+            var imageWidth = stage.Width;
+            var imageHeight = stage.Height;
+            Console.SetCursorPosition(0, 0);
             for (int y = 0; y < imageHeight; y++)
             {
                 for (int x = 0; x < imageWidth; x++)
@@ -74,39 +87,41 @@ class Program
                     var pix = pixels[x, y];
                     if (pix == null)
                     {
-                        text += "  ";
+                        text += " ";
                         break;
                     }
                     var col = pix.ToColor();
                     if (col == null)
                     {
-                        text += "  ";
+                        text += " ";
                         break;
                     }
                     var arr = col.ToByteArray();
                     if (arr[3] > 0)
-                        text += $"\e[38;2;{arr[0]};{arr[1]};{arr[2]}m██\e[0m";
+                        text += $"\e#6\e[38;2;{arr[0]};{arr[1]};{arr[2]}m█\e[0m";
                     else
-                        text += "  ";
+                        text += " ";
                 }
                 text += "\n";
             }
             Console.Write(text);
-            DrawUi((int)(imageWidth * 2 * 1 / 4), (int)(imageWidth * 2 * 3 / 4), (int)bufferSize[1] - (int)imageHeight,
+            double width1 = imageWidth * 2 / 4;
+            double width2 = imageWidth * 2 * 3 / 4;
+            DrawUi((int)Math.Floor(width1), (int)Math.Floor(width2), (int)bufferSize[1] - ((int)imageHeight + 1),
             [
                 "FIGHT",
                 "SPELL",
                 "INVENTORY",
                 "DEFEND",
                 "RUN"
-            ], choice, $"Buffer Size: {Console.BufferWidth} X {Console.BufferHeight}");
+            ], choice, $"Buffer Size: {Console.BufferWidth} X {Console.BufferHeight}, {Console.CursorSize}");
+            pos = Console.GetCursorPosition();
             Console.ResetColor();
             imageFrame++;
-            Console.SetCursorPosition(0, 0);
             Thread.Sleep(1000 / fps);
         }
         Console.Clear();
-        Console.Write("\x1b[4J");
+        Console.SetCursorPosition(pos.x, pos.y);
     }
 
     static void DrawUi(int width1, int width2, int height, List<string> words, int choice, string rtext)

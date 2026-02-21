@@ -76,8 +76,30 @@ public static class Game
         var pixels = stage.GetPixels();
         var imageWidth = stage.Width;
         var imageHeight = stage.Height;
-        var text = "";
+        var text = GetImageText(pixels,imageWidth,imageHeight);
         Console.SetCursorPosition(0, 0);
+        Console.Write(text);
+        MainPanel.DrawUi();
+        Console.ResetColor();
+        imageFrame++;
+    }
+
+    public static void Input()
+    {
+        if (Console.KeyAvailable)
+        {
+            var key = Console.ReadKey(true).Key;
+            KeyPressed?.Invoke(key);
+            if (key == ConsoleKey.Escape)
+            {
+                gameStopped = true;
+            }
+        }
+    }
+
+    public static string GetImageText(IPixelCollection<byte> pixels, uint imageWidth, uint imageHeight)
+    {
+        string text = "";
         for (int y = 0; y < imageHeight; y++)
         {
             for (int x = 0; x < imageWidth; x++)
@@ -102,28 +124,12 @@ public static class Game
             }
             text += "\n";
         }
-        Console.Write(text);
-        MainPanel.DrawUi();
-        Console.ResetColor();
-        imageFrame++;
-    }
-
-    public static void Input()
-    {
-        if (Console.KeyAvailable)
-        {
-            var key = Console.ReadKey(true).Key;
-            KeyPressed?.Invoke(key);
-            if (key == ConsoleKey.Escape)
-            {
-                gameStopped = true;
-            }
-        }
+        return text;
     }
 
     public static event KeyEventHandler? KeyPressed;
 
-    static readonly Panel MainPanel = new Panel(NativeX * 1 / 4, NativeX * 3 / 4, 16, "UNOWEN");
+    static readonly Panel MainPanel = new Panel(NativeX * 1 / 4, NativeX * 3 / 4, 16, "RIKA!!!");
     const int NativeX = 180;
     const int NativeY = 50;
 }

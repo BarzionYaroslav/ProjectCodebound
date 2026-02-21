@@ -1,7 +1,9 @@
+using ImageMagick;
 namespace Codebound.System.UI;
 
 public class Panel
 {
+    private MagickImage rik = new MagickImage(@"./assets/rika.gif");
     public ButtonCollection Buttons {
         get { return buttons; }
         set
@@ -40,7 +42,7 @@ public class Panel
             }
         }
     }
-    
+
     public int Width2
     {
         get { return width2; }
@@ -52,7 +54,7 @@ public class Panel
             }
         }
     }
-    
+
     public int Width1
     {
         get { return width1; }
@@ -103,6 +105,8 @@ public class Panel
 
     public void DrawUi()
     {
+        string rika = Game.GetImageText(rik.GetPixels(), 14, 14);
+        var lines = rika.Split('\n');
         string text = "";
         int wrdCount = Buttons.Count;
         List<string> rlines = StringToLines(rtext, width2 - 2, height - 4);
@@ -121,11 +125,11 @@ public class Panel
                 txt += rlines[(i - 1) / 2];
             }
             if (i == 0)
-                text += "╔" + new string('═', width1 - 1) + "╦" + new string('═', width2 - 1) + "╗\n";
+                text += "╔" + new string('═', 28) + "╦" + new string('═', width1 - 1) + "╦" + new string('═', width2 - 1 - 29) + "╗\n";
             else if (i == height - 1)
-                text += "╚" + new string('═', width1 - 1) + "╩" + new string('═', width2 - 1) + "╝\n";
+                text += "╚" + new string('═', 28) + "╩" + new string('═', width1 - 1) + "╩" + new string('═', width2 - 1 - 29) + "╝\n";
             else
-                text += "║" + col + msg.PadRight(width1 - 1) + "\e[0m║ " + txt.PadRight(width2 - 2) + "║\n";
+                text += "║" + lines[i-1] + "║" + col + msg.PadRight(width1 - 1) + "\e[0m║ " + txt.PadRight(width2 - 2 - 29) + "║\n";
         }
         Console.Write(text);
     }

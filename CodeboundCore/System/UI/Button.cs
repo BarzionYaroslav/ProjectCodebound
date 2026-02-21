@@ -1,3 +1,4 @@
+using NetCoreAudio;
 namespace Codebound.System.UI;
 
 public class Button
@@ -7,7 +8,7 @@ public class Button
         get { return action; }
         set { action = value; }
     }
-    
+
     public string Text
     {
         get { return text; }
@@ -40,10 +41,13 @@ public class Button
 
     public static int DefaultAction()
     {
+        sounder.Play(soundPath);
         return 0;
     }
 
     private Func<int> action = DefaultAction;
     private string text = "UNOWEN";
     private readonly int MaxTextSize = 16;
+    private static readonly Player sounder = new Player();
+    private static readonly string soundPath = @"./assets/sounds/Nuhuh.wav";
 }

@@ -3,7 +3,7 @@ using System.Threading;
 using System.Drawing;
 using System.Media;
 using ImageMagick;
-using NAudio.Wave;
+using NetCoreAudio;
 
 class Program
 {
@@ -12,9 +12,9 @@ class Program
         const int nativeX = 180;
         const int nativeY = 50;
         bool gameStopped = false;
-        var audioFile = new AudioFileReader(@"./assets/15. Heian Alien.mp3");
-        var outputDevice = new WaveOutEvent();
-        outputDevice.Init(audioFile);
+        string audioFile = @"./assets/ElectricHeritage.wav";
+        Player audPlayer = new Player();
+        audPlayer.SetVolume(100);
         string image = @"./assets/WeirdArena.gif";
         string enemyImage = @"./assets/punchy_bad.gif";
         var enemyFromFile = new MagickImageCollection(enemyImage);
@@ -29,11 +29,11 @@ class Program
         Console.Clear();
         Console.CursorVisible = false;
         MagickImage stage;
-        List<uint> bufferSize=new List<uint>(
+        List<uint> bufferSize = new List<uint>(
             [Convert.ToUInt16(Math.Min(Console.BufferWidth/2,nativeX/2)),
             Convert.ToUInt16(Math.Min(Console.BufferHeight-1,nativeY-1))]
             );
-        uint[] bufferSizePrev = [0,0];
+        uint[] bufferSizePrev = [0, 0];
         bufferSize.CopyTo(bufferSizePrev);
         (int x, int y) pos = (0, 0);
         while (!gameStopped)
@@ -58,10 +58,10 @@ class Program
                     gameStopped = true;
                     break;
                 }
-                if (key == ConsoleKey.P && outputDevice.PlaybackState != PlaybackState.Playing)
-                    outputDevice.Play();
-                if (key == ConsoleKey.S && outputDevice.PlaybackState == PlaybackState.Playing)
-                    outputDevice.Stop();
+                if (key == ConsoleKey.P && !audPlayer.Playing)
+                    audPlayer.Play(audioFile);
+                if (key == ConsoleKey.S && audPlayer.Playing)
+                    audPlayer.Stop();
             }
             text = "";
             bufferSize = new List<uint>(
@@ -87,20 +87,20 @@ class Program
                     var pix = pixels[x, y];
                     if (pix == null)
                     {
-                        text += " ";
+                        text += "  ";
                         break;
                     }
                     var col = pix.ToColor();
                     if (col == null)
                     {
-                        text += " ";
+                        text += "  ";
                         break;
                     }
                     var arr = col.ToByteArray();
                     if (arr[3] > 0)
-                        text += $"\e#6\e[38;2;{arr[0]};{arr[1]};{arr[2]}m█\e[0m";
+                        text += $"\e[38;2;{arr[0]};{arr[1]};{arr[2]}m██\e[0m";
                     else
-                        text += " ";
+                        text += "  ";
                 }
                 text += "\n";
             }
@@ -114,7 +114,7 @@ class Program
                 "INVENTORY",
                 "DEFEND",
                 "RUN"
-            ], choice, $"Buffer Size: {Console.BufferWidth} X {Console.BufferHeight}, {Console.CursorSize}");
+            ], choice, $"So, like, I can add some 🪶Feathers🪶, but apparently BIG TEXT is a bit out of my league suddenly, how the fuck is THAT fair-? Who made those Unicodes and ANSI break codes where big text doesn't even fucking work half the time with the different font sizes being impossible to edit in runtime???");
             pos = Console.GetCursorPosition();
             Console.ResetColor();
             imageFrame++;
@@ -128,30 +128,29 @@ class Program
     {
         string text = "";
         int wrdCount = words.Count;
-        List<string> rlines = StringToLines(rtext, width2/2 - 4, (height - 4) / 2);
+        List<string> rlines = StringToLines(rtext, width2 - 2, height - 4);
         int linecount = rlines.Count;
         for (int i = 0; i < height; i++)
         {
-            string starter = (i < height - 2 && i % 2 == 0) || (i >= height - 2 && (height - 2 - i) % 2 == 0) ? "\e#3" : "\e#4";
-            string msg = " ";
+            string msg = "  ";
             string txt = "";
             string col = "\e[m";
-            if ((i - 2) / 2 < wrdCount && i > 1)
+            if ((i - 1) / 2 < wrdCount && i > 0 && i % 2 == 0)
             {
-                msg += words[(i - 2) / 2];
+                msg += words[(i - 1) / 2];
             }
-            if ((i - 2) / 2 < linecount && i > 1)
+            if ((i - 1) / 2 < linecount && i > 0 && i % 2 == 0)
             {
-                txt += rlines[(i - 2) / 2];
+                txt += rlines[(i - 1) / 2];
             }
-            if (choice == (i - 2) / 2)
+            if (choice == (i - 1) / 2)
                 col = "\e[38:5:220m";
-            if (i <= 1)
-                text += starter + "╔" + new string('═', width1 / 2 - 1) + "╦" + new string('═', width2 / 2 - 1) + "╗\n";
-            else if (i >= height - 2)
-                text += starter + "╚" + new string('═', width1 / 2 - 1) + "╩" + new string('═', width2 / 2 - 1) + "╝\n";
+            if (i == 0)
+                text += "╔" + new string('═', width1 - 1) + "╦" + new string('═', width2 - 1) + "╗\n";
+            else if (i == height - 1)
+                text += "╚" + new string('═', width1 - 1) + "╩" + new string('═', width2 - 1) + "╝\n";
             else
-                text += starter + "║" + col + msg.PadRight(width1 / 2 - 1) + "\e[m║ " + txt.PadRight(width2 / 2 - 2) + "║\n";
+                text += "║" + col + msg.PadRight(width1 - 1) + "\e[m║ " + txt.PadRight(width2 - 2) + "║\n";
         }
         Console.Write(text);
     }
@@ -161,7 +160,7 @@ class Program
         List<string> answer = new List<string>();
         int left = 0;
         int space;
-        while (answer.Count<maxLines)
+        while (answer.Count < maxLines)
         {
             if (text.Length - left <= size)
             {
@@ -179,7 +178,7 @@ class Program
             if (text[left] == ' ')
                 answer.Add(text.Substring(left + 1, space - left));
             else
-                answer.Add(text.Substring(left, space-left));
+                answer.Add(text.Substring(left, space - left));
             left = space;
         }
         return answer;

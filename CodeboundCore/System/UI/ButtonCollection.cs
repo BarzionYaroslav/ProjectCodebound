@@ -56,7 +56,7 @@ public class ButtonCollection
     {
         if (change != 0)
         {
-            if (sound)
+            if (sound && (!sounder.Playing))
             {
                 sounder.Play(ChangeSound);
             }

@@ -41,7 +41,8 @@ public class Button
 
     public static int DefaultAction()
     {
-        sounder.Play(soundPath);
+        if (!sounder.Playing)
+            sounder.Play(soundPath);
         return 0;
     }
 

@@ -1,9 +1,10 @@
 using ImageMagick;
+using Codebound.Drawing;
 namespace Codebound.System.UI;
 
 public class Panel
 {
-    private MagickImage rik = new MagickImage(@"./assets/rika.gif");
+    private Icon rik = new Icon(@"./assets/rika.gif",0);
     public ButtonCollection Buttons {
         get { return buttons; }
         set
@@ -89,6 +90,9 @@ public class Panel
     {
         switch (key)
         {
+            case ConsoleKey.T:
+                RText = $"{Console.BufferWidth} X {Console.BufferHeight}";
+                break;
             case ConsoleKey.UpArrow:
                 Buttons.SubstractChoice(true);
                 break;
@@ -105,7 +109,7 @@ public class Panel
 
     public void DrawUi()
     {
-        string rika = Game.GetImageText(rik.GetPixels(), 14, 14);
+        string rika = rik.GetImageText();
         var lines = rika.Split('\n');
         string text = "";
         int wrdCount = Buttons.Count;
@@ -165,6 +169,7 @@ public class Panel
 
     public static int RunCommand()
     {
+        Game.MainPanel.RText = "And so, you ran away...";
         Game.GameStopped = true;
         return 0;
     }

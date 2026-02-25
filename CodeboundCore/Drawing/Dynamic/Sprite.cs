@@ -93,7 +93,12 @@ public class Sprite: IDrawableDynamic
     }
     public MagickImage GetFrame()
     {
-        MagickImage answer = (MagickImage)Image[(int)ImageIndex];
+        MagickImage tempFrame = (MagickImage)Image[(int)ImageIndex];
+        MagickImage answer = new MagickImage(
+            new MagickColor(0, 0, 0, 0),
+            tempFrame.Width,
+            tempFrame.Height);
+        answer.CopyPixels(tempFrame);
         answer.Resize(
             (uint)(DrawWidth - Z),
             (uint)(DrawHeight - Z),

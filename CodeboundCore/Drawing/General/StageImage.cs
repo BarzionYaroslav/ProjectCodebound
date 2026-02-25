@@ -49,8 +49,7 @@ public class StageImage: IDrawable
         get { return alpha; }
         set
         {
-            if (value >= 0 && value <= 255)
-                alpha = value;
+            alpha = Math.Clamp(value, 0, 255);
         }
         }
 
@@ -107,7 +106,12 @@ public class StageImage: IDrawable
     }
     public MagickImage GetFrame()
     {
-        MagickImage answer = (MagickImage)Image[(int)ImageIndex];
+        MagickImage tempFrame = (MagickImage)Image[(int)ImageIndex];
+        MagickImage answer = new MagickImage(
+            new MagickColor(0, 0, 0, 0),
+            tempFrame.Width,
+            tempFrame.Height);
+        answer.CopyPixels(tempFrame);
         answer.Resize(
             (uint)DrawWidth,
             (uint)DrawHeight,

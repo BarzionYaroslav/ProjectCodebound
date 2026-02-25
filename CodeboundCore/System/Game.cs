@@ -81,14 +81,14 @@ public static class Game
                 waitTime = 0;
             Thread.Sleep(waitTime);
         }
-        while (Stage.Alpha!=0)
+        while (Stage.Alpha>0)
         {
             var watch = Stopwatch.StartNew();
-            Stage.Alpha -= 3;
+            Stage.Alpha -= QuitChange;
             Render();
             watch.Stop();
             var timeTaken = (int)watch.ElapsedMilliseconds;
-            int waitTime = (1000 / fps) - timeTaken;
+            int waitTime = QuitDelay - timeTaken;
             if (waitTime < 0)
                 waitTime = 0;
             Thread.Sleep(waitTime);
@@ -113,31 +113,11 @@ public static class Game
         Siner++;
     }
 
-    //This will live here for now, until I get better code done...
     public static void Render()
     {
 
         for (int i = MaxDepth; i >= 0; i--)
             RenderStarted?.Invoke(stage, i);
-        // string image = @"./assets/WeirdArena.gif";
-        // string enemyImage = @"./assets/punchy_bad.gif";
-        // var enemyFromFile = new MagickImageCollection(enemyImage);
-        // var imageFromFile = new MagickImageCollection(image);
-        // var arm1 = new MagickImageCollection(@"./assets/bad_arm1.gif");
-        // var arm2 = new MagickImageCollection(@"./assets/bad_arm2.gif");
-        // int imageNum = enemyFromFile.Count;
-        // Console.SetCursorPosition(0, 0);
-        // stage.Composite(imageFromFile[0],0,0,CompositeOperator.Over);
-        // stage.Composite(enemyFromFile[(imageFrame / 4) % imageNum], 32, -6 + (int)(Math.Sin((MathF.PI / 180) * imageFrame * 4) * 3), CompositeOperator.Over);
-        // int z = (int)(Math.Sin((MathF.PI / 180) * imageFrame * 5) * 4);
-        // arm1[0].Resize((uint)(arm1[0].Width - z), (uint)(arm1[0].Height - z), FilterType.Point);
-        // arm1[0].Colorize(new MagickColor(0, 0, 0, 0),new Percentage((z+4)*5));
-        // stage.Composite(arm1[0], (int)z - 3 + (int)(Math.Cos((MathF.PI / 180) * imageFrame * 5) * 3), -3 + (int)(Math.Sin((MathF.PI / 180) * imageFrame * 5) * 2), CompositeOperator.Over);
-        // z = (int)(Math.Sin(180+(MathF.PI / 180) * imageFrame * 5) * 4);
-        // arm2[0].Resize((uint)(arm2[0].Width - z), (uint)(arm2[0].Height - z), FilterType.Point);
-        // arm2[0].Colorize(new MagickColor(0, 0, 0, 0),new Percentage((z+4)*5));
-        // stage.Composite(arm2[0], (int)z+(90 - 28) - (int)(Math.Cos((MathF.PI / 180) * imageFrame * 5) * 3), -3 + (int)(Math.Sin((MathF.PI / 180) * imageFrame * 5) * 2), CompositeOperator.Over);
-        // stage.Resize(bufferSize[0], bufferSize[1], FilterType.Point);
         var text = stage.GetImageText();
         Console.SetCursorPosition(0, 0);
         Console.Write(text);
@@ -163,7 +143,8 @@ public static class Game
     public static event UpdateEventHandler? UpdateStarted;
     public static event BufferChangeEventHandler? BufferChanged;
 
-
+    public const int QuitDelay = 5;
+    public const int QuitChange = 10;
     public const int DefaultFps = 60;
     public const int StageWidth = 90;
     public const int StageHeight = 32;

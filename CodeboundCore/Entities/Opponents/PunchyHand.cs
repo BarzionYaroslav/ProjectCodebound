@@ -15,10 +15,6 @@ public class PunchyBadHand : Enemy
     
     public override void UpdateValues()
     {
-        // int z = (int)(Math.Sin((MathF.PI / 180) * imageFrame * 5) * 4);
-        // stage.Composite(arm1[0], (int)z - 3 + (int)(Math.Cos((MathF.PI / 180) * imageFrame * 5) * 3), -3 + (int)(Math.Sin((MathF.PI / 180) * imageFrame * 5) * 2), CompositeOperator.Over);
-        // z = (int)(Math.Sin(180+(MathF.PI / 180) * imageFrame * 5) * 4);
-        // stage.Composite(arm2[0], (int)z+(90 - 28) - (int)(Math.Cos((MathF.PI / 180) * imageFrame * 5) * 3), -3 + (int)(Math.Sin((MathF.PI / 180) * imageFrame * 5) * 2), CompositeOperator.Over);
         double change;
         if (!flip)
         {

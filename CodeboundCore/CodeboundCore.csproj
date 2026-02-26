@@ -7,4 +7,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="14.10.3" />
+    <PackageReference Include="Magick.NET.Core" Version="14.10.3" />
+    <PackageReference Include="NetCoreAudio" Version="2.0.1" />
+  </ItemGroup>
+
 </Project>

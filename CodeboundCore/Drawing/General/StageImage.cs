@@ -58,6 +58,7 @@ public class StageImage: IDrawable
         DrawHeight = (int)Image[0].Height;
         DrawWidth = (int)Image[0].Width;
         Game.UpdateStarted += UpdateValues;
+        Game.BufferChanged += Resizer;
     }
 
     public StageImage(uint width, uint height)
@@ -74,6 +75,7 @@ public class StageImage: IDrawable
         DrawHeight = (int)Image[0].Height;
         DrawWidth = (int)Image[0].Width;
         Game.UpdateStarted += UpdateValues;
+        Game.BufferChanged += Resizer;
     }
 
     public StageImage(string path, float imageSpeed)
@@ -84,6 +86,7 @@ public class StageImage: IDrawable
         DrawHeight = (int)Image[0].Height;
         DrawWidth = (int)Image[0].Width;
         Game.UpdateStarted += UpdateValues;
+        Game.BufferChanged += Resizer;
     }
 
     public StageImage(MagickImage copier)
@@ -93,25 +96,29 @@ public class StageImage: IDrawable
         DrawHeight = (int)Image[0].Height;
         DrawWidth = (int)Image[0].Width;
         Game.UpdateStarted += UpdateValues;
+        Game.BufferChanged += Resizer;
     }
 
     public void Dispose()
     {
         Game.UpdateStarted -= UpdateValues;
+        Game.BufferChanged -= Resizer;
     }
 
     public void UpdateValues()
     {
         ImageIndex += ImageSpeed;
     }
+
+    public void Resizer(int width, int height)
+    {
+        DrawHeight = height;
+        DrawWidth = width/2;
+    }
+
     public MagickImage GetFrame()
     {
-        MagickImage tempFrame = (MagickImage)Image[(int)ImageIndex];
-        MagickImage answer = new MagickImage(
-            new MagickColor(0, 0, 0, 0),
-            tempFrame.Width,
-            tempFrame.Height);
-        answer.CopyPixels(tempFrame);
+        MagickImage answer = (MagickImage)Image[(int)ImageIndex];
         answer.Resize(
             (uint)DrawWidth,
             (uint)DrawHeight,
@@ -119,6 +126,7 @@ public class StageImage: IDrawable
             );
         return answer;
     }
+
     public List<string> GetLines()
     {
         List<string> answer = new List<string>();
@@ -126,6 +134,7 @@ public class StageImage: IDrawable
             answer.Add(GetLine(num));
         return answer;
     }
+
     public string GetLine(int num)
     {
         uint imageWidth = this.Frame.Width;
@@ -138,6 +147,7 @@ public class StageImage: IDrawable
             text += GetPixelText(x, num, pixels);
         return text;
     }
+
     public string GetImageText()
     {
         uint imageWidth = this.Frame.Width;

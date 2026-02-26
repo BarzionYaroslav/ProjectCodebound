@@ -64,7 +64,7 @@ public static class Game
         Console.CursorVisible = false;
         bufferSize = new List<uint>(
             [Convert.ToUInt16(Math.Min(Console.BufferWidth,NativeX)),
-            Convert.ToUInt16(Math.Min(Console.BufferHeight-1,NativeY-1))]
+            Convert.ToUInt16(Math.Min(Console.BufferHeight,NativeY))]
             );
         bufferSize.CopyTo(bufferSizePrev);
         while (!gameStopped)
@@ -73,7 +73,16 @@ public static class Game
             Input();
             Update();
             CheckBufferSize();
-            Render();
+            //Bandaid solution for the time being. I'll figure it out later
+            if (bufferSize[0] < NativeX || bufferSize[1] < NativeY)
+            {
+                Console.SetCursorPosition(0, 0);
+                Console.Write($"Due to the resize code being unfinished, it's impossible to render the game at the buffer size less than {NativeX} X {NativeY}\n");
+                Console.Write("Please make sure it's at least that by editing the console settings!\n");
+                Console.Write($"Current Buffer Size: {bufferSize[0]} X {bufferSize[1]}");
+            }
+            else    
+                Render();
             watch.Stop();
             var timeTaken = (int)watch.ElapsedMilliseconds;
             int waitTime = (1000 / fps) - timeTaken;
@@ -99,7 +108,7 @@ public static class Game
     {
         bufferSize = new List<uint>(
             [Convert.ToUInt16(Math.Min(Console.BufferWidth,NativeX)),
-            Convert.ToUInt16(Math.Min(Console.BufferHeight-1,NativeY-1))]
+            Convert.ToUInt16(Math.Min(Console.BufferHeight,NativeY))]
             );
             if (!Enumerable.SequenceEqual(bufferSize, bufferSizePrev))
                 Console.Clear();

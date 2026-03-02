@@ -9,7 +9,7 @@ public class PunchyBadHand : Enemy
     public PunchyBadHand(string name, int def, int atk, int hp, int maxHp, Sprite body, bool flip)
     : base(name, def, atk, hp, maxHp, body)
     {
-        Game.UpdateStarted += UpdateValues;
+        GameManager.UpdateStarted += UpdateValues;
         Flip = flip;
     }
     
@@ -18,20 +18,20 @@ public class PunchyBadHand : Enemy
         double change;
         if (!flip)
         {
-            change = Math.Sin((MathF.PI / 180) * Game.Siner * 5) * 4;
+            change = Math.Sin((MathF.PI / 180) * GameManager.Siner * 5) * 4;
             Body.Z = (int)change;
-            change = Math.Cos((MathF.PI / 180) * Game.Siner * 5) * 3;
+            change = Math.Cos((MathF.PI / 180) * GameManager.Siner * 5) * 3;
             Body.X = Body.StartX + (int)change;
-            change = Math.Sin((MathF.PI / 180) * Game.Siner * 5) * 2;
+            change = Math.Sin((MathF.PI / 180) * GameManager.Siner * 5) * 2;
             Body.Y = Body.StartY + (int)change;
         }
         else
         {
-            change = Math.Sin(180+(MathF.PI / 180) * Game.Siner * 5) * 4;
+            change = Math.Sin(180+(MathF.PI / 180) * GameManager.Siner * 5) * 4;
             Body.Z = (int)change;
-            change = Math.Cos((MathF.PI / 180) * Game.Siner * 5) * 3;
+            change = Math.Cos((MathF.PI / 180) * GameManager.Siner * 5) * 3;
             Body.X = Body.StartX + (int)change;
-            change = Math.Sin((MathF.PI / 180) * Game.Siner * 5) * 2;
+            change = Math.Sin((MathF.PI / 180) * GameManager.Siner * 5) * 2;
             Body.Y = Body.StartY + (int)change;
         }
         

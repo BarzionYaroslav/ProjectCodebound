@@ -12,6 +12,6 @@ class Program
         var enmArm1 = new PunchyBadHand("Bad Hand", 0, 0, 10, 15, arm1, false);
         var enmArm2 = new PunchyBadHand("Bad Hand", 0, 0, 10, 15, arm2, true);
         var bg = new Backdrop(@"./assets/WeirdArena.gif", 0, 0, 0, 15);
-        Game.GameLoop();
+        GameManager.Instance.GameLoop();
     }
 }

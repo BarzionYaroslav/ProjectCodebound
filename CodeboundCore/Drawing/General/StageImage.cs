@@ -57,8 +57,8 @@ public class StageImage: IDrawable
     {
         DrawHeight = (int)Image[0].Height;
         DrawWidth = (int)Image[0].Width;
-        Game.UpdateStarted += UpdateValues;
-        Game.BufferChanged += Resizer;
+        GameManager.UpdateStarted += UpdateValues;
+        GameManager.BufferChanged += Resizer;
     }
 
     public StageImage(uint width, uint height)
@@ -74,8 +74,8 @@ public class StageImage: IDrawable
         );
         DrawHeight = (int)Image[0].Height;
         DrawWidth = (int)Image[0].Width;
-        Game.UpdateStarted += UpdateValues;
-        Game.BufferChanged += Resizer;
+        GameManager.UpdateStarted += UpdateValues;
+        GameManager.BufferChanged += Resizer;
     }
 
     public StageImage(string path, float imageSpeed)
@@ -85,8 +85,8 @@ public class StageImage: IDrawable
         ImageSpeed = imageSpeed;
         DrawHeight = (int)Image[0].Height;
         DrawWidth = (int)Image[0].Width;
-        Game.UpdateStarted += UpdateValues;
-        Game.BufferChanged += Resizer;
+        GameManager.UpdateStarted += UpdateValues;
+        GameManager.BufferChanged += Resizer;
     }
 
     public StageImage(MagickImage copier)
@@ -95,14 +95,14 @@ public class StageImage: IDrawable
         ImageSpeed = 0;
         DrawHeight = (int)Image[0].Height;
         DrawWidth = (int)Image[0].Width;
-        Game.UpdateStarted += UpdateValues;
-        Game.BufferChanged += Resizer;
+        GameManager.UpdateStarted += UpdateValues;
+        GameManager.BufferChanged += Resizer;
     }
 
     public void Dispose()
     {
-        Game.UpdateStarted -= UpdateValues;
-        Game.BufferChanged -= Resizer;
+        GameManager.UpdateStarted -= UpdateValues;
+        GameManager.BufferChanged -= Resizer;
     }
 
     public void UpdateValues()

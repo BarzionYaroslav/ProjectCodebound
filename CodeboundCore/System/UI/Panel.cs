@@ -83,6 +83,7 @@ public class Panel
         {
             buttons.Add(i);
         }
+        buttons.Link = this;
         GameManager.KeyPressed += HandleControls;
     }
 
@@ -167,11 +168,11 @@ public class Panel
         return answer;
     }
 
-    public static int RunCommand()
+    public static void RunCommand(Panel? panel)
     {
-        //Game.MainPanel.RText = "And so, you ran away...";
+        if (panel!=null)
+            panel.RText = "And so, you ran away...";
         GameManager.Instance.EndGame();
-        return 0;
     }
 
     readonly IEnumerable<Button> DefaultButtons = new List<Button>(

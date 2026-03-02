@@ -94,7 +94,10 @@ public static class Game
         {
             var watch = Stopwatch.StartNew();
             Stage.Alpha -= QuitChange;
-            Render();
+            CheckBufferSize();
+            //Bandaid solution for the time being. I'll figure it out later
+            if (!(bufferSize[0] < NativeX || bufferSize[1] < NativeY))
+                Render();
             watch.Stop();
             var timeTaken = (int)watch.ElapsedMilliseconds;
             int waitTime = QuitDelay - timeTaken;

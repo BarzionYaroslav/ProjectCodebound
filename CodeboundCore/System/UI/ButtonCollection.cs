@@ -16,6 +16,12 @@ public class ButtonCollection
                 choice = value % Count;
         }
     }
+    public Panel? Link
+    {
+        get { return link; }
+        set { link = value; }
+    }
+    private Panel? link;
     private int choice = 0;
     private Player sounder = new Player();
 
@@ -76,7 +82,7 @@ public class ButtonCollection
 
     public void ExecuteChoice()
     {
-        _list[choice].Action();
+        _list[choice].Action(link!);
     }
 
     public string GetTextColor(int ind)
@@ -100,7 +106,7 @@ public class ButtonCollection
         return _list.GetEnumerator();
     }
 
-    const string DefaultSelectCol = "\e[38:5:220m";
+    const string DefaultSelectCol = "\e[38;2;255;255;0m";
     const string ColorReset = "\e[0m";
     const string ChangeSound = @"./assets/sounds/CursorMove.wav";
 }

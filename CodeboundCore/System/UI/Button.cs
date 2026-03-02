@@ -1,9 +1,10 @@
 using NetCoreAudio;
 namespace Codebound.System.UI;
 
+public delegate void ButtonAction(Panel panel);
 public class Button
 {
-    public Func<int> Action
+    public ButtonAction Action
     {
         get { return action; }
         set { action = value; }
@@ -33,20 +34,19 @@ public class Button
         this.Text = text;
     }
 
-    public Button(string text, Func<int> action)
+    public Button(string text, ButtonAction action)
     {
         this.Text = text;
         this.Action = action;
     }
 
-    public static int DefaultAction()
+    public static void DefaultAction(Panel panel)
     {
         if (!sounder.Playing)
             sounder.Play(soundPath);
-        return 0;
     }
 
-    private Func<int> action = DefaultAction;
+    private ButtonAction action = DefaultAction;
     private string text = "UNOWEN";
     private readonly int MaxTextSize = 16;
     private static readonly Player sounder = new Player();

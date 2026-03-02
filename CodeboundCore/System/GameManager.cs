@@ -9,56 +9,63 @@ using Codebound.Entities.Opponents;
 
 namespace Codebound.System;
 
+
 public delegate void KeyEventHandler(ConsoleKey key);
 public delegate void UpdateEventHandler();
 public delegate void RenderEventHandler(StageImage stage, int depth);
 public delegate void BufferChangeEventHandler(int width, int height);
-public static class Game
+public class GameManager
 {
-    static public Panel MainPanel
-    {
-        get { return mainPanel; }
-        set
-        {
-            if (value != null)
-                mainPanel = value;
-            else
-                throw new NullReferenceException();
-        }
-    }
+    public int QuitDelay { get; private set; }
+    public int QuitChange { get; private set; }
+    public int StageWidth { get; private set; }
+    public int StageHeight { get; private set; }
+    public int NativeX { get; private set; }
+    public int NativeY { get; private set; }
+    public int MaxDepth { get; private set; }
+    public int Fps { get; private set; }
     static public int Siner
     {
         get { return siner; }
-        set { siner = value % 360; }
+        private set { siner = value % 360; }
     }
-    static public StageImage Stage
+    static private int siner;
+    private bool gameStopped = false;
+    private List<uint> bufferSize = new List<uint>();
+    private uint[] bufferSizePrev = [0, 0];
+    private static GameManager? _instance;
+    public static GameManager Instance
     {
-        get { return stage; }
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = new GameManager();
+            }
+            return _instance;
+        }
     }
-    static public int Fps
-    {
-        get { return fps; }
-        set { fps = value; }
-    }
-    static public bool GameStopped
-    {
-        get { return gameStopped; }
-        set { gameStopped = value; }
-    }
-    static public List<uint> BufferSize => bufferSize;
-    static private bool gameStopped = false;
-    static private List<uint> bufferSize = new List<uint>();
-    static private uint[] bufferSizePrev = [0, 0];
-    static private int fps = DefaultFps;
-    static private int siner = 0;
-    static private Panel mainPanel = new Panel(NativeX * 1 / 4, NativeX * 3 / 4, 16, "RIKA!!!");
-    static private Wave currentWave = new Wave();
-    static private StageImage stage = new StageImage(
-        StageWidth,
-        StageHeight
-    );
+    private Panel mainPanel;
+    private Wave currentWave;
+    private StageImage stage;
 
-    public static void GameLoop()
+    private GameManager()
+    {
+        QuitDelay = 5;
+        QuitChange = 10;
+        Fps = 60;
+        StageWidth = 90;
+        StageHeight = 32;
+        NativeX = 180;
+        NativeY = 50;
+        MaxDepth = 16;
+        Siner = 0;
+        stage = new StageImage((uint)StageWidth, (uint)StageHeight);
+        currentWave = new Wave();
+        mainPanel = new Panel(NativeX * 1 / 4, NativeX * 3 / 4, 16, "RIKA!!!");
+    }
+
+    public void GameLoop()
     {
         Console.Clear();
         Console.CursorVisible = false;
@@ -81,19 +88,19 @@ public static class Game
                 Console.Write("Please make sure it's at least that by editing the console settings!\n");
                 Console.Write($"Current Buffer Size: {bufferSize[0]} X {bufferSize[1]}");
             }
-            else    
+            else
                 Render();
             watch.Stop();
             var timeTaken = (int)watch.ElapsedMilliseconds;
-            int waitTime = (1000 / fps) - timeTaken;
+            int waitTime = (1000 / Fps) - timeTaken;
             if (waitTime < 0)
                 waitTime = 0;
             Thread.Sleep(waitTime);
         }
-        while (Stage.Alpha>0)
+        while (stage.Alpha > 0)
         {
             var watch = Stopwatch.StartNew();
-            Stage.Alpha -= QuitChange;
+            stage.Alpha -= QuitChange;
             CheckBufferSize();
             //Bandaid solution for the time being. I'll figure it out later
             if (!(bufferSize[0] < NativeX || bufferSize[1] < NativeY))
@@ -107,25 +114,25 @@ public static class Game
         }
     }
 
-    public static void CheckBufferSize()
+    private void CheckBufferSize()
     {
         bufferSize = new List<uint>(
             [Convert.ToUInt16(Math.Min(Console.BufferWidth,NativeX)),
             Convert.ToUInt16(Math.Min(Console.BufferHeight,NativeY))]
             );
-            if (!Enumerable.SequenceEqual(bufferSize, bufferSizePrev))
-                Console.Clear();
+        if (!Enumerable.SequenceEqual(bufferSize, bufferSizePrev))
+            Console.Clear();
         bufferSize.CopyTo(bufferSizePrev);
         BufferChanged?.Invoke((int)bufferSize[0], (int)bufferSize[1]);
     }
 
-    public static void Update()
+    private void Update()
     {
         UpdateStarted?.Invoke();
         Siner++;
     }
 
-    public static void Render()
+    private void Render()
     {
 
         for (int i = MaxDepth; i >= 0; i--)
@@ -133,11 +140,11 @@ public static class Game
         var text = stage.GetImageText();
         Console.SetCursorPosition(0, 0);
         Console.Write(text);
-        MainPanel.DrawUi();
+        mainPanel.DrawUi();
         Console.ResetColor();
     }
 
-    public static void Input()
+    private void Input()
     {
         if (Console.KeyAvailable)
         {
@@ -145,22 +152,18 @@ public static class Game
             KeyPressed?.Invoke(key);
             if (key == ConsoleKey.Escape)
             {
-                gameStopped = true;
+                EndGame();
             }
         }
     }
 
-    public static event KeyEventHandler? KeyPressed;
-    public static event RenderEventHandler? RenderStarted;
-    public static event UpdateEventHandler? UpdateStarted;
-    public static event BufferChangeEventHandler? BufferChanged;
+    public void EndGame()
+    {
+        gameStopped = true;
+    }
 
-    public const int QuitDelay = 5;
-    public const int QuitChange = 10;
-    public const int DefaultFps = 60;
-    public const int StageWidth = 90;
-    public const int StageHeight = 32;
-    public const int NativeX = 180;
-    public const int NativeY = 50;
-    public const int MaxDepth = 16;
+    static public event KeyEventHandler? KeyPressed;
+    static public event RenderEventHandler? RenderStarted;
+    static public event UpdateEventHandler? UpdateStarted;
+    static public event BufferChangeEventHandler? BufferChanged;
 }

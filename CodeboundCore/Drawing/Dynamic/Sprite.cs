@@ -47,7 +47,7 @@ public class Sprite: IDrawableDynamic
         get { return depth; }
         set
         {
-            if (value >= 0 && value <= Game.MaxDepth)
+            if (value >= 0)
                 depth = value;
         } 
     }
@@ -56,8 +56,8 @@ public class Sprite: IDrawableDynamic
     {
         DrawHeight = (int)Image[0].Height;
         DrawWidth = (int)Image[0].Width;
-        Game.UpdateStarted += UpdateValues;
-        Game.RenderStarted += Draw;
+        GameManager.UpdateStarted += UpdateValues;
+        GameManager.RenderStarted += Draw;
     }
     public Sprite(string path, int x, int y, float imageSpeed, int depth)
     {
@@ -71,8 +71,8 @@ public class Sprite: IDrawableDynamic
         StartY = Y;
         DrawHeight = (int)Image[0].Height;
         DrawWidth = (int)Image[0].Width;
-        Game.UpdateStarted += UpdateValues;
-        Game.RenderStarted += Draw;
+        GameManager.UpdateStarted += UpdateValues;
+        GameManager.RenderStarted += Draw;
     }
     public void Draw(StageImage stage, int depth)
     {
@@ -84,8 +84,8 @@ public class Sprite: IDrawableDynamic
     }
     public void Dispose()
     {
-        Game.UpdateStarted -= UpdateValues;
-        Game.RenderStarted -= Draw;
+        GameManager.UpdateStarted -= UpdateValues;
+        GameManager.RenderStarted -= Draw;
     }
     public void UpdateValues()
     {

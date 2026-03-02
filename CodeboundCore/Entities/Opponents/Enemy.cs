@@ -81,7 +81,7 @@ public class Enemy : IEntity
         MaxHp = maxHp;
         Hp = hp;
         this.body = body;
-        Game.UpdateStarted += UpdateValues;
+        GameManager.UpdateStarted += UpdateValues;
     }
 
     public virtual void UpdateValues(){}

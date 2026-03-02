@@ -50,7 +50,7 @@ public class Icon: IDrawable
     {
         DrawHeight = (int)Image[0].Height;
         DrawWidth = (int)Image[0].Width;
-        Game.UpdateStarted += UpdateValues;
+        GameManager.UpdateStarted += UpdateValues;
     }
 
     public Icon(string path, float imageSpeed)
@@ -60,12 +60,12 @@ public class Icon: IDrawable
         ImageSpeed = imageSpeed;
         DrawHeight = (int)Image[0].Height;
         DrawWidth = (int)Image[0].Width;
-        Game.UpdateStarted += UpdateValues;
+        GameManager.UpdateStarted += UpdateValues;
     }
 
     public void Dispose()
     {
-        Game.UpdateStarted -= UpdateValues;
+        GameManager.UpdateStarted -= UpdateValues;
     }
 
     public void UpdateValues()

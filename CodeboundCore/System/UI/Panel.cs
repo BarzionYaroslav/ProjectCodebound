@@ -83,7 +83,7 @@ public class Panel
         {
             buttons.Add(i);
         }
-        Game.KeyPressed += HandleControls;
+        GameManager.KeyPressed += HandleControls;
     }
 
     public void HandleControls(ConsoleKey key)
@@ -169,8 +169,8 @@ public class Panel
 
     public static int RunCommand()
     {
-        Game.MainPanel.RText = "And so, you ran away...";
-        Game.GameStopped = true;
+        //Game.MainPanel.RText = "And so, you ran away...";
+        GameManager.Instance.EndGame();
         return 0;
     }
 

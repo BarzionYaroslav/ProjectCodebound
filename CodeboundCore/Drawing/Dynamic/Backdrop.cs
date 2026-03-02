@@ -53,7 +53,7 @@ public class Backdrop : IDrawableDynamic
         get { return depth; }
         set
         {
-            if (value >= 0 && value <= Game.MaxDepth)
+            if (value >= 0)
                 depth = value;
         }
     }
@@ -63,8 +63,8 @@ public class Backdrop : IDrawableDynamic
     {
         DrawHeight = (int)Image[0].Height;
         DrawWidth = (int)Image[0].Width;
-        Game.UpdateStarted += UpdateValues;
-        Game.RenderStarted += Draw;
+        GameManager.UpdateStarted += UpdateValues;
+        GameManager.RenderStarted += Draw;
     }
     public Backdrop(string path, int x, int y, float imageSpeed, int depth)
     {
@@ -78,8 +78,8 @@ public class Backdrop : IDrawableDynamic
         StartY = Y;
         DrawHeight = (int)Image[0].Height;
         DrawWidth = (int)Image[0].Width;
-        Game.UpdateStarted += UpdateValues;
-        Game.RenderStarted += Draw;
+        GameManager.UpdateStarted += UpdateValues;
+        GameManager.RenderStarted += Draw;
     }
     public void Draw(StageImage stage, int depth)
     {
@@ -91,8 +91,8 @@ public class Backdrop : IDrawableDynamic
     }
     public void Dispose()
     {
-        Game.UpdateStarted -= UpdateValues;
-        Game.RenderStarted -= Draw;
+        GameManager.UpdateStarted -= UpdateValues;
+        GameManager.RenderStarted -= Draw;
     }
     public void UpdateValues()
     {

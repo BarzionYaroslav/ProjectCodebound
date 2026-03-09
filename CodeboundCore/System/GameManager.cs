@@ -16,6 +16,14 @@ public delegate void RenderEventHandler(StageImage stage, int depth);
 public delegate void BufferChangeEventHandler(int width, int height);
 public class GameManager
 {
+    public int SpriteAmount {get
+        {
+            if (RenderStarted != null)
+                return RenderStarted!.GetInvocationList().Count();
+            return 0;
+        }
+    }
+    public int Delta { get; private set; }
     public int QuitDelay { get; private set; }
     public int QuitChange { get; private set; }
     public int StageWidth { get; private set; }
@@ -74,6 +82,7 @@ public class GameManager
             Convert.ToUInt16(Math.Min(Console.BufferHeight,NativeY))]
             );
         bufferSize.CopyTo(bufferSizePrev);
+        Delta = 0;
         while (!gameStopped)
         {
             var watch = Stopwatch.StartNew();
@@ -96,6 +105,7 @@ public class GameManager
             if (waitTime < 0)
                 waitTime = 0;
             Thread.Sleep(waitTime);
+            Delta = timeTaken;
         }
         while (stage.Alpha > 0)
         {

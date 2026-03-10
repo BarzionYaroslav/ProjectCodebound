@@ -9,7 +9,7 @@ public class PunchyBad : Enemy
     {
         GameManager.UpdateStarted += UpdateValues;
     }
-    
+
     public override void UpdateValues()
     {
         var change = Math.Sin(GameManager.Siner * (MathF.PI / 180) * 4) * 3;

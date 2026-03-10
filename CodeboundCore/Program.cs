@@ -12,12 +12,12 @@ class Program
         // var enmArm1 = new PunchyBadHand("Bad Hand", 0, 0, 10, 15, arm1, false);
         // var enmArm2 = new PunchyBadHand("Bad Hand", 0, 0, 10, 15, arm2, true);
         var bg = new Backdrop(@"./assets/WeirdArena.gif", 0, 0, 0, 15);
-        var skullSpr = new Sprite(@"./assets/skulatra_body.gif",0,-2,0.5f,0);
-        new Skulatra("Mr. Skulatra", 0, 0, 15, 15, skullSpr);
-        skullSpr = new Sprite(@"./assets/skulatra_body.gif",90-32,-2,0.5f,0);
-        new Skulatra("Mr. Skulatra", 0, 0, 15, 15, skullSpr);
-        var eyeSpr = new Sprite(@"./assets/Ibiruai.gif", 45 - 16, 8, 0f, 0);
-        new Enemy("Ibiruai", 0, 0, 15, 15, eyeSpr);
+        // var skullFactory = new SkulatraFactory(0, -2, 0);
+        // skullFactory.Create();
+        // skullFactory = new SkulatraFactory(90 - 32, -2, 0);
+        // skullFactory.Create();
+        // var eyeSpr = new Sprite(@"./assets/Ibiruai.gif", 45 - 16, 8, 0f, 0);
+        // new Enemy("Ibiruai", 0, 0, 15, 15, eyeSpr);
         GameManager.Instance.GameLoop();
     }
 }

@@ -25,12 +25,15 @@ public class Skulatra : Enemy
                 shmoves = value;
         }
     }
-    public Skulatra(string name, int def, int atk, int hp, int maxHp, Sprite body)
+    public Skulatra(string name, int def, int atk, int hp, int maxHp, Sprite body, Sprite head)
     : base(name, def, atk, hp, maxHp, body)
     {
         Random rnd = new Random();
         GameManager.UpdateStarted += UpdateValues;
-        head = new Sprite(@"./assets/skulatra_head.gif", body.X + 8, body.Y + 6, 0, body.Depth);
+        if (head != null)
+            this.head = head;
+        else
+            this.head = new Sprite();
         shmoves = rnd.Next(2);
     }
 

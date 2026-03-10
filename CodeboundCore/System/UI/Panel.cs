@@ -114,7 +114,7 @@ public class Panel
         var lines = rika.Split('\n');
         string text = "";
         int wrdCount = Buttons.Count;
-        List<string> rlines = StringToLines(rtext, width2 - 2, height - 4);
+        List<string> rlines = StringToLines(rtext, width2 - 2 - 29, height - 4);
         int linecount = rlines.Count;
         for (int i = 0; i < height; i++)
         {

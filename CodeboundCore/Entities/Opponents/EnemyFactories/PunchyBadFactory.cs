@@ -22,11 +22,21 @@ public class PunchyBadFactory: IEnemyFactory
     }
     public Enemy Create()
     {
-        Sprite spr = new Sprite(@"./assets/punchy_bad.gif", X, Y, 0.25f, Depth);
-        Enemy returner = new PunchyBag("Punchy Bad", 0, 0, 10, 15, spr);
+        Sprite spr = new SpriteBuilder().SetPath(bodyAsset)
+                        .SetPosition(X,Y)
+                        .SetDepth(Depth)
+                        .SetImageSpeed(bodySpeed)
+                        .Build();
+        Enemy returner = new PunchyBad(name, def, atk, maxHp, maxHp, spr);
         return returner;
     }
     private int x;
     private int y;
     private int depth;
+    private readonly string bodyAsset = @"./assets/punchy_bad.gif";
+    private readonly float bodySpeed = 0.25f;
+    private readonly string name = "Punchy Bad";
+    private readonly int def = 0;
+    private readonly int atk = 0;
+    private readonly int maxHp = 15;
 }

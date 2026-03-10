@@ -33,13 +33,19 @@ public class Blaindai : Enemy
         Halo.Y = prevY;
         prevX = Body.X;
         prevY = Body.Y;
-        var change = Math.Sin((GameManager.Siner + Body.Depth * 15) * (MathF.PI / 180) * 2) * 6;
+        var sinner = (GameManager.Siner + Body.Depth * depthOffset) * (MathF.PI / 180);
+        var change = Math.Sin(sinner * waveSpeed) * waveYMagnitude;
         Body.Y = Body.StartY + (int)change;
-        change = Math.Cos((GameManager.Siner + Body.Depth * 15) * (MathF.PI / 180) * 6) * 8;
+        change = Math.Cos(sinner * waveSpeed * waveXMult) * waveXMagnitude;
         Body.X = Body.StartX + (int)change;
     }
 
     private Sprite halo;
     private int prevX;
     private int prevY;
+    private readonly int depthOffset = 15;
+    private readonly int waveYMagnitude = 6;
+    private readonly int waveXMagnitude = 8;
+    private readonly int waveSpeed = 2;
+    private readonly int waveXMult = 3;
 }

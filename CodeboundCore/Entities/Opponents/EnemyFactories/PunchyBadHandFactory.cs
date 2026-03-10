@@ -26,17 +26,32 @@ public class PunchyBadHandFactory : IEnemyFactory
         Enemy returner;
         if (X>45)
         {
-            Sprite spr = new Sprite(@"./assets/bad_arm2.gif", X, Y, 0.25f, Depth);
-            returner = new PunchyBadHand("Punchy Hand", 0, 0, 10, 15, spr, true);
+            Sprite spr = new SpriteBuilder().SetPath(bodyAsset2)
+                        .SetPosition(X,Y)
+                        .SetDepth(Depth)
+                        .SetImageSpeed(bodySpeed)
+                        .Build();
+            returner = new PunchyBadHand(name, def, atk, maxHp, maxHp, spr, true);
         }
         else
         {
-            Sprite spr = new Sprite(@"./assets/bad_arm1.gif", X, Y, 0.25f, Depth);
-            returner = new PunchyBadHand("Punchy Hand", 0, 0, 10, 15, spr, false);
+            Sprite spr = new SpriteBuilder().SetPath(bodyAsset1)
+                        .SetPosition(X,Y)
+                        .SetDepth(Depth)
+                        .SetImageSpeed(bodySpeed)
+                        .Build();
+            returner = new PunchyBadHand(name, def, atk, maxHp, maxHp, spr, false);
         }
         return returner;
     }
     private int x;
     private int y;
     private int depth;
+    private readonly string bodyAsset1 = @"./assets/bad_arm1.gif";
+    private readonly string bodyAsset2 = @"./assets/bad_arm2.gif";
+    private readonly float bodySpeed = 0.25f;
+    private readonly string name = "Punchy Hand";
+    private readonly int def = 0;
+    private readonly int atk = 0;
+    private readonly int maxHp = 15;
 }

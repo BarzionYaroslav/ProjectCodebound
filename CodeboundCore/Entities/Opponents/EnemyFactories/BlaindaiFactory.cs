@@ -22,12 +22,29 @@ public class BlaindaiFactory: IEnemyFactory
     }
     public Enemy Create()
     {
-        Sprite spr = new Sprite(@"./assets/Ibiruai2.gif", X, Y, 0.25f, Depth);
-        Sprite spr2 = new Sprite(@"./assets/BlaindaiHalo.gif", X, Y, 0.2f, Depth);
-        Enemy returner = new Blaindai("Blaindai", 0, 0, 10, 15, spr, spr2);
+        Sprite spr = new SpriteBuilder().SetPath(bodyAsset)
+                        .SetPosition(X,Y)
+                        .SetDepth(Depth)
+                        .SetImageSpeed(bodySpeed)
+                        .Build();
+        Sprite spr2 = new SpriteBuilder().SetPath(haloAsset)
+                        .SetPosition(X,Y)
+                        .SetDepth(Depth)
+                        .SetImageSpeed(haloSpeed)
+                        .Build();;
+        Enemy returner = new Blaindai(name, def, atk, maxHp, maxHp, spr, spr2);
         return returner;
     }
     private int x;
     private int y;
     private int depth;
+    private readonly string bodyAsset = @"./assets/Ibiruai2.gif";
+    private readonly string haloAsset = @"./assets/BlaindaiHalo.gif";
+    private readonly float bodySpeed = 0.25f;
+    private readonly float haloSpeed = 0.2f;
+    private readonly string name = "Blaindai";
+    private readonly int def = 0;
+    private readonly int atk = 0;
+    private readonly int maxHp = 15;
+
 }

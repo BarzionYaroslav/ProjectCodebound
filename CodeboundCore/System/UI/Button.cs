@@ -42,8 +42,7 @@ public class Button
 
     public static void DefaultAction(Panel panel)
     {
-        if (!sounder.Playing)
-            sounder.Play(soundPath);
+        sounder.Play(soundPath);
     }
 
     private ButtonAction action = DefaultAction;

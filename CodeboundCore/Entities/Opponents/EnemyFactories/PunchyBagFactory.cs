@@ -22,7 +22,7 @@ public class PunchyBagFactory: IEnemyFactory
     }
     public Enemy Create()
     {
-        Sprite spr = new SpriteBuilder().SetPath(bodyAsset)
+        Sprite spr = new SpriteBuilder().SetSprite(bodyAsset)
                         .SetPosition(X,Y)
                         .SetDepth(Depth)
                         .SetImageSpeed(bodySpeed)
@@ -33,7 +33,7 @@ public class PunchyBagFactory: IEnemyFactory
     private int x;
     private int y;
     private int depth;
-    private readonly string bodyAsset = @"./assets/punchy_bag.gif";
+    private readonly string bodyAsset = "punchy_bag";
     private readonly float bodySpeed = 0.25f;
     private readonly string name = "Punchy Bag";
     private readonly int def = 0;

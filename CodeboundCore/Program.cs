@@ -5,7 +5,7 @@ class Program
 {
     static void Main()
     {
-        var bg = new Backdrop(@"./assets/WeirdArena.gif", 0, 0, 0, 15);
+        var bg = new Backdrop("WeirdArena", 0, 0, 0, 15);
         GameManager.Instance.GameLoop();
     }
 }

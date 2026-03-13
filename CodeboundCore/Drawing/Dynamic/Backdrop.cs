@@ -66,8 +66,9 @@ public class Backdrop : IDrawableDynamic
         GameManager.UpdateStarted += UpdateValues;
         GameManager.RenderStarted += Draw;
     }
-    public Backdrop(string path, int x, int y, float imageSpeed, int depth)
+    public Backdrop(string name, int x, int y, float imageSpeed, int depth)
     {
+        var path = AssetManager.GetBackgroundSpritePath(name);
         if (File.Exists(path))
             Image = new MagickImageCollection(path);
         X = x;
@@ -166,8 +167,8 @@ public class Backdrop : IDrawableDynamic
             [
             new MagickImage(
                 new MagickColor(255, 0, 0),
-                5,
-                5
+                (uint)GameManager.Instance.NativeX,
+                (uint)GameManager.Instance.NativeY
             )
             ]
         );

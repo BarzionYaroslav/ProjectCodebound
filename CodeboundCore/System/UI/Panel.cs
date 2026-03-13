@@ -4,7 +4,7 @@ namespace Codebound.System.UI;
 
 public class Panel
 {
-    private Icon rik = new Icon(@"./assets/rika.gif",0);
+    private Icon rik = new Icon("rika",0);
     public ButtonCollection Buttons {
         get { return buttons; }
         set
@@ -121,6 +121,7 @@ public class Panel
             string msg = "  ";
             string txt = "";
             string col = buttons.GetTextColor((i - 1) / 2);
+            
             if ((i - 1) / 2 < wrdCount && i > 0 && i % 2 == 0)
             {
                 msg += Buttons[(i - 1) / 2].Text;
@@ -134,7 +135,18 @@ public class Panel
             else if (i == height - 1)
                 text += "╚" + new string('═', 28) + "╩" + new string('═', width1 - 1) + "╩" + new string('═', width2 - 1 - 29) + "╝\n";
             else
-                text += "║" + lines[i-1] + "║" + col + msg.PadRight(width1 - 1) + "\e[0m║ " + txt.PadRight(width2 - 2 - 29) + "║\n";
+            {
+                string icoLine;
+                if (i - 1 >= lines.Length)
+                {
+                    icoLine = new string(' ', rik.DrawWidth*2);
+                }
+                else
+                {
+                    icoLine = lines[i - 1];
+                }
+                text += "║" + icoLine + "║" + col + msg.PadRight(width1 - 1) + "\e[0m║ " + txt.PadRight(width2 - 2 - 29) + "║\n";
+            }        
         }
         Console.Write(text);
     }

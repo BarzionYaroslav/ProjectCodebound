@@ -22,12 +22,12 @@ public class BlaindaiFactory: IEnemyFactory
     }
     public Enemy Create()
     {
-        Sprite spr = new SpriteBuilder().SetPath(bodyAsset)
+        Sprite spr = new SpriteBuilder().SetSprite(bodyAsset)
                         .SetPosition(X,Y)
                         .SetDepth(Depth)
                         .SetImageSpeed(bodySpeed)
                         .Build();
-        Sprite spr2 = new SpriteBuilder().SetPath(haloAsset)
+        Sprite spr2 = new SpriteBuilder().SetSprite(haloAsset)
                         .SetPosition(X,Y)
                         .SetDepth(Depth)
                         .SetImageSpeed(haloSpeed)
@@ -38,10 +38,10 @@ public class BlaindaiFactory: IEnemyFactory
     private int x;
     private int y;
     private int depth;
-    private readonly string bodyAsset = @"./assets/Ibiruai2.gif";
-    private readonly string haloAsset = @"./assets/BlaindaiHalo.gif";
-    private readonly float bodySpeed = 0.25f;
-    private readonly float haloSpeed = 0.2f;
+    private readonly string bodyAsset = "Blaindai";
+    private readonly string haloAsset = "BlaindaiHalo";
+    private readonly float bodySpeed = 0.4f;
+    private readonly float haloSpeed = 0.4f;
     private readonly string name = "Blaindai";
     private readonly int def = 0;
     private readonly int atk = 0;

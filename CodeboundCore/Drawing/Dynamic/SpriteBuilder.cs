@@ -1,11 +1,13 @@
 using ImageMagick;
+using Codebound.System;
 namespace Codebound.Drawing;
 public class SpriteBuilder
 {
     private Sprite _sprite = new Sprite();
 
-    public SpriteBuilder SetPath(string path)
+    public SpriteBuilder SetSprite(string name)
     {
+        var path = AssetManager.GetEntitySpritePath(name);
         if (File.Exists(path))
             _sprite.Image = new MagickImageCollection(path);
         _sprite.DrawHeight = (int)_sprite.Image[0].Height;
@@ -19,6 +21,12 @@ public class SpriteBuilder
         _sprite.Y = y;
         _sprite.StartX = _sprite.X;
         _sprite.StartY = _sprite.Y;
+        return this;
+    }
+
+    public SpriteBuilder SetZ(int z)
+    {
+        _sprite.Z = z;
         return this;
     }
 

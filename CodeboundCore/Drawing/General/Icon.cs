@@ -53,8 +53,9 @@ public class Icon: IDrawable
         GameManager.UpdateStarted += UpdateValues;
     }
 
-    public Icon(string path, float imageSpeed)
+    public Icon(string name, float imageSpeed)
     {
+        string path = AssetManager.GetMiscSpritePath(name);
         if (File.Exists(path))
             Image = new MagickImageCollection(path);
         ImageSpeed = imageSpeed;
@@ -144,9 +145,9 @@ public class Icon: IDrawable
     private MagickImageCollection image = new MagickImageCollection(
             [
             new MagickImage(
-                new MagickColor(255, 0, 0),
-                5,
-                5
+                new MagickColor(255, 0, 255),
+                14,
+                14
             )
             ]
         );

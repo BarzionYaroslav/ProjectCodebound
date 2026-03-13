@@ -33,12 +33,12 @@ public class SkulatraFactory: IEnemyFactory
                 name = name2;
                 break;
         }
-        Sprite bodySpr = new SpriteBuilder().SetPath(bodyAsset)
+        Sprite bodySpr = new SpriteBuilder().SetSprite(bodyAsset)
                         .SetPosition(X,Y)
                         .SetDepth(Depth)
                         .SetImageSpeed(bodySpeed)
                         .Build();
-        Sprite headSpr = new SpriteBuilder().SetPath(headAsset)
+        Sprite headSpr = new SpriteBuilder().SetSprite(headAsset)
                         .SetPosition(X + headXOffset,Y + headYOffset)
                         .SetDepth(Depth)
                         .SetImageSpeed(headSpeed)
@@ -49,9 +49,9 @@ public class SkulatraFactory: IEnemyFactory
     private int x;
     private int y;
     private int depth;
-    private readonly string bodyAsset = @"./assets/skulatra_body.gif";
+    private readonly string bodyAsset = "skulatra_body";
     private readonly float bodySpeed = 0.75f;
-    private readonly string headAsset = @"./assets/skulatra_head.gif";
+    private readonly string headAsset = "skulatra_head";
     private readonly float headSpeed = 0f;
     private readonly int headXOffset = 8;
     private readonly int headYOffset = 6;

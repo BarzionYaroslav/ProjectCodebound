@@ -22,7 +22,7 @@ public class IbiruaiFactory: IEnemyFactory
     }
     public Enemy Create()
     {
-        Sprite spr = new SpriteBuilder().SetPath(bodyAsset)
+        Sprite spr = new SpriteBuilder().SetSprite(bodyAsset)
                         .SetPosition(X,Y)
                         .SetDepth(Depth)
                         .SetImageSpeed(bodySpeed)
@@ -33,8 +33,8 @@ public class IbiruaiFactory: IEnemyFactory
     private int x;
     private int y;
     private int depth;
-    private readonly string bodyAsset = @"./assets/Ibiruai.gif";
-    private readonly float bodySpeed = 0.25f;
+    private readonly string bodyAsset = "Ibiruai";
+    private readonly float bodySpeed = 0.35f;
     private readonly string name = "Ibiruai";
     private readonly int def = 0;
     private readonly int atk = 0;

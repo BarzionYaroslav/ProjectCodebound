@@ -5,7 +5,11 @@ class Program
 {
     static void Main()
     {
-        var bg = new Backdrop("WeirdArena", 0, 0, 0, 15);
+        Backdrop bg = new BackdropBuilder().SetSprite("WeirdArena")
+                    .SetPosition(0,0)
+                    .SetDepth(16)
+                    .SetImageSpeed(0)
+                    .Build();
         GameManager.Instance.GameLoop();
     }
 }

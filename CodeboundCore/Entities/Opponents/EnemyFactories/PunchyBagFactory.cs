@@ -33,7 +33,7 @@ public class PunchyBagFactory: IEnemyFactory
     private int x;
     private int y;
     private int depth;
-    private readonly string bodyAsset = "punchy_bag";
+    private readonly string bodyAsset = "punchy_bag2";
     private readonly float bodySpeed = 0.25f;
     private readonly string name = "Punchy Bag";
     private readonly int def = 0;

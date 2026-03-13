@@ -108,6 +108,7 @@ public class Panel
         }
     }
 
+    //Yeeeeeaaaaaah, I need to redo that one
     public void DrawUi()
     {
         string rika = rik.GetImageText();
@@ -121,7 +122,7 @@ public class Panel
             string msg = "  ";
             string txt = "";
             string col = buttons.GetTextColor((i - 1) / 2);
-            
+
             if ((i - 1) / 2 < wrdCount && i > 0 && i % 2 == 0)
             {
                 msg += Buttons[(i - 1) / 2].Text;
@@ -139,14 +140,14 @@ public class Panel
                 string icoLine;
                 if (i - 1 >= lines.Length)
                 {
-                    icoLine = new string(' ', rik.DrawWidth*2);
+                    icoLine = new string(' ', rik.DrawWidth * 2);
                 }
                 else
                 {
                     icoLine = lines[i - 1];
                 }
                 text += "║" + icoLine + "║" + col + msg.PadRight(width1 - 1) + "\e[0m║ " + txt.PadRight(width2 - 2 - 29) + "║\n";
-            }        
+            }
         }
         Console.Write(text);
     }

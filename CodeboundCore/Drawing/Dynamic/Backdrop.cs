@@ -66,22 +66,6 @@ public class Backdrop : IDrawableDynamic
         GameManager.UpdateStarted += UpdateValues;
         GameManager.RenderStarted += Draw;
     }
-    // public Backdrop(string name, int x, int y, float imageSpeed, int depth)
-    // {
-    //     var path = AssetManager.GetBackgroundSpritePath(name);
-    //     if (File.Exists(path))
-    //         Image = new MagickImageCollection(path);
-    //     X = x;
-    //     Y = y;
-    //     ImageSpeed = imageSpeed;
-    //     Depth = depth;
-    //     StartX = X;
-    //     StartY = Y;
-    //     DrawHeight = (int)Image[0].Height;
-    //     DrawWidth = (int)Image[0].Width;
-    //     GameManager.UpdateStarted += UpdateValues;
-    //     GameManager.RenderStarted += Draw;
-    // }
     public void Draw(StageImage stage, int depth)
     {
         if (depth == this.Depth)

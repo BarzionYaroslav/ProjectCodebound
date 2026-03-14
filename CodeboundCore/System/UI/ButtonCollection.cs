@@ -23,7 +23,6 @@ public class ButtonCollection
     }
     private Panel? link;
     private int choice = 0;
-    private Player sounder = new Player();
 
     public Button this[int ind]
     {
@@ -62,9 +61,9 @@ public class ButtonCollection
     {
         if (change != 0)
         {
-            if (sound && (!sounder.Playing))
+            if (sound)
             {
-                sounder.Play(ChangeSound);
+                SoundManager.PlaySound(ChangeSound);
             }
             Choice += change;
         }
@@ -108,5 +107,5 @@ public class ButtonCollection
 
     const string DefaultSelectCol = "\e[38;2;255;255;0m";
     const string ColorReset = "\e[0m";
-    private readonly string ChangeSound = AssetManager.GetSoundPath("CursorMove");
+    private readonly string ChangeSound = "CursorMove";
 }

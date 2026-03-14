@@ -245,6 +245,7 @@ public class GameManager
         }
         while (stage.Alpha > 0)
         {
+            SoundManager.Kill();
             var watch = Stopwatch.StartNew();
             stage.Alpha -= QuitChange;
             CheckBufferSize();

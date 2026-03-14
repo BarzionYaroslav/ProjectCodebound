@@ -42,12 +42,12 @@ public class Button
 
     public static void DefaultAction(Panel panel)
     {
-        sounder.Play(soundPath);
+        SoundManager.PlaySound(soundPath);
     }
 
     private ButtonAction action = DefaultAction;
     private string text = "UNOWEN";
     private readonly int MaxTextSize = 16;
     private static readonly Player sounder = new Player();
-    private static readonly string soundPath = AssetManager.GetSoundPath("Nuhuh");
+    private static readonly string soundPath = "Nuhuh";
 }

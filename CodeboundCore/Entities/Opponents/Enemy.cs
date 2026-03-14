@@ -80,7 +80,10 @@ public class Enemy : IEntity
         Atk = atk;
         MaxHp = maxHp;
         Hp = hp;
-        this.body = body;
+        if (body != null)
+            this.body = body;
+        else
+            this.body = new Sprite();
         GameManager.UpdateStarted += UpdateValues;
     }
 

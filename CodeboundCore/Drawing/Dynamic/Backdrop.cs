@@ -66,21 +66,6 @@ public class Backdrop : IDrawableDynamic
         GameManager.UpdateStarted += UpdateValues;
         GameManager.RenderStarted += Draw;
     }
-    public Backdrop(string path, int x, int y, float imageSpeed, int depth)
-    {
-        if (File.Exists(path))
-            Image = new MagickImageCollection(path);
-        X = x;
-        Y = y;
-        ImageSpeed = imageSpeed;
-        Depth = depth;
-        StartX = X;
-        StartY = Y;
-        DrawHeight = (int)Image[0].Height;
-        DrawWidth = (int)Image[0].Width;
-        GameManager.UpdateStarted += UpdateValues;
-        GameManager.RenderStarted += Draw;
-    }
     public void Draw(StageImage stage, int depth)
     {
         if (depth == this.Depth)
@@ -166,8 +151,8 @@ public class Backdrop : IDrawableDynamic
             [
             new MagickImage(
                 new MagickColor(255, 0, 0),
-                5,
-                5
+                (uint)GameManager.Instance.NativeX,
+                (uint)GameManager.Instance.NativeY
             )
             ]
         );

@@ -108,5 +108,5 @@ public class ButtonCollection
 
     const string DefaultSelectCol = "\e[38;2;255;255;0m";
     const string ColorReset = "\e[0m";
-    const string ChangeSound = @"./assets/sounds/CursorMove.wav";
+    private readonly string ChangeSound = AssetManager.GetSoundPath("CursorMove");
 }

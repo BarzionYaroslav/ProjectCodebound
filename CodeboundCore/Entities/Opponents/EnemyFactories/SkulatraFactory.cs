@@ -27,18 +27,37 @@ public class SkulatraFactory: IEnemyFactory
         switch (rand.Next(2))
         {
             case 0:
-                name = "Ms. Skulatra";
+                name = name1;
                 break;
             default:
-                name = "Mr. Skulatra";
+                name = name2;
                 break;
         }
-        Sprite bodySpr = new Sprite(@"./assets/skulatra_body.gif", X, Y, 0.75f, Depth);
-        Sprite headSpr = new Sprite(@"./assets/skulatra_head.gif", X + 8, Y + 6, 0, Depth);
-        Enemy returner = new Skulatra(name, 0, 0, 10, 15, bodySpr, headSpr);
+        Sprite bodySpr = new SpriteBuilder().SetSprite(bodyAsset)
+                        .SetPosition(X,Y)
+                        .SetDepth(Depth)
+                        .SetImageSpeed(bodySpeed)
+                        .Build();
+        Sprite headSpr = new SpriteBuilder().SetSprite(headAsset)
+                        .SetPosition(X + headXOffset,Y + headYOffset)
+                        .SetDepth(Depth)
+                        .SetImageSpeed(headSpeed)
+                        .Build();
+        Enemy returner = new Skulatra(name, def, atk, maxHp, maxHp, bodySpr, headSpr);
         return returner;
     }
     private int x;
     private int y;
     private int depth;
+    private readonly string bodyAsset = "skulatra_body";
+    private readonly float bodySpeed = 0.75f;
+    private readonly string headAsset = "skulatra_head";
+    private readonly float headSpeed = 0f;
+    private readonly int headXOffset = 8;
+    private readonly int headYOffset = 6;
+    private readonly string name1 = "Mr. Skulatra";
+    private readonly string name2 = "Ms. Skulatra";
+    private readonly int def = 0;
+    private readonly int atk = 0;
+    private readonly int maxHp = 15;
 }

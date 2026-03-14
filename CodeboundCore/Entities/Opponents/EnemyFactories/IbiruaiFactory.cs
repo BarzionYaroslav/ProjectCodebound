@@ -22,11 +22,21 @@ public class IbiruaiFactory: IEnemyFactory
     }
     public Enemy Create()
     {
-        Sprite spr = new Sprite(@"./assets/Ibiruai.gif", X, Y, 0.25f, Depth);
-        Enemy returner = new Ibiruai("Ibiruai", 0, 0, 10, 15, spr);
+        Sprite spr = new SpriteBuilder().SetSprite(bodyAsset)
+                        .SetPosition(X,Y)
+                        .SetDepth(Depth)
+                        .SetImageSpeed(bodySpeed)
+                        .Build();
+        Enemy returner = new Ibiruai(name, def, atk, maxHp, maxHp, spr);
         return returner;
     }
     private int x;
     private int y;
     private int depth;
+    private readonly string bodyAsset = "Ibiruai";
+    private readonly float bodySpeed = 0.35f;
+    private readonly string name = "Ibiruai";
+    private readonly int def = 0;
+    private readonly int atk = 0;
+    private readonly int maxHp = 15;
 }

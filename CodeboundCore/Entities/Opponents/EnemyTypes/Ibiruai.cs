@@ -12,7 +12,7 @@ public class Ibiruai : Enemy
     
     public override void UpdateValues()
     {
-        var change = Math.Sin((GameManager.Siner + Body.Depth*15) * (MathF.PI / 180) * 2) * 3;
+        var change = Math.Sin((GameManager.Siner + Body.Depth*15) * (MathF.PI / 180) * 2) * 2;
         Body.Y = Body.StartY + (int)change;
     }
 }

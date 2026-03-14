@@ -49,5 +49,5 @@ public class Button
     private string text = "UNOWEN";
     private readonly int MaxTextSize = 16;
     private static readonly Player sounder = new Player();
-    private static readonly string soundPath = @"./assets/sounds/Nuhuh.wav";
+    private static readonly string soundPath = AssetManager.GetSoundPath("Nuhuh");
 }

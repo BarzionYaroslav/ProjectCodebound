@@ -5,7 +5,7 @@ static public class SoundManager
     static public nint SoundMixer;
     static public nint MusicMixer;
     static public SoundHolder? CurrentSong;
-    static private Dictionary<string, SoundHolder> LoadedSounds = new Dictionary<string, SoundHolder>();
+    static private Dictionary<string, SoundHolder> loadedSounds = new Dictionary<string, SoundHolder>();
     static SoundManager()
     {
         // SDL init
@@ -40,25 +40,25 @@ static public class SoundManager
 
     static public void ClearSounds()
     {
-        foreach (string i in LoadedSounds.Keys)
+        foreach (string i in loadedSounds.Keys)
         {
-            LoadedSounds[i].Kill();
-            LoadedSounds.Remove(i);
+            loadedSounds[i].Kill();
+            loadedSounds.Remove(i);
         }
     }
 
     static public void PlaySound(string asset)
     {
         var snd = AssetManager.GetSoundPath(asset);
-        if (!LoadedSounds.ContainsKey(snd))
+        if (!loadedSounds.ContainsKey(snd))
         {
             SoundHolder holdah = new SoundHolder(snd, SoundMixer);
-            LoadedSounds.Add(snd, holdah);
+            loadedSounds.Add(snd, holdah);
             holdah.Play();
         }
         else
         {
-            LoadedSounds[snd].Play();
+            loadedSounds[snd].Play();
         }
     }
 

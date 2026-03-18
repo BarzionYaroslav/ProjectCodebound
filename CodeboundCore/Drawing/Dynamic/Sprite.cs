@@ -84,15 +84,26 @@ public class Sprite: IDrawableDynamic
             tempFrame.Width,
             tempFrame.Height);
         answer.CopyPixels(tempFrame);
-        answer.Resize(
-            (uint)(DrawWidth - Z),
-            (uint)(DrawHeight - Z),
-            FilterType.Point
-            );
-        answer.Colorize(
-            new MagickColor(0, 0, 0, 255),
-            new Percentage(Math.Max(0,Z * darkener))
-            );
+        if (z != 0)
+        {
+            answer.Resize(
+                (uint)(DrawWidth - Z),
+                (uint)(DrawHeight - Z),
+                FilterType.Point
+                );
+            answer.Colorize(
+                new MagickColor(0, 0, 0, 255),
+                new Percentage(Math.Max(0, Z * darkener))
+                );
+        }
+        else
+        {
+            answer.Resize(
+                (uint)(DrawWidth),
+                (uint)(DrawHeight),
+                FilterType.Point
+                );
+        }
         return answer;
     }
     public List<string> GetLines()

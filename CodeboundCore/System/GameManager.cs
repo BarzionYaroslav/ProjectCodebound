@@ -76,7 +76,7 @@ public class GameManager
         currentWave = new Wave();
         mainPanel = new Panel(NativeX * 1 / 4, NativeX * 3 / 4, 16, "RIKA!!!");
         Random rand = new Random((int)DateTime.Now.Ticks);
-        var checker = rand.Next(11);
+        var checker = rand.Next(15);
         switch (checker)
         {
             case 0:
@@ -193,6 +193,42 @@ public class GameManager
                     [
                     new BlaindaiFactory(2,6,2),
                     new SkulatraFactory(30,-1,0),
+                    new IbiruaiFactory(58,6,2)
+                    ]
+                );
+                break;
+            case 11:
+                prepText = "Yokanten slides in!";
+                prepFactories = new List<IEnemyFactory>(
+                    [
+                    new YokantenFactory(37,15,0)
+                    ]
+                );
+                break;
+            case 12:
+                prepText = "Early Game Enemy convention.";
+                prepFactories = new List<IEnemyFactory>(
+                    [
+                    new IbiruaiFactory(2,6,2),
+                    new YokantenFactory(37,15,0),
+                    new IbiruaiFactory(58,6,2)
+                    ]
+                );
+                break;
+            case 13:
+                prepText = "Maybe the true enemies were the friends we made along the way...";
+                prepFactories = new List<IEnemyFactory>(
+                    [
+                    new IbiruaiderFactory(30,-6,0)
+                    ]
+                );
+                break;
+            case 14:
+                prepText = "Kneel before the Great Ibiruai Tamer! Let his matcha colors be known across the lands!";
+                prepFactories = new List<IEnemyFactory>(
+                    [
+                    new IbiruaiFactory(2,6,2),
+                    new IbiruaiderFactory(30,-6,0),
                     new IbiruaiFactory(58,6,2)
                     ]
                 );

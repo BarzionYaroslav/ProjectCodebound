@@ -2,8 +2,6 @@ using System;
 using System.Threading;
 using System.Diagnostics;
 using Codebound.System.UI;
-using ImageMagick;
-using NetCoreAudio;
 using Codebound.Drawing;
 using Codebound.Entities.Opponents;
 
@@ -76,7 +74,8 @@ public class GameManager
         currentWave = new Wave();
         mainPanel = new Panel(NativeX * 1 / 4, NativeX * 3 / 4, 16, "RIKA!!!");
         Random rand = new Random((int)DateTime.Now.Ticks);
-        var checker = rand.Next(15);
+        var checker = rand.Next(18);
+        checker = 17;
         switch (checker)
         {
             case 0:
@@ -230,6 +229,34 @@ public class GameManager
                     new IbiruaiFactory(2,6,2),
                     new IbiruaiderFactory(30,-6,0),
                     new IbiruaiFactory(58,6,2)
+                    ]
+                );
+                break;
+            case 15:
+                prepText = "Desu Mashin: Mk.I flies in!";
+                prepFactories = new List<IEnemyFactory>(
+                    [
+                    new MekaiFactory(30,1,0)
+                    ]
+                );
+                break;
+            case 16:
+                prepText = "An Ibiruai, a Mek-AI and a Blaindai walk into a bar...";
+                prepFactories = new List<IEnemyFactory>(
+                    [
+                    new IbiruaiFactory(2,6,2),
+                    new MekaiFactory(30,1,0),
+                    new BlaindaiFactory(58,6,2)
+                    ]
+                );
+                break;
+            case 17:
+                prepText = "Finally an eye who understands...";
+                prepFactories = new List<IEnemyFactory>(
+                    [
+                    new SkulatraFactory(0,-2,1),
+                    new MekaiFactory(30,1,0),
+                    new SkulatraFactory(60,-2,1)
                     ]
                 );
                 break;

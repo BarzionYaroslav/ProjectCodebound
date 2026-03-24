@@ -1,11 +1,13 @@
 using ImageMagick;
 using Codebound.Drawing;
+using Codebound.Entities.Opponents;
 namespace Codebound.System.UI;
 
 public class Panel
 {
     private Icon rik = new Icon("rika",0);
-    public ButtonCollection Buttons {
+    public ButtonCollection Buttons
+    {
         get { return buttons; }
         set
         {
@@ -15,6 +17,13 @@ public class Panel
             }
             else
                 throw new NullReferenceException();
+        }
+    }
+    public ButtonCollection? SecondaryButtons {
+        get { return secondaryButtons; }
+        set
+        {
+            secondaryButtons = value;
         }
     }
     public string RText
@@ -68,6 +77,7 @@ public class Panel
         }
     }
     private ButtonCollection buttons = new ButtonCollection();
+    private ButtonCollection? secondaryButtons;
     private string rtext = "UNOWEN";
     private int height;
     private int width2;
@@ -89,19 +99,28 @@ public class Panel
 
     public void HandleControls(ConsoleKey key)
     {
+        ButtonCollection curButtons;
+        if (secondaryButtons == null)
+            curButtons = Buttons;
+        else
+            curButtons = secondaryButtons;
         switch (key)
         {
             case ConsoleKey.T:
                 RText = $"{Console.BufferWidth} X {Console.BufferHeight}";
                 break;
             case ConsoleKey.UpArrow:
-                Buttons.SubstractChoice(true);
+                curButtons.SubstractChoice(true);
                 break;
             case ConsoleKey.DownArrow:
-                Buttons.AddChoice(true);
+                curButtons.AddChoice(true);
+                break;
+            case ConsoleKey.X:
+                if (secondaryButtons != null)
+                    secondaryButtons = null;
                 break;
             case ConsoleKey.Z:
-                Buttons.ExecuteChoice();
+                curButtons.ExecuteChoice();
                 break;
             default:
                 break;
@@ -122,14 +141,26 @@ public class Panel
             string msg = "  ";
             string txt = "";
             string col = buttons.GetTextColor((i - 1) / 2);
+            string scol = "";
 
             if ((i - 1) / 2 < wrdCount && i > 0 && i % 2 == 0)
             {
                 msg += Buttons[(i - 1) / 2].Text;
             }
-            if ((i - 1) / 2 < linecount && i > 0 && i % 2 == 0)
+            if (secondaryButtons == null)
             {
-                txt += rlines[(i - 1) / 2];
+                if ((i - 1) / 2 < linecount && i > 0 && i % 2 == 0)
+                {
+                    txt += rlines[(i - 1) / 2];
+                }
+            }
+            else
+            {
+                if ((i - 1) / 2 < secondaryButtons.Count && i > 0 && i % 2 == 0)
+                {
+                    scol = secondaryButtons.GetTextColor((i - 1) / 2);
+                    txt += secondaryButtons[(i - 1) / 2].Text;
+                }
             }
             if (i == 0)
                 text += "╔" + new string('═', 28) + "╦" + new string('═', width1 - 1) + "╦" + new string('═', width2 - 1 - 29) + "╗\n";
@@ -146,7 +177,7 @@ public class Panel
                 {
                     icoLine = lines[i - 1];
                 }
-                text += "║" + icoLine + "║" + col + msg.PadRight(width1 - 1) + "\e[0m║ " + txt.PadRight(width2 - 2 - 29) + "║\n";
+                text += "║" + icoLine + "║" + col + msg.PadRight(width1 - 1) + "\e[0m║ " + scol + txt.PadRight(width2 - 2 - 29) + "\e[0m║\n";
             }
         }
         Console.Write(text);
@@ -183,14 +214,49 @@ public class Panel
 
     public static void RunCommand(Panel? panel)
     {
-        if (panel!=null)
+        if (panel != null)
             panel.RText = "And so, you ran away...";
         GameManager.Instance.EndGame();
     }
 
+    public static void FightCommand(Panel? panel)
+    {
+        if (panel != null)
+        {
+            if (GameManager.Instance.CurrentWave.Count != 0)
+            {
+                SoundManager.PlaySound("CursorMove");
+                panel.SecondaryButtons = new ButtonCollection(panel);
+                foreach (Enemy i in GameManager.Instance.CurrentWave)
+                {
+                    Button btn = new Button($"{i.Name}  ({i.Hp}/{i.MaxHp})", EnemyAttackCommand);
+                    panel.SecondaryButtons.Add(btn);
+                }
+            }
+            else
+                SoundManager.PlaySound("Nuhuh");
+        }
+    }
+    
+    public static void EnemyAttackCommand(Panel? panel)
+    {
+        if (panel != null)
+        {
+            if (panel.SecondaryButtons!=null)
+            {
+                int ind = panel.SecondaryButtons.Choice;
+                Wave wave = GameManager.Instance.CurrentWave;
+                SoundManager.PlaySound("punch");
+                int dmg = wave[ind].Hurt(GameManager.Instance.MainChar.Atk);
+                panel.RText = $"You attacked {wave[ind].Name} for {dmg} HP! It didn't really like that!";
+                panel.SecondaryButtons = null;
+            }
+        }
+    }
+
     readonly IEnumerable<Button> DefaultButtons = new List<Button>(
         [
-        new Button("FIGHT"),
+        new Button("FIGHT", FightCommand),
         new Button("SPELL"),
         new Button("INVENTORY"),
         new Button("DEFEND"),

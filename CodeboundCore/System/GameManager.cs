@@ -4,6 +4,7 @@ using System.Diagnostics;
 using Codebound.System.UI;
 using Codebound.Drawing;
 using Codebound.Entities.Opponents;
+using Codebound.Entities;
 
 namespace Codebound.System;
 
@@ -53,14 +54,21 @@ public class GameManager
             return _instance;
         }
     }
+    public Wave CurrentWave;
+    public Hero MainChar;
     private Panel mainPanel;
-    private Wave currentWave;
     private StageImage stage;
     private string prepText;
     private List<IEnemyFactory> prepFactories;
 
     private GameManager()
     {
+        MainChar = new HeroBuilder().SetAtk(5)
+                    .SetDef(2)
+                    .SetHp(40)
+                    .SetMana(40)
+                    .SetName("Rika")
+                    .Build();
         QuitDelay = 5;
         QuitChange = 10;
         Fps = 60;
@@ -71,11 +79,10 @@ public class GameManager
         MaxDepth = 16;
         Siner = 0;
         stage = new StageImage((uint)StageWidth, (uint)StageHeight);
-        currentWave = new Wave();
+        CurrentWave = new Wave();
         mainPanel = new Panel(NativeX * 1 / 4, NativeX * 3 / 4, 16, "RIKA!!!");
         Random rand = new Random((int)DateTime.Now.Ticks);
         var checker = rand.Next(18);
-        checker = 17;
         switch (checker)
         {
             case 0:
@@ -329,7 +336,7 @@ public class GameManager
         mainPanel.RText = text;
         foreach (IEnemyFactory i in factories)
         {
-            i.Create();
+            CurrentWave.Add(i.Create());
         }
     }
 

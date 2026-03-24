@@ -1,4 +1,4 @@
-using NetCoreAudio;
+using Codebound.Entities.Opponents;
 namespace Codebound.System.UI;
 
 public delegate void ButtonAction(Panel panel);
@@ -47,7 +47,6 @@ public class Button
 
     private ButtonAction action = DefaultAction;
     private string text = "UNOWEN";
-    private readonly int MaxTextSize = 16;
-    private static readonly Player sounder = new Player();
+    private readonly int MaxTextSize = 32;
     private static readonly string soundPath = "Nuhuh";
 }

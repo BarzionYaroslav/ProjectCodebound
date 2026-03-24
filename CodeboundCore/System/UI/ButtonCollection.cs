@@ -37,6 +37,13 @@ public class ButtonCollection
         }
     }
 
+    public ButtonCollection(){}
+
+    public ButtonCollection(Panel link)
+    {
+        Link = link;
+    }
+
     public void Add(Button btn)
     {
         if (btn != null)

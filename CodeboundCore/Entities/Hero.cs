@@ -20,10 +20,15 @@ public class Hero: IEntity
             }
         }
     }
-    //Yes, defense can go into negatives. Yes, it's intentional
     public int Def {
         get { return def; }
-        set { def = value; } 
+        set
+        {
+            if (value >= 0)
+                def = value;
+            else
+                def = 0;
+        }
         }
     public int Atk {
         get { return atk; }
@@ -78,17 +83,42 @@ public class Hero: IEntity
                 maxMana = 0;
         }
     }
-    
-    public void UpdateValues(){}
+
+    public void UpdateValues() { }
+    public int Hurt(int dmg, bool defIgnore = false)
+    {
+        int damage = dmg;
+        if (!defIgnore)
+            damage -= Def;
+        if (damage > 0)
+        {
+            Hp -= damage;
+            return damage;
+        }
+        return 0;
+    }
+    public int Heal(int value)
+    {
+        if (Hp != 0 && value > 0)
+        {
+            Hp += value;
+            return value;
+        }
+        return 0;
+    }
 
     private string name = DefaultName;
-    private int def;
-    private int atk;
-    private int hp;
-    private int maxHp;
-    private int mana;
-    private int maxMana;
+    private int def = DefaultDef;
+    private int atk = DefaultAtk;
+    private int hp = DefaultHp;
+    private int maxHp = DefaultHp;
+    private int mana = DefaultMana;
+    private int maxMana = DefaultMana;
 
     const int MaxNameSize = 16;
     const string DefaultName = "Rika";
+    const int DefaultDef = 0;
+    const int DefaultAtk = 0;
+    const int DefaultHp = 10;
+    const int DefaultMana = 10;
 }

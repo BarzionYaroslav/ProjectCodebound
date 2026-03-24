@@ -1,10 +1,10 @@
 ﻿using Codebound.System;
 using Codebound.Drawing;
-using Codebound.Entities.Opponents;
 class Program
 {
     static void Main()
     {
+        SoundManager.PlayBGM("himorogi");
         Backdrop bg = new BackdropBuilder().SetSprite("WeirdArena")
                     .SetPosition(0,0)
                     .SetDepth(16)

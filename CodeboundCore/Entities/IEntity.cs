@@ -8,4 +8,6 @@ public interface IEntity
     int Hp { get; set; }
     int MaxHp { get; set; }
     void UpdateValues();
+    int Hurt(int dmg, bool defIgnore = false);
+    int Heal(int value);
 }

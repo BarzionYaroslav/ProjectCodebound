@@ -2,10 +2,9 @@ using System;
 using System.Threading;
 using System.Diagnostics;
 using Codebound.System.UI;
-using ImageMagick;
-using NetCoreAudio;
 using Codebound.Drawing;
 using Codebound.Entities.Opponents;
+using Codebound.Entities;
 
 namespace Codebound.System;
 
@@ -55,14 +54,21 @@ public class GameManager
             return _instance;
         }
     }
+    public Wave CurrentWave;
+    public Hero MainChar;
     private Panel mainPanel;
-    private Wave currentWave;
     private StageImage stage;
     private string prepText;
     private List<IEnemyFactory> prepFactories;
 
     private GameManager()
     {
+        MainChar = new HeroBuilder().SetAtk(5)
+                    .SetDef(2)
+                    .SetHp(40)
+                    .SetMana(40)
+                    .SetName("Rika")
+                    .Build();
         QuitDelay = 5;
         QuitChange = 10;
         Fps = 60;
@@ -73,10 +79,10 @@ public class GameManager
         MaxDepth = 16;
         Siner = 0;
         stage = new StageImage((uint)StageWidth, (uint)StageHeight);
-        currentWave = new Wave();
+        CurrentWave = new Wave();
         mainPanel = new Panel(NativeX * 1 / 4, NativeX * 3 / 4, 16, "RIKA!!!");
         Random rand = new Random((int)DateTime.Now.Ticks);
-        var checker = rand.Next(11);
+        var checker = rand.Next(18);
         switch (checker)
         {
             case 0:
@@ -197,6 +203,70 @@ public class GameManager
                     ]
                 );
                 break;
+            case 11:
+                prepText = "Yokanten slides in!";
+                prepFactories = new List<IEnemyFactory>(
+                    [
+                    new YokantenFactory(37,15,0)
+                    ]
+                );
+                break;
+            case 12:
+                prepText = "Early Game Enemy convention.";
+                prepFactories = new List<IEnemyFactory>(
+                    [
+                    new IbiruaiFactory(2,6,2),
+                    new YokantenFactory(37,15,0),
+                    new IbiruaiFactory(58,6,2)
+                    ]
+                );
+                break;
+            case 13:
+                prepText = "Maybe the true enemies were the friends we made along the way...";
+                prepFactories = new List<IEnemyFactory>(
+                    [
+                    new IbiruaiderFactory(30,-6,0)
+                    ]
+                );
+                break;
+            case 14:
+                prepText = "Kneel before the Great Ibiruai Tamer! Let his matcha colors be known across the lands!";
+                prepFactories = new List<IEnemyFactory>(
+                    [
+                    new IbiruaiFactory(2,6,2),
+                    new IbiruaiderFactory(30,-6,0),
+                    new IbiruaiFactory(58,6,2)
+                    ]
+                );
+                break;
+            case 15:
+                prepText = "Desu Mashin: Mk.I flies in!";
+                prepFactories = new List<IEnemyFactory>(
+                    [
+                    new MekaiFactory(30,1,0)
+                    ]
+                );
+                break;
+            case 16:
+                prepText = "An Ibiruai, a Mek-AI and a Blaindai walk into a bar...";
+                prepFactories = new List<IEnemyFactory>(
+                    [
+                    new IbiruaiFactory(2,6,2),
+                    new MekaiFactory(30,1,0),
+                    new BlaindaiFactory(58,6,2)
+                    ]
+                );
+                break;
+            case 17:
+                prepText = "Finally an eye who understands...";
+                prepFactories = new List<IEnemyFactory>(
+                    [
+                    new SkulatraFactory(0,-2,1),
+                    new MekaiFactory(30,1,0),
+                    new SkulatraFactory(60,-2,1)
+                    ]
+                );
+                break;
             default:
                 prepText = "Punchy Bag swings in like a fluff-filled pinata!";
                 prepFactories = new List<IEnemyFactory>(
@@ -245,6 +315,7 @@ public class GameManager
         }
         while (stage.Alpha > 0)
         {
+            SoundManager.Kill();
             var watch = Stopwatch.StartNew();
             stage.Alpha -= QuitChange;
             CheckBufferSize();
@@ -265,7 +336,7 @@ public class GameManager
         mainPanel.RText = text;
         foreach (IEnemyFactory i in factories)
         {
-            i.Create();
+            CurrentWave.Add(i.Create());
         }
     }
 

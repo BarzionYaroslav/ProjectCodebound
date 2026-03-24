@@ -22,11 +22,16 @@ public class Enemy : IEntity
             }
         }
     }
-    //Yes, defense can go into negatives. Yes, it's intentional
     public int Def
     {
         get { return def; }
-        set { def = value; }
+        set
+        {
+            if (value >= 0)
+                def = value;
+            else
+                def = 0;
+        }
     }
     public int Atk
     {
@@ -87,7 +92,32 @@ public class Enemy : IEntity
         GameManager.UpdateStarted += UpdateValues;
     }
 
-    public virtual void UpdateValues(){}
+    public virtual void UpdateValues() { }
+    public int Hurt(int dmg, bool defIgnore = false)
+    {
+        int damage = dmg;
+        if (!defIgnore)
+            damage -= Def;
+        if (damage > 0)
+        {
+            Hp -= damage;
+            return damage;
+        }
+        else
+        {
+            Hp -= 1;
+            return 1;
+        }
+    }
+    public int Heal(int value)
+    {
+        if (Hp != 0 && value > 0)
+        {
+            Hp += value;
+            return value;
+        }
+        return 0;
+    }
 
     private string name = DefaultName;
     private int def;

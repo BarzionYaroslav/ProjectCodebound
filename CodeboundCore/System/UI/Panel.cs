@@ -1,11 +1,12 @@
 using ImageMagick;
 using Codebound.Drawing;
 using Codebound.Entities.Opponents;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
 namespace Codebound.System.UI;
 
 public class Panel
 {
-    private Icon rik = new Icon("rika",0);
     public ButtonCollection Buttons
     {
         get { return buttons; }
@@ -53,40 +54,27 @@ public class Panel
         }
     }
 
-    public int Width2
+    public int Width
     {
-        get { return width2; }
+        get { return width; }
         set
         {
             if (value > 0)
             {
-                width2 = value;
+                width = value;
             }
         }
     }
 
-    public int Width1
-    {
-        get { return width1; }
-        set
-        {
-            if (value > 0)
-            {
-                width1 = value;
-            }
-        }
-    }
     private ButtonCollection buttons = new ButtonCollection();
     private ButtonCollection? secondaryButtons;
     private string rtext = "UNOWEN";
     private int height;
-    private int width2;
-    private int width1;
+    private int width;
 
-    public Panel(int width1, int width2, int height, string rtext)
+    public Panel(int width, int height, string rtext)
     {
-        Width1 = width1;
-        Width2 = width2;
+        Width = width;
         Height = height;
         RText = rtext;
         foreach (var i in DefaultButtons)
@@ -127,57 +115,162 @@ public class Panel
         }
     }
 
+    public string MakeFloor(int width)
+    {
+        return new string(floorSymbol, width);
+    }
+
+    public string MakePartEdges(int width, bool top = false, PanelContinueOptions option = PanelContinueOptions.None)
+    {
+        string symbolSet;
+        if (top)
+        {
+            symbolSet = topSymbols;
+        }
+        else
+            symbolSet = bottomSymbols;
+        char cornL;
+        char cornR;
+        switch (option)
+        {
+            case PanelContinueOptions.None:
+                cornL = symbolSet[0];
+                cornR = symbolSet[2];
+                break;
+            case PanelContinueOptions.Left:
+                cornL = symbolSet[1];
+                cornR = symbolSet[2];
+                break;
+            case PanelContinueOptions.Right:
+                cornL = symbolSet[0];
+                cornR = symbolSet[1];
+                break;
+            case PanelContinueOptions.Both:
+                cornL = symbolSet[1];
+                cornR = symbolSet[1];
+                break;
+            default:
+                cornL = symbolSet[0];
+                cornR = symbolSet[2];
+                break;
+        }
+        string mid = MakeFloor(width);
+        string answer = $"\e[0m{cornL}{mid}{cornR}";
+        return answer;
+    }
+
+    public string MakePanelPart(int i, int width, int height, ButtonCollection content, PanelContinueOptions option = PanelContinueOptions.None)
+    {
+        string text;
+        if (i == 0)
+            text = MakePartEdges(width, true, option);
+        else if (i == height - 1)
+            text = MakePartEdges(width, false, option);
+        else
+        {
+            string mid = "  ";
+            string col = content.GetTextColor((i - 1) / 2);
+            if ((i - 1) / 2 < content.Count && i > 0 && i % 2 == 0)
+            {
+                mid += content[(i - 1) / 2].Text;
+            }
+            text = wallSymbol + col + mid.PadRight(width) + "\e[0m" + wallSymbol;
+        }
+        if (option != PanelContinueOptions.Both && option != PanelContinueOptions.Right)
+            text += "\n";
+        return text;
+    }
+
+    public string MakePanelPart(int i, int width, int height, List<string> content, PanelContinueOptions option = PanelContinueOptions.None, bool gap = true)
+    {
+        string text;
+
+        if (i == 0)
+            text = MakePartEdges(width, true, option);
+        else if (i == height - 1)
+            text = MakePartEdges(width, false, option);
+        else
+        {
+            string mid;
+            if (gap)
+            {
+                mid = "  ";
+                if ((i - 1) / 2 < content.Count && i > 0 && i % 2 == 0)
+                {
+                    mid += content[(i - 1) / 2];
+                }
+            }
+            else
+            {
+                mid = "";
+                if ((i - 1) < content.Count && i > 0)
+                {
+                    mid += content[i - 1];
+                }
+            }
+            text = wallSymbol + mid.PadRight(width) + "\e[0m" + wallSymbol;
+        }
+        if (option != PanelContinueOptions.Both && option != PanelContinueOptions.Right)
+            text += "\n";
+        return text;
+    }
+
     //Yeeeeeaaaaaah, I need to redo that one
     public void DrawUi()
     {
-        string rika = rik.GetImageText();
-        var lines = rika.Split('\n');
+        var rik = GameManager.Instance.MainChar.Face;
         string text = "";
-        int wrdCount = Buttons.Count;
-        List<string> rlines = StringToLines(rtext, width2 - 2 - 29, height - 4);
-        int linecount = rlines.Count;
+        List<string> playerDat = [.. GameManager.Instance.MainChar.ToString().Split('\n')];
+        int datMax = 0;
+        foreach (var i in playerDat)
+        {
+            if (i.Length>datMax)
+            {
+                datMax = i.Length;
+            }
+        }
+        string icoText = rik.GetImageText();
+        List<string> icolines = [.. icoText.Split('\n')];
+        int lenCounter = 0;
+        lenCounter += datMax + 4 + 2;
+        lenCounter += rik.DrawWidth * 2 + 2;
+        lenCounter += 12 + 2;
+        var rlines = StringToLines(RText, width - lenCounter, height - 4);
+        string enText;
+        List<string> enlines = new List<string>();
+        List<string> enmDat = new List<string>();
+        int enmMax = 0;
+        if (secondaryButtons!=null)
+        {
+            enText = GameManager.Instance.CurrentWave[secondaryButtons.Choice].Face.GetImageText();
+            enlines = [.. enText.Split('\n')];
+            enmDat = [.. GameManager.Instance.CurrentWave[secondaryButtons.Choice].ToString().Split('\n')];
+            foreach (var i in enmDat)
+            {
+                if (i.Length>enmMax)
+                {
+                    enmMax = i.Length;
+                }
+            }
+        }
+        
         for (int i = 0; i < height; i++)
         {
-            string msg = "  ";
-            string txt = "";
-            string col = buttons.GetTextColor((i - 1) / 2);
-            string scol = "";
+            text += MakePanelPart(i, rik.DrawWidth * 2, height, icolines, PanelContinueOptions.Right, false);
+            
+            text += MakePanelPart(i, datMax + 4, height, playerDat, PanelContinueOptions.Both);
+            
+            text += MakePanelPart(i, 12, height, Buttons, PanelContinueOptions.Both);
 
-            if ((i - 1) / 2 < wrdCount && i > 0 && i % 2 == 0)
-            {
-                msg += Buttons[(i - 1) / 2].Text;
-            }
             if (secondaryButtons == null)
             {
-                if ((i - 1) / 2 < linecount && i > 0 && i % 2 == 0)
-                {
-                    txt += rlines[(i - 1) / 2];
-                }
+                text += MakePanelPart(i, width - lenCounter, height, rlines, PanelContinueOptions.Left);
             }
             else
             {
-                if ((i - 1) / 2 < secondaryButtons.Count && i > 0 && i % 2 == 0)
-                {
-                    scol = secondaryButtons.GetTextColor((i - 1) / 2);
-                    txt += secondaryButtons[(i - 1) / 2].Text;
-                }
-            }
-            if (i == 0)
-                text += "╔" + new string('═', 28) + "╦" + new string('═', width1 - 1) + "╦" + new string('═', width2 - 1 - 29) + "╗\n";
-            else if (i == height - 1)
-                text += "╚" + new string('═', 28) + "╩" + new string('═', width1 - 1) + "╩" + new string('═', width2 - 1 - 29) + "╝\n";
-            else
-            {
-                string icoLine;
-                if (i - 1 >= lines.Length)
-                {
-                    icoLine = new string(' ', rik.DrawWidth * 2);
-                }
-                else
-                {
-                    icoLine = lines[i - 1];
-                }
-                text += "║" + icoLine + "║" + col + msg.PadRight(width1 - 1) + "\e[0m║ " + scol + txt.PadRight(width2 - 2 - 29) + "\e[0m║\n";
+                text += MakePanelPart(i, width - lenCounter - (rik.DrawWidth * 2) - 2 - (enmMax+4) - 2, height, secondaryButtons, PanelContinueOptions.Both);
+                text += MakePanelPart(i, enmMax + 4, height, enmDat, PanelContinueOptions.Both);
+                text += MakePanelPart(i, rik.DrawWidth * 2, height, enlines, PanelContinueOptions.Left, false);
             }
         }
         Console.Write(text);
@@ -229,7 +322,7 @@ public class Panel
                 panel.SecondaryButtons = new ButtonCollection(panel);
                 foreach (Enemy i in GameManager.Instance.CurrentWave)
                 {
-                    Button btn = new Button($"{i.Name}  ({i.Hp}/{i.MaxHp})", EnemyAttackCommand);
+                    Button btn = new Button($"{i.Name}", EnemyAttackCommand);
                     panel.SecondaryButtons.Add(btn);
                 }
             }
@@ -246,9 +339,19 @@ public class Panel
             {
                 int ind = panel.SecondaryButtons.Choice;
                 Wave wave = GameManager.Instance.CurrentWave;
+                Enemy enm = wave[ind];
                 SoundManager.PlaySound("punch");
-                int dmg = wave[ind].Hurt(GameManager.Instance.MainChar.Atk);
-                panel.RText = $"You attacked {wave[ind].Name} for {dmg} HP! It didn't really like that!";
+                new SpriteBuilder().SetSprite("punch_fx")
+                    .SetImageSpeed(1f)
+                    .SetPosition(
+                        enm.Body.X + (enm.Body.DrawWidth/2) - 8,
+                        enm.Body.Y + (enm.Body.DrawHeight/2) - 8
+                        )
+                    .SetDepth(0)
+                    .SetVanish(true)
+                    .Build();
+                int dmg = enm.Hurt(GameManager.Instance.MainChar.Atk);
+                panel.RText = $"You attacked {enm.Name} for {dmg} HP! It didn't really like that!";
                 panel.SecondaryButtons = null;
             }
         }
@@ -263,4 +366,9 @@ public class Panel
         new Button("RUN", RunCommand)
         ]
     );
+
+    private readonly string topSymbols = "╔╦╗";
+    private readonly char wallSymbol = '║';
+    private readonly char floorSymbol = '═';
+    private readonly string bottomSymbols = "╚╩╝";
 }

@@ -80,7 +80,7 @@ public class GameManager
         Siner = 0;
         stage = new StageImage((uint)StageWidth, (uint)StageHeight);
         CurrentWave = new Wave();
-        mainPanel = new Panel(NativeX * 1 / 4, NativeX * 3 / 4, 16, "RIKA!!!");
+        mainPanel = new Panel(NativeX, 16, "RIKA!!!");
         Random rand = new Random((int)DateTime.Now.Ticks);
         var checker = rand.Next(18);
         switch (checker)

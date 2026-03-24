@@ -16,17 +16,13 @@ public class Skulatra : Enemy
                 throw new NullReferenceException();
         }
     }
-    public int Shmoves
+
+    public Skulatra()
     {
-        get { return shmoves; }
-        set
-        {
-            if (value >= 0)
-                shmoves = value;
-        }
+        head = new Sprite();
     }
-    public Skulatra(string name, int def, int atk, int hp, int maxHp, Sprite body, Sprite head)
-    : base(name, def, atk, hp, maxHp, body)
+    public Skulatra(string name, int def, int atk, int hp, int maxHp, Sprite body, Icon face, Sprite head)
+    : base(name, def, atk, hp, maxHp, body, face)
     {
         Random rnd = new Random();
         GameManager.UpdateStarted += UpdateValues;

@@ -6,8 +6,13 @@ public class PunchyBadHand : Enemy
 {
     public bool Flip {get { return flip; } set { flip = value; }}
     private bool flip;
-    public PunchyBadHand(string name, int def, int atk, int hp, int maxHp, Sprite body, bool flip)
-    : base(name, def, atk, hp, maxHp, body)
+
+    public PunchyBadHand()
+    {
+        flip = false;
+    }
+    public PunchyBadHand(string name, int def, int atk, int hp, int maxHp, Sprite body, Icon face, bool flip)
+    : base(name, def, atk, hp, maxHp, body, face)
     {
         GameManager.UpdateStarted += UpdateValues;
         Flip = flip;

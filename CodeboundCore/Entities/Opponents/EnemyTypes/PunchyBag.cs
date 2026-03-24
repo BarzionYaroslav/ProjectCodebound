@@ -4,8 +4,9 @@ namespace Codebound.Entities.Opponents;
 
 public class PunchyBag : Enemy
 {
-    public PunchyBag(string name, int def, int atk, int hp, int maxHp, Sprite body)
-    : base(name, def, atk, hp, maxHp, body)
+    public PunchyBag(){}
+    public PunchyBag(string name, int def, int atk, int hp, int maxHp, Sprite body, Icon face)
+    : base(name, def, atk, hp, maxHp, body, face)
     {
         GameManager.UpdateStarted += UpdateValues;
     }

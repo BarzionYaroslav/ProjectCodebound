@@ -78,7 +78,24 @@ public class Enemy : IEntity
         }
     }
 
-    public Enemy(string name, int def, int atk, int hp, int maxHp, Sprite body)
+    public Icon Face
+    {
+        get { return face; }
+        set
+        {
+            if (value != null)
+                face = value;
+            else
+                throw new NullReferenceException();
+        }
+    }
+
+    public Enemy()
+    {
+        this.body = new Sprite();
+    }
+
+    public Enemy(string name, int def, int atk, int hp, int maxHp, Sprite body, Icon face)
     {
         Name = name;
         Def = def;
@@ -89,6 +106,8 @@ public class Enemy : IEntity
             this.body = body;
         else
             this.body = new Sprite();
+        if (face != null)
+            this.face = face;
         GameManager.UpdateStarted += UpdateValues;
     }
 
@@ -119,13 +138,20 @@ public class Enemy : IEntity
         return 0;
     }
 
+    public override string ToString()
+    {
+        return $"Name: {name}\nDEF: {def}\nATK: {atk}\nHP: {hp}/{maxHp}\n";
+    }
+
     private string name = DefaultName;
-    private int def;
-    private int atk;
-    private int hp;
-    private int maxHp;
+    private int def = 0;
+    private int atk = 0;
+    private int hp = 10;
+    private int maxHp = 10;
     private Sprite body;
+    private Icon face = new Icon(DefaultIcon, 0f);
 
     const int MaxNameSize = 16;
     const string DefaultName = "Punchy Bag";
+    const string DefaultIcon = "punchy";
 }

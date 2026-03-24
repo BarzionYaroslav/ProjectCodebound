@@ -15,8 +15,13 @@ public class Mekai : Enemy
                 throw new NullReferenceException();
         }
     }
-    public Mekai(string name, int def, int atk, int hp, int maxHp, Sprite body, Sprite blades)
-    : base(name, def, atk, hp, maxHp, body)
+
+    public Mekai()
+    {
+        blades = new Sprite();
+    }
+    public Mekai(string name, int def, int atk, int hp, int maxHp, Sprite body, Icon face, Sprite blades)
+    : base(name, def, atk, hp, maxHp, body, face)
     {
         GameManager.UpdateStarted += UpdateValues;
         if (blades != null)

@@ -6,7 +6,7 @@ public class EnemyTests
     [Fact]
     public void HealthTest_HealthCantGoLowerThan0()
     {
-        Enemy enm = new Enemy("test",0,0,20,20,new Drawing.Sprite());
+        Enemy enm = new Enemy("test",0,0,20,20,new Drawing.Sprite(), new Drawing.Icon());
 
         enm.Hp -= 30;
 
@@ -16,7 +16,7 @@ public class EnemyTests
     [Fact]
     public void HealthTest_HealthCantGoHigherThanMax()
     {
-        Enemy enm = new Enemy("test", 0, 0, 20, 20, new Drawing.Sprite());
+        Enemy enm = new Enemy("test", 0, 0, 20, 20, new Drawing.Sprite(), new Drawing.Icon());
 
         enm.Hp += 30;
 
@@ -26,7 +26,7 @@ public class EnemyTests
     [Fact]
     public void HurtTest_NegativeDamageDoesChipDamage()
     {
-        Enemy enm = new Enemy("test", 0, 0, 20, 20, new Drawing.Sprite());
+        Enemy enm = new Enemy("test", 0, 0, 20, 20, new Drawing.Sprite(), new Drawing.Icon());
 
         enm.Hurt(-1, true);
 
@@ -36,7 +36,7 @@ public class EnemyTests
     [Fact]
     public void HurtTest_ZeroDamageDoesChipDamage()
     {
-        Enemy enm = new Enemy("test", 0, 0, 20, 20, new Drawing.Sprite());
+        Enemy enm = new Enemy("test", 0, 0, 20, 20, new Drawing.Sprite(), new Drawing.Icon());
 
         enm.Hurt(0, true);
 
@@ -46,7 +46,7 @@ public class EnemyTests
     [Fact]
     public void HurtTest_DamageCalculatesProperly()
     {
-        Enemy enm = new Enemy("test", 0, 0, 20, 20, new Drawing.Sprite());
+        Enemy enm = new Enemy("test", 0, 0, 20, 20, new Drawing.Sprite(), new Drawing.Icon());
 
         enm.Hurt(5, true);
 
@@ -56,7 +56,7 @@ public class EnemyTests
     [Fact]
     public void HurtTest_DefenseTests_DefenseBlocksDamageLessThanItButLeavesChip()
     {
-        Enemy enm = new Enemy("test", 5, 0, 20, 20, new Drawing.Sprite());
+        Enemy enm = new Enemy("test", 5, 0, 20, 20, new Drawing.Sprite(), new Drawing.Icon());
 
         enm.Hurt(4);
 
@@ -66,7 +66,7 @@ public class EnemyTests
     [Fact]
     public void HurtTest_DefenseTests_DefenseBlocksDamageEqualToItButLeavesChip()
     {
-        Enemy enm = new Enemy("test", 5, 0, 20, 20, new Drawing.Sprite());
+        Enemy enm = new Enemy("test", 5, 0, 20, 20, new Drawing.Sprite(), new Drawing.Icon());
 
         enm.Hurt(5);
 
@@ -76,7 +76,7 @@ public class EnemyTests
     [Fact]
     public void HurtTest_DefenseTests_DefenseBlocksPartOfTheDamageMoreThanIt()
     {
-        Enemy enm = new Enemy("test", 5, 0, 20, 20, new Drawing.Sprite());
+        Enemy enm = new Enemy("test", 5, 0, 20, 20, new Drawing.Sprite(), new Drawing.Icon());
 
         enm.Hurt(8);
 
@@ -86,7 +86,7 @@ public class EnemyTests
     [Fact]
     public void HurtTest_CantGoLowerThan0()
     {
-        Enemy enm = new Enemy("test", 0, 0, 20, 20, new Drawing.Sprite());
+        Enemy enm = new Enemy("test", 0, 0, 20, 20, new Drawing.Sprite(), new Drawing.Icon());
 
         enm.Hurt(90, true);
 
@@ -96,7 +96,7 @@ public class EnemyTests
     [Fact]
     public void HealTest_HealthIncreasesNormally()
     {
-        Enemy enm = new Enemy("test", 5, 0, 15, 20, new Drawing.Sprite());
+        Enemy enm = new Enemy("test", 5, 0, 15, 20, new Drawing.Sprite(), new Drawing.Icon());
 
         enm.Heal(5);
 
@@ -106,7 +106,7 @@ public class EnemyTests
     [Fact]
     public void HealTest_HealthCantGoPastMax()
     {
-        Enemy enm = new Enemy("test", 5, 0, 15, 20, new Drawing.Sprite());
+        Enemy enm = new Enemy("test", 5, 0, 15, 20, new Drawing.Sprite(), new Drawing.Icon());
 
         enm.Heal(20);
 
@@ -116,7 +116,7 @@ public class EnemyTests
     [Fact]
     public void HealTest_CantRevive()
     {
-        Enemy enm = new Enemy("test", 5, 0, 0, 20, new Drawing.Sprite());
+        Enemy enm = new Enemy("test", 5, 0, 0, 20, new Drawing.Sprite(), new Drawing.Icon());
 
         enm.Heal(20);
 
@@ -126,7 +126,7 @@ public class EnemyTests
     [Fact]
     public void HealTest_DoesNothingOnNegative()
     {
-        Enemy enm = new Enemy("test", 5, 0, 15, 20, new Drawing.Sprite());
+        Enemy enm = new Enemy("test", 5, 0, 15, 20, new Drawing.Sprite(), new Drawing.Icon());
 
         enm.Heal(-5);
 

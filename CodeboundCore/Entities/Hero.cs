@@ -1,3 +1,5 @@
+using Codebound.Drawing;
+
 namespace Codebound.Entities;
 
 public class Hero: IEntity
@@ -84,6 +86,18 @@ public class Hero: IEntity
         }
     }
 
+    public Icon Face
+    {
+        get { return face; }
+        set
+        {
+            if (value != null)
+                face = value;
+            else
+                throw new NullReferenceException();
+        }
+    }
+
     public void UpdateValues() { }
     public int Hurt(int dmg, bool defIgnore = false)
     {
@@ -107,6 +121,11 @@ public class Hero: IEntity
         return 0;
     }
 
+    public override string ToString()
+    {
+        return $"Name: {name}\nDEF: {def}\nATK: {atk}\nHP: {hp}/{maxHp}\nMANA: {mana}/{maxMana}";
+    }
+
     private string name = DefaultName;
     private int def = DefaultDef;
     private int atk = DefaultAtk;
@@ -114,6 +133,7 @@ public class Hero: IEntity
     private int maxHp = DefaultHp;
     private int mana = DefaultMana;
     private int maxMana = DefaultMana;
+    private Icon face = new Icon(DefaultIcon, 0f);
 
     const int MaxNameSize = 16;
     const string DefaultName = "Rika";
@@ -121,4 +141,5 @@ public class Hero: IEntity
     const int DefaultAtk = 0;
     const int DefaultHp = 10;
     const int DefaultMana = 10;
+    const string DefaultIcon = "rika";
 }

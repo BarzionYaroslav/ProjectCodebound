@@ -26,8 +26,15 @@ public class Ibiruaider : Enemy
                 throw new NullReferenceException();
         }
     }
-    public Ibiruaider(string name, int def, int atk, int hp, int maxHp, Sprite body, Sprite middle, Sprite head)
-    : base(name, def, atk, hp, maxHp, body)
+
+    public Ibiruaider()
+    {
+        this.middle = new Sprite();
+        this.head = new Sprite();
+    }
+
+    public Ibiruaider(string name, int def, int atk, int hp, int maxHp, Sprite body, Icon face, Sprite middle, Sprite head)
+    : base(name, def, atk, hp, maxHp, body,face)
     {
         GameManager.UpdateStarted += UpdateValues;
         if (middle != null)

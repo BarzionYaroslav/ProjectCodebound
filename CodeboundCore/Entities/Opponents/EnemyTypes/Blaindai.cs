@@ -15,8 +15,12 @@ public class Blaindai : Enemy
                 throw new NullReferenceException();
         }
     }
-    public Blaindai(string name, int def, int atk, int hp, int maxHp, Sprite body, Sprite halo)
-    : base(name, def, atk, hp, maxHp, body)
+    public Blaindai()
+    {
+        halo = new Sprite();
+    }
+    public Blaindai(string name, int def, int atk, int hp, int maxHp, Sprite body, Icon face, Sprite halo)
+    : base(name, def, atk, hp, maxHp, body, face)
     {
         GameManager.UpdateStarted += UpdateValues;
         if (halo != null)

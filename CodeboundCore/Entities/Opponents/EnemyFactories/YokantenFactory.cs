@@ -37,7 +37,8 @@ public class YokantenFactory: IEnemyFactory
                         .SetDepth(Depth)
                         .SetImageSpeed(bodySpeed)
                         .Build();
-        Enemy returner = new Yokanten(name, def, atk, maxHp, maxHp, sprHead, sprMid, sprTail);
+        Icon ico = new Icon(iconAsset, 0f);
+        Enemy returner = new Yokanten(name, def, atk, maxHp, maxHp, sprHead, ico, sprMid, sprTail);
         return returner;
     }
     private int x;
@@ -50,6 +51,7 @@ public class YokantenFactory: IEnemyFactory
     private readonly string tailAsset = "yokanten_tail";
     private readonly float tailSpeed = 0f;
     private readonly string name = "Yokanten";
+    private readonly string iconAsset = "yokanten";
     private readonly int def = 0;
     private readonly int atk = 0;
     private readonly int maxHp = 15;

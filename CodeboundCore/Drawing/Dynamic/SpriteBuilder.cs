@@ -42,5 +42,11 @@ public class SpriteBuilder
         return this;
     }
 
+    public SpriteBuilder SetVanish(bool vanish)
+    {
+        _sprite.Vanish = vanish;
+        return this;
+    }
+
     public Sprite Build() => _sprite;
 }

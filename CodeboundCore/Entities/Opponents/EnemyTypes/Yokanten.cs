@@ -26,8 +26,15 @@ public class Yokanten : Enemy
                 throw new NullReferenceException();
         }
     }
-    public Yokanten(string name, int def, int atk, int hp, int maxHp, Sprite body, Sprite middle, Sprite tail)
-    : base(name, def, atk, hp, maxHp, body)
+
+    public Yokanten()
+    {
+        this.middle = new Sprite();
+        this.tail = new Sprite();
+    }
+
+    public Yokanten(string name, int def, int atk, int hp, int maxHp, Sprite body, Icon face, Sprite middle, Sprite tail)
+    : base(name, def, atk, hp, maxHp, body, face)
     {
         GameManager.UpdateStarted += UpdateValues;
         if (middle != null)

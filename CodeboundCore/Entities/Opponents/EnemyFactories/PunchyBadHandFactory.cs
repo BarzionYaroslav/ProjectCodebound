@@ -24,6 +24,7 @@ public class PunchyBadHandFactory : IEnemyFactory
     public Enemy Create()
     {
         Enemy returner;
+        Icon ico = new Icon(iconAsset, 0f);
         if (X>45)
         {
             Sprite spr = new SpriteBuilder().SetSprite(bodyAsset2)
@@ -31,7 +32,7 @@ public class PunchyBadHandFactory : IEnemyFactory
                         .SetDepth(Depth)
                         .SetImageSpeed(bodySpeed)
                         .Build();
-            returner = new PunchyBadHand(name, def, atk, maxHp, maxHp, spr, true);
+            returner = new PunchyBadHand(name, def, atk, maxHp, maxHp, spr, ico, true);
         }
         else
         {
@@ -40,7 +41,7 @@ public class PunchyBadHandFactory : IEnemyFactory
                         .SetDepth(Depth)
                         .SetImageSpeed(bodySpeed)
                         .Build();
-            returner = new PunchyBadHand(name, def, atk, maxHp, maxHp, spr, false);
+            returner = new PunchyBadHand(name, def, atk, maxHp, maxHp, spr, ico, false);
         }
         return returner;
     }
@@ -51,6 +52,7 @@ public class PunchyBadHandFactory : IEnemyFactory
     private readonly string bodyAsset2 = "bad_arm2";
     private readonly float bodySpeed = 0.25f;
     private readonly string name = "Punchy Hand";
+    private readonly string iconAsset = "handbad";
     private readonly int def = 0;
     private readonly int atk = 0;
     private readonly int maxHp = 15;

@@ -37,7 +37,8 @@ public class IbiruaiderFactory: IEnemyFactory
                         .SetDepth(Depth)
                         .SetImageSpeed(headSpeed)
                         .Build();
-        Enemy returner = new Ibiruaider(name, def, atk, maxHp, maxHp, sprBody, sprMid, sprHead);
+        Icon ico = new Icon(iconAsset,0f);
+        Enemy returner = new Ibiruaider(name, def, atk, maxHp, maxHp, sprBody, ico, sprMid, sprHead);
         return returner;
     }
     private int x;
@@ -50,6 +51,7 @@ public class IbiruaiderFactory: IEnemyFactory
     private readonly string headAsset = "ibiruaider_head";
     private readonly float headSpeed = 0f;
     private readonly string name = "Ibiruaider (I&Y)";
+    private readonly string iconAsset = "ibiruaider";
     private readonly int def = 0;
     private readonly int atk = 0;
     private readonly int maxHp = 15;

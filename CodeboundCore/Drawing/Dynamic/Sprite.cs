@@ -43,14 +43,16 @@ public class Sprite: IDrawableDynamic
     public int Z { get { return z; } set { z = value; } }
     public int StartX { get { return startX; } set { startX = value; } }
     public int StartY { get { return startY; } set { startY = value; } }
-    public int Depth {
+    public int Depth
+    {
         get { return depth; }
         set
         {
             if (value >= 0)
                 depth = value;
-        } 
+        }
     }
+    public bool Vanish { get { return vanish; } set { vanish = value; } }
     public MagickImage Frame { get { return GetFrame(); } }
     public Sprite()
     {
@@ -74,6 +76,11 @@ public class Sprite: IDrawableDynamic
     }
     public void UpdateValues()
     {
+        if (Vanish)
+        {
+            if (ImageIndex + ImageSpeed >= ImageCount)
+                Dispose();
+        }
         ImageIndex += ImageSpeed;
     }
     public MagickImage GetFrame()
@@ -178,5 +185,6 @@ public class Sprite: IDrawableDynamic
     private int startX = 0;
     private int startY = 0;
     private int depth = 0;
+    private bool vanish = false;
     private readonly int darkener = 5;
 }

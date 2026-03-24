@@ -23,11 +23,12 @@ public class IbiruaiFactory: IEnemyFactory
     public Enemy Create()
     {
         Sprite spr = new SpriteBuilder().SetSprite(bodyAsset)
-                        .SetPosition(X,Y)
+                        .SetPosition(X, Y)
                         .SetDepth(Depth)
                         .SetImageSpeed(bodySpeed)
                         .Build();
-        Enemy returner = new Ibiruai(name, def, atk, maxHp, maxHp, spr);
+        Icon ico = new Icon(iconAsset,0f);
+        Enemy returner = new Ibiruai(name, def, atk, maxHp, maxHp, spr, ico);
         return returner;
     }
     private int x;
@@ -36,6 +37,7 @@ public class IbiruaiFactory: IEnemyFactory
     private readonly string bodyAsset = "Ibiruai";
     private readonly float bodySpeed = 0.35f;
     private readonly string name = "Ibiruai";
+    private readonly string iconAsset = "ibiruai";
     private readonly int def = 0;
     private readonly int atk = 0;
     private readonly int maxHp = 15;

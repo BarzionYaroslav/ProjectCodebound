@@ -130,19 +130,19 @@ public class StageImage: IDrawable
     public List<string> GetLines()
     {
         List<string> answer = new List<string>();
+        IPixelCollection<byte> pixels = this.Frame.GetPixels();
         for (int num = 0; num < this.Frame.Height; num++)
-            answer.Add(GetLine(num));
+            answer.Add(GetLine(num, pixels));
         return answer;
     }
 
-    public string GetLine(int num)
+    public string GetLine(int num, IPixelCollection<byte> pixels)
     {
         uint imageWidth = this.Frame.Width;
         uint imageHeight = this.Frame.Height;
         if (num > imageHeight)
             return "  ";
         string text = "";
-        IPixelCollection<byte> pixels = this.Frame.GetPixels();
         for (int x = 0; x < imageWidth; x++)
             text += GetPixelText(x, num, pixels);
         return text;

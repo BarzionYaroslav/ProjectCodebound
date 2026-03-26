@@ -68,6 +68,7 @@ public class GameManager
                     .SetHp(40)
                     .SetMana(40)
                     .SetName("Rika")
+                    .SetFace("rika")
                     .Build();
         QuitDelay = 5;
         QuitChange = 10;

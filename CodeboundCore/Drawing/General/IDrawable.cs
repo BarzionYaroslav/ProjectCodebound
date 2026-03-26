@@ -13,7 +13,7 @@ public interface IDrawable
     void UpdateValues();
     MagickImage GetFrame();
     List<string> GetLines();
-    string GetLine(int num);
+    string GetLine(int num,IPixelCollection<byte> pixels);
     string GetImageText();
     string GetPixelText(int x, int y, IPixelCollection<byte> pixels);
 }

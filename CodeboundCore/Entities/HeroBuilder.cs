@@ -1,4 +1,6 @@
+using Codebound.Drawing;
 namespace Codebound.Entities;
+
 public class HeroBuilder
 {
     private Hero _hero = new Hero();
@@ -28,6 +30,13 @@ public class HeroBuilder
     {
         _hero.MaxMana = mana;
         _hero.Mana = mana;
+        return this;
+    }
+
+    public HeroBuilder SetFace(string faceAsset, float imageSpeed = 0f)
+    {
+        _hero.Face.Dispose();
+        _hero.Face = new Icon(faceAsset, imageSpeed);
         return this;
     }
 

@@ -4,13 +4,16 @@ namespace Codebound.Entities.Opponents;
 
 public class Enemy : BaseEntity
 {
-    public Sprite Body
+    public ComplexSpriter Body
     {
         get { return body; }
         set
         {
             if (value != null)
+            {
+                body.Dispose();
                 body = value;
+            }
             else
                 throw new NullReferenceException();
         }
@@ -18,24 +21,13 @@ public class Enemy : BaseEntity
 
     public Enemy()
     {
-        this.body = new Sprite();
-    }
-
-    public Enemy(string name, int def, int atk, int hp, int maxHp, Sprite body, Icon face)
-    {
-        Name = name;
-        Def = def;
-        Atk = atk;
-        MaxHp = maxHp;
-        Hp = hp;
-        if (body != null)
-            this.body = body;
-        else
-            this.body = new Sprite();
-        if (face != null)
-            this.face = face;
+        Expectations.Add(BodyName);
+        this.body = new ComplexSpriter(Expectations);
         GameManager.UpdateStarted += UpdateValues;
     }
+
+    public virtual void AfterPrep() { }
+
     public override int Hurt(int dmg, bool defIgnore = false)
     {
         int damage = dmg;
@@ -52,5 +44,7 @@ public class Enemy : BaseEntity
             return 1;
         }
     }
-    private Sprite body;
+    private ComplexSpriter body;
+    public HashSet<string> Expectations { get; private set; } = new HashSet<string>();
+    static public readonly string BodyName = "body";
 }

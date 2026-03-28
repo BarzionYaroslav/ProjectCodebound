@@ -44,7 +44,19 @@ public class SkulatraFactory: IEnemyFactory
                         .SetImageSpeed(headSpeed)
                         .Build();
         Icon ico = new Icon(iconAsset, 0f);
-        Enemy returner = new Skulatra(name, def, atk, maxHp, maxHp, bodySpr, ico, headSpr);
+        Dictionary<string, Sprite> complexion = new()
+            {
+                { Enemy.BodyName, bodySpr },
+                { Skulatra.HeadName, headSpr },
+            };
+        Enemy returner = new EnemyBuilder<Skulatra>()
+                            .SetAtk(atk)
+                            .SetDef(def)
+                            .SetFace(ico)
+                            .SetName(name)
+                            .SetHp(maxHp)
+                            .SetBody(complexion)
+                            .Build();
         return returner;
     }
     private int x;

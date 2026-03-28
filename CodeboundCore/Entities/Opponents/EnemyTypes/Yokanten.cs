@@ -4,77 +4,49 @@ namespace Codebound.Entities.Opponents;
 
 public class Yokanten : Enemy
 {
-    public Sprite Tail
-    {
-        get { return tail; }
-        set
-        {
-            if (value != null)
-                tail = value;
-            else
-                throw new NullReferenceException();
-        }
-    }
-    public Sprite Middle
-    {
-        get { return middle; }
-        set
-        {
-            if (value != null)
-                middle = value;
-            else
-                throw new NullReferenceException();
-        }
-    }
-
     public Yokanten()
     {
-        this.middle = new Sprite();
-        this.tail = new Sprite();
+        Expectations.Add(TailName);
+        Expectations.Add(MidName);
+        Body.ChangeExpectations(Expectations);
     }
-
-    public Yokanten(string name, int def, int atk, int hp, int maxHp, Sprite body, Icon face, Sprite middle, Sprite tail)
-    : base(name, def, atk, hp, maxHp, body, face)
+    public override void AfterPrep()
     {
-        GameManager.UpdateStarted += UpdateValues;
-        if (middle != null)
-            this.middle = middle;
-        else
-            this.middle = new Sprite();
-        if (tail != null)
-            this.tail = tail;
-        else
-            this.tail = new Sprite();
+        base.AfterPrep();
         for (int i = 0; i < posCount; i++)
         {
-            positions.Add((Body.X, Body.Y, Body.ImageIndex));
+            positions.Add((Body[BodyName].X, Body[BodyName].Y, Body[BodyName].ImageIndex));
         }
     }
+
     public override void UpdateValues()
     {
-        int bodyChange = (int)(Math.Sin(GameManager.Siner * (MathF.PI / 180) * 3) * 8);
-        int turnChange = (int)(Math.Cos(GameManager.Siner * (MathF.PI / 180) * 3) * 8);
+        Sprite bod = Body[BodyName];
+        Sprite mid = Body[MidName];
+        Sprite tail = Body[TailName];
+        int bodyChange = (int)(GameManager.DSin(GameManager.Siner * 3) * 8);
+        int turnChange = (int)(GameManager.DCos(GameManager.Siner * 3) * 8);
         if (turnChange > 2)
-            Body.ImageIndex = 1;
+            bod.ImageIndex = 1;
         else if (turnChange < -2)
-            Body.ImageIndex = 2;
+            bod.ImageIndex = 2;
         else
-            Body.ImageIndex = 0;
-        Body.X = Body.StartX + bodyChange;
-        positions.Insert(0, (Body.X, Body.Y, Body.ImageIndex));
+            bod.ImageIndex = 0;
+        bod.X = bod.StartX + bodyChange;
+        positions.Insert(0, (bod.X, bod.Y, bod.ImageIndex));
         positions.RemoveAt(posCount);
-        Middle.X = positions[midIndex].X;
-        Middle.Y = positions[midIndex].Y;
-        Middle.ImageIndex = positions[midIndex].Frame;
-        Tail.X = positions[tailIndex].X;
-        Tail.Y = positions[tailIndex].Y;
-        Tail.ImageIndex = positions[tailIndex].Frame;
+        mid.X = positions[midIndex].X;
+        mid.Y = positions[midIndex].Y;
+        mid.ImageIndex = positions[midIndex].Frame;
+        tail.X = positions[tailIndex].X;
+        tail.Y = positions[tailIndex].Y;
+        tail.ImageIndex = positions[tailIndex].Frame;
     }
 
     private List<(int X, int Y, float Frame)> positions = new List<(int X, int Y, float Frame)>();
-    private Sprite middle;
-    private Sprite tail;
     private readonly int posCount = 120;
-    private readonly int midIndex = 35;
-    private readonly int tailIndex = 60;
+    private readonly int midIndex = 15;
+    private readonly int tailIndex = 25;
+    static public readonly string MidName = "mid";
+    static public readonly string TailName = "tail";
 }

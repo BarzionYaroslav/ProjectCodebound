@@ -3,15 +3,15 @@ namespace Codebound.Drawing;
 
 public interface IDrawable
 {
-    MagickImageCollection Image { get; set; }
-    float ImageIndex { get; set; }
-    float ImageSpeed { get; set; }
+    MagickImageCollection Image { get; }
+    float ImageIndex { get; }
+    float ImageSpeed { get; }
     float ImageCount { get { return Image.Count; } }
-    int DrawHeight { get; set; }
-    int DrawWidth { get; set; }
+    int DrawHeight { get; }
+    int DrawWidth { get; }
     MagickImage Frame { get { return GetFrame(); } }
-    void UpdateValues();
     MagickImage GetFrame();
+    void UpdateValues();
     List<string> GetLines();
     string GetLine(int num,IPixelCollection<byte> pixels);
     string GetImageText();

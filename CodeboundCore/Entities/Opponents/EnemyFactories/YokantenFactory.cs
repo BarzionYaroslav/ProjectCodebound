@@ -38,7 +38,20 @@ public class YokantenFactory: IEnemyFactory
                         .SetImageSpeed(bodySpeed)
                         .Build();
         Icon ico = new Icon(iconAsset, 0f);
-        Enemy returner = new Yokanten(name, def, atk, maxHp, maxHp, sprHead, ico, sprMid, sprTail);
+        Dictionary<string, Sprite> complexion = new()
+            {
+                { Enemy.BodyName, sprHead },
+                { Yokanten.MidName, sprMid },
+                { Yokanten.TailName, sprTail },
+            };
+        Enemy returner = new EnemyBuilder<Yokanten>()
+                            .SetAtk(atk)
+                            .SetDef(def)
+                            .SetFace(ico)
+                            .SetName(name)
+                            .SetHp(maxHp)
+                            .SetBody(complexion)
+                            .Build();
         return returner;
     }
     private int x;

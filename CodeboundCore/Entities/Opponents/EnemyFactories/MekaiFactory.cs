@@ -33,7 +33,19 @@ public class MekaiFactory: IEnemyFactory
                         .SetImageSpeed(bodySpeed)
                         .Build();
         Icon ico = new Icon(iconAsset, 0f);
-        Enemy returner = new Mekai(name, def, atk, maxHp, maxHp, spr,ico, spr2);
+        Dictionary<string, Sprite> complexion = new()
+        {
+            { Enemy.BodyName, spr },
+            { Mekai.BladeName, spr2 },
+        };
+        Enemy returner = new EnemyBuilder<Mekai>()
+                            .SetAtk(atk)
+                            .SetDef(def)
+                            .SetFace(ico)
+                            .SetName(name)
+                            .SetHp(maxHp)
+                            .SetBody(complexion)
+                            .Build();
         return returner;
     }
     private int x;

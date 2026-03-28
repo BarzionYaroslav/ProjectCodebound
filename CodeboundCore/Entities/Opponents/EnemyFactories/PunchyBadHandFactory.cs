@@ -23,7 +23,7 @@ public class PunchyBadHandFactory : IEnemyFactory
     }
     public Enemy Create()
     {
-        Enemy returner;
+        PunchyBadHand returner;
         Icon ico = new Icon(iconAsset, 0f);
         if (X>45)
         {
@@ -32,7 +32,19 @@ public class PunchyBadHandFactory : IEnemyFactory
                         .SetDepth(Depth)
                         .SetImageSpeed(bodySpeed)
                         .Build();
-            returner = new PunchyBadHand(name, def, atk, maxHp, maxHp, spr, ico, true);
+            Dictionary<string, Sprite> complexion = new()
+            {
+                { Enemy.BodyName, spr },
+            };
+            returner = new EnemyBuilder<PunchyBadHand>()
+                                .SetAtk(atk)
+                                .SetDef(def)
+                                .SetFace(ico)
+                                .SetName(name)
+                                .SetHp(maxHp)
+                                .SetBody(complexion)
+                                .Build();
+            returner.Flip = true;
         }
         else
         {
@@ -41,7 +53,18 @@ public class PunchyBadHandFactory : IEnemyFactory
                         .SetDepth(Depth)
                         .SetImageSpeed(bodySpeed)
                         .Build();
-            returner = new PunchyBadHand(name, def, atk, maxHp, maxHp, spr, ico, false);
+            Dictionary<string, Sprite> complexion = new()
+            {
+                { Enemy.BodyName, spr },
+            };
+            returner = new EnemyBuilder<PunchyBadHand>()
+                                .SetAtk(atk)
+                                .SetDef(def)
+                                .SetFace(ico)
+                                .SetName(name)
+                                .SetHp(maxHp)
+                                .SetBody(complexion)
+                                .Build();
         }
         return returner;
     }

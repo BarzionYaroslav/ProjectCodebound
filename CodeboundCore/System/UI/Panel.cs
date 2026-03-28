@@ -344,8 +344,8 @@ public class Panel
                 new SpriteBuilder().SetSprite("punch_fx")
                     .SetImageSpeed(1f)
                     .SetPosition(
-                        enm.Body.X + (enm.Body.DrawWidth/2) - 8,
-                        enm.Body.Y + (enm.Body.DrawHeight/2) - 8
+                        enm.Body[Enemy.BodyName].X + (enm.Body[Enemy.BodyName].DrawWidth/2) - 8,
+                        enm.Body[Enemy.BodyName].Y + (enm.Body[Enemy.BodyName].DrawHeight/2) - 8
                         )
                     .SetDepth(0)
                     .SetVanish(true)

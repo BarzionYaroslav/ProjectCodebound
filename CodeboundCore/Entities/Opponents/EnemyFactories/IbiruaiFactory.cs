@@ -27,8 +27,19 @@ public class IbiruaiFactory: IEnemyFactory
                         .SetDepth(Depth)
                         .SetImageSpeed(bodySpeed)
                         .Build();
-        Icon ico = new Icon(iconAsset,0f);
-        Enemy returner = new Ibiruai(name, def, atk, maxHp, maxHp, spr, ico);
+        Icon ico = new Icon(iconAsset, 0f);
+        Dictionary<string, Sprite> complexion = new()
+        {
+            { Enemy.BodyName, spr },
+        };
+        Enemy returner = new EnemyBuilder<Ibiruai>()
+                            .SetAtk(atk)
+                            .SetDef(def)
+                            .SetFace(ico)
+                            .SetName(name)
+                            .SetHp(maxHp)
+                            .SetBody(complexion)
+                            .Build();
         return returner;
     }
     private int x;

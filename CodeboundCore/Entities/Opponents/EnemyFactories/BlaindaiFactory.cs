@@ -28,12 +28,24 @@ public class BlaindaiFactory: IEnemyFactory
                         .SetImageSpeed(bodySpeed)
                         .Build();
         Sprite spr2 = new SpriteBuilder().SetSprite(haloAsset)
-                        .SetPosition(X,Y)
+                        .SetPosition(X, Y)
                         .SetDepth(Depth)
                         .SetImageSpeed(haloSpeed)
-                        .Build(); ;
-        Icon ico = new Icon(iconAsset,0f);
-        Enemy returner = new Blaindai(name, def, atk, maxHp, maxHp, spr, ico, spr2);
+                        .Build();
+        Dictionary<string, Sprite> complexion = new()
+        {
+            { Enemy.BodyName, spr },
+            { Blaindai.HaloName, spr2 }
+        };
+        Icon ico = new Icon(iconAsset, 0f);
+        Enemy returner = new EnemyBuilder<Blaindai>()
+                            .SetAtk(atk)
+                            .SetDef(def)
+                            .SetFace(ico)
+                            .SetName(name)
+                            .SetHp(maxHp)
+                            .SetBody(complexion)
+                            .Build();
         return returner;
     }
     private int x;

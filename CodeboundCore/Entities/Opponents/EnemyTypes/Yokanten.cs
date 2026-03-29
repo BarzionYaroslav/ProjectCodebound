@@ -8,22 +8,22 @@ public class Yokanten : Enemy
     {
         Expectations.Add(TailName);
         Expectations.Add(MidName);
-        Body.ChangeExpectations(Expectations);
+        body.ChangeExpectations(Expectations);
     }
     public override void AfterPrep()
     {
         base.AfterPrep();
         for (int i = 0; i < posCount; i++)
         {
-            positions.Add((Body[BodyName].X, Body[BodyName].Y, Body[BodyName].ImageIndex));
+            positions.Add((body[BodyName].X, body[BodyName].Y, body[BodyName].ImageIndex));
         }
     }
 
     public override void UpdateValues()
     {
-        Sprite bod = Body[BodyName];
-        Sprite mid = Body[MidName];
-        Sprite tail = Body[TailName];
+        Sprite bod = body[BodyName];
+        Sprite mid = body[MidName];
+        Sprite tail = body[TailName];
         int bodyChange = (int)(GameManager.DSin(GameManager.Siner * 3) * 8);
         int turnChange = (int)(GameManager.DCos(GameManager.Siner * 3) * 8);
         if (turnChange > 2)

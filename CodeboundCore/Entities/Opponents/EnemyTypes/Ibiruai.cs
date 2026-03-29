@@ -6,7 +6,7 @@ public class Ibiruai : Enemy
 {
     public override void UpdateValues()
     {
-        Sprite bod = Body[BodyName];
+        Sprite bod = body[BodyName];
         var change = GameManager.DSin((GameManager.Siner + bod.Depth*15) * 2) * 2;
         bod.Y = bod.StartY + (int)change;
     }

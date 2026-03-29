@@ -14,7 +14,7 @@ public class PunchyBadHand : Enemy
     public override void UpdateValues()
     {
         double change;
-        Sprite bod = Body[BodyName];
+        Sprite bod = body[BodyName];
         if (!flip)
         {
             change = GameManager.DSin(GameManager.Siner * 5) * 4;

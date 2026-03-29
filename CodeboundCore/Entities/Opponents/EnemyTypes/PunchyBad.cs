@@ -6,7 +6,7 @@ public class PunchyBad : Enemy
 {
     public override void UpdateValues()
     {
-        Sprite bod = Body[BodyName];
+        Sprite bod = body[BodyName];
         var change = GameManager.DSin(GameManager.Siner * 4) * 3;
         bod.Y = bod.StartY + (int)change;
     }

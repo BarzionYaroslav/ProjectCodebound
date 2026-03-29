@@ -8,20 +8,20 @@ public class Blaindai : Enemy
     public Blaindai() : base()
     {
         Expectations.Add(HaloName);
-        Body.ChangeExpectations(Expectations);
+        body.ChangeExpectations(Expectations);
     }
 
     public override void AfterPrep()
     {
         base.AfterPrep();
-        prevX = Body[BodyName].X;
-        prevY = Body[BodyName].Y;
+        prevX = body[BodyName].X;
+        prevY = body[BodyName].Y;
     }
 
     public override void UpdateValues()
     {
-        Sprite bod = Body[BodyName];
-        Sprite halo = Body[HaloName];
+        Sprite bod = body[BodyName];
+        Sprite halo = body[HaloName];
         halo.X = prevX;
         halo.Y = prevY;
         prevX = bod.X;

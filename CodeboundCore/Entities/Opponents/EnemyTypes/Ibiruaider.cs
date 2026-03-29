@@ -9,7 +9,7 @@ public class Ibiruaider : Enemy
     {
         Expectations.Add(MidName);
         Expectations.Add(HeadName);
-        Body.ChangeExpectations(Expectations);
+        body.ChangeExpectations(Expectations);
     }
 
     public override void AfterPrep()
@@ -17,14 +17,14 @@ public class Ibiruaider : Enemy
         base.AfterPrep();
         for (int i = 0; i < posCount; i++)
         {
-            positions.Add((Body[BodyName].X, Body[BodyName].Y, Body[BodyName].ImageIndex));
+            positions.Add((body[BodyName].X, body[BodyName].Y, body[BodyName].ImageIndex));
         }
     }
     public override void UpdateValues()
     {
-        Sprite bod = Body[BodyName];
-        Sprite mid = Body[MidName];
-        Sprite head = Body[HeadName];
+        Sprite bod = body[BodyName];
+        Sprite mid = body[MidName];
+        Sprite head = body[HeadName];
         int bodyChangeX = (int)(GameManager.DSin(GameManager.Siner * 3) * 8);
         int bodyChangeY = (int)(GameManager.DSin((GameManager.Siner + bod.Depth*15) * 3) * 2);
         int turnChange = (int)(GameManager.DCos(GameManager.Siner * 3) * 8);

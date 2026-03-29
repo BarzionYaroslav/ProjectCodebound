@@ -8,15 +8,15 @@ public class Skulatra : Enemy
     public Skulatra() : base()
     {
         Expectations.Add(HeadName);
-        Body.ChangeExpectations(Expectations);
+        body.ChangeExpectations(Expectations);
         Random rnd = new Random();
         shmoves = rnd.Next(2);
     }
 
     public override void UpdateValues()
     {
-        Sprite bod = Body[BodyName];
-        Sprite head = Body[HeadName];
+        Sprite bod = body[BodyName];
+        Sprite head = body[HeadName];
         var degree = (360 / bod.ImageCount) * bod.ImageIndex;
         var change = GameManager.DSin(degree) * 2;
         if (shmoves != 1)

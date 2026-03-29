@@ -1,3 +1,5 @@
+using System.Security.Cryptography;
+
 namespace Codebound.Drawing;
 public class ComplexSpriter: IDisposable
 {
@@ -23,6 +25,8 @@ public class ComplexSpriter: IDisposable
             _sprites[name] = value;
         }
     }
+    public Dictionary<string, Sprite>.KeyCollection Keys { get { return _sprites.Keys; } }
+    public Dictionary<string, Sprite>.ValueCollection Values {get { return _sprites.Values; }}
 
     public ComplexSpriter(HashSet<string> expectations)
     {

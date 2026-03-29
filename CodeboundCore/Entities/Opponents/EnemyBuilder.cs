@@ -36,7 +36,9 @@ public class EnemyBuilder<T> : IEnemyBuilder<T> where T: Enemy, new()
 
     public EnemyBuilder<T> SetBody(Dictionary<string, Sprite> dict)
     {
-        _enemy.Body.Add(dict);
+        ComplexSpriter newBody = new ComplexSpriter(_enemy.Expectations);
+        newBody.Add(dict);
+        _enemy.ReplaceBody(newBody);
         return this;
     }
 

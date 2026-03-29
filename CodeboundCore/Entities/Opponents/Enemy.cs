@@ -4,19 +4,9 @@ namespace Codebound.Entities.Opponents;
 
 public class Enemy : BaseEntity
 {
-    public ComplexSpriter Body
+    public ComplexSpriterHollow Body
     {
-        get { return body; }
-        set
-        {
-            if (value != null)
-            {
-                body.Dispose();
-                body = value;
-            }
-            else
-                throw new NullReferenceException();
-        }
+        get { return new ComplexSpriterHollow(body); }
     }
 
     public Enemy()
@@ -44,7 +34,18 @@ public class Enemy : BaseEntity
             return 1;
         }
     }
-    private ComplexSpriter body;
+    public void ReplaceBody(ComplexSpriter bodyNew)
+    {
+        if (bodyNew != null)
+            {
+                body.Dispose();
+                body = bodyNew;
+            }
+            else
+                throw new NullReferenceException();
+    }
+
+    protected ComplexSpriter body;
     public HashSet<string> Expectations { get; private set; } = new HashSet<string>();
     static public readonly string BodyName = "body";
 }

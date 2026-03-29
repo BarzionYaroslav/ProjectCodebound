@@ -7,13 +7,13 @@ public class Mekai : Enemy
     public Mekai() : base()
     {
         Expectations.Add(BladeName);
-        Body.ChangeExpectations(Expectations);
+        body.ChangeExpectations(Expectations);
     }
 
     public override void UpdateValues()
     {
-        Sprite bod = Body[BodyName];
-        Sprite blades = Body[BladeName];
+        Sprite bod = body[BodyName];
+        Sprite blades = body[BladeName];
         var sinner = GameManager.Siner + bod.Depth * depthOffset;
         var change = GameManager.DSin(sinner * waveSpeed) * waveYMagnitude;
         bod.Y = bod.StartY + Math.Clamp((int)change, -maxChange, maxChange);

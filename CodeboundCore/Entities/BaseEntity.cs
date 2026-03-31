@@ -22,28 +22,31 @@ public abstract class BaseEntity : IEntity
             }
         }
     }
-    public int Def
+    public int BaseDef
     {
-        get { return def; }
+        get { return baseDef; }
         set
         {
             if (value >= 0)
-                def = value;
+                baseDef = value;
             else
-                def = 0;
+                baseDef = 0;
         }
     }
-    public int Atk
+    public int BaseAtk
     {
-        get { return atk; }
+        get { return baseAtk; }
         set
         {
             if (value >= 0)
-                atk = value;
+                baseAtk = value;
             else
-                atk = 0;
+                baseAtk = 0;
         }
     }
+
+    public int Atk => GetDamage();
+    public int Def => GetDefense();
     public int Hp
     {
         get { return hp; }
@@ -103,14 +106,23 @@ public abstract class BaseEntity : IEntity
         return 0;
     }
 
+    public virtual int GetDamage()
+    {
+        return BaseAtk;
+    }
+    public virtual int GetDefense()
+    {
+        return BaseDef;
+    }
+
     public override string ToString()
     {
-        return $"Name: {name}\nDEF: {def}\nATK: {atk}\nHP: {hp}/{maxHp}\n";
+        return $"Name: {name}\nDEF: {Def}\nATK: {Atk}\nHP: {hp}/{maxHp}\n";
     }
 
     private protected string name = DefaultName;
-    private protected int def = DefaultDef;
-    private protected int atk = DefaultAtk;
+    private protected int baseDef = DefaultDef;
+    private protected int baseAtk = DefaultAtk;
     private protected int hp = DefaultHp;
     private protected int maxHp = DefaultHp;
     private protected Icon face = new Icon(DefaultIcon, 0f);

@@ -1,4 +1,5 @@
 using Codebound.Drawing;
+using Codebound.Items.Weapons;
 namespace Codebound.Entities;
 
 public class HeroBuilder
@@ -12,12 +13,12 @@ public class HeroBuilder
     }
     public HeroBuilder SetAtk(int atk)
     {
-        _hero.Atk = atk;
+        _hero.BaseAtk = atk;
         return this;
     }
     public HeroBuilder SetDef(int def)
     {
-        _hero.Def = def;
+        _hero.BaseDef = def;
         return this;
     }
     public HeroBuilder SetHp(int hp)
@@ -30,6 +31,11 @@ public class HeroBuilder
     {
         _hero.MaxMana = mana;
         _hero.Mana = mana;
+        return this;
+    }
+    public HeroBuilder SetWeapon(BaseWeapon weapon)
+    {
+        _hero.Weapon = weapon;
         return this;
     }
 

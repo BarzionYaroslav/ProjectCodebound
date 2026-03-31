@@ -1,4 +1,6 @@
 using Codebound.Drawing;
+using Codebound.Items;
+using Codebound.Items.Weapons;
 
 namespace Codebound.Entities;
 
@@ -26,12 +28,36 @@ public class Hero: BaseEntity
         }
     }
 
+    public BaseWeapon? Weapon
+    {
+        get { return weapon; }
+        set
+        {
+            weapon = value;
+        }
+    }
+
     public override void UpdateValues() { }
+
+    public override int GetDamage()
+    {
+        if (weapon!=null)
+        {
+            return BaseAtk + weapon.GetDamage();
+        }
+        return BaseAtk;
+    }
+    public override int GetDefense()
+    {
+        return BaseDef;
+    }
 
     public override string ToString()
     {
-        return $"Name: {name}\nDEF: {def}\nATK: {atk}\nHP: {hp}/{maxHp}\nMANA: {mana}/{maxMana}";
+        return $"Name: {name}\nDEF: {Def}\nATK: {Atk}\nHP: {hp}/{maxHp}\nMANA: {mana}/{maxMana}";
     }
+    private BaseWeapon? weapon = null;
+    private IItem? armor = null;
     private int mana = DefaultMana;
     private int maxMana = DefaultMana;
     const int DefaultMana = 10;

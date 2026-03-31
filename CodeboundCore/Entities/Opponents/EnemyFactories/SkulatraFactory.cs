@@ -39,11 +39,24 @@ public class SkulatraFactory: IEnemyFactory
                         .SetImageSpeed(bodySpeed)
                         .Build();
         Sprite headSpr = new SpriteBuilder().SetSprite(headAsset)
-                        .SetPosition(X + headXOffset,Y + headYOffset)
+                        .SetPosition(X + headXOffset, Y + headYOffset)
                         .SetDepth(Depth)
                         .SetImageSpeed(headSpeed)
                         .Build();
-        Enemy returner = new Skulatra(name, def, atk, maxHp, maxHp, bodySpr, headSpr);
+        Icon ico = new Icon(iconAsset, 0f);
+        Dictionary<string, Sprite> complexion = new()
+            {
+                { Enemy.BodyName, bodySpr },
+                { Skulatra.HeadName, headSpr },
+            };
+        Enemy returner = new EnemyBuilder<Skulatra>()
+                            .SetAtk(atk)
+                            .SetDef(def)
+                            .SetFace(ico)
+                            .SetName(name)
+                            .SetHp(maxHp)
+                            .SetBody(complexion)
+                            .Build();
         return returner;
     }
     private int x;
@@ -57,6 +70,7 @@ public class SkulatraFactory: IEnemyFactory
     private readonly int headYOffset = 6;
     private readonly string name1 = "Mr. Skulatra";
     private readonly string name2 = "Ms. Skulatra";
+    private readonly string iconAsset = "skulatra";
     private readonly int def = 0;
     private readonly int atk = 0;
     private readonly int maxHp = 15;

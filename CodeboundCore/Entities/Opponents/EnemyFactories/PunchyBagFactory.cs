@@ -23,11 +23,23 @@ public class PunchyBagFactory: IEnemyFactory
     public Enemy Create()
     {
         Sprite spr = new SpriteBuilder().SetSprite(bodyAsset)
-                        .SetPosition(X,Y)
+                        .SetPosition(X, Y)
                         .SetDepth(Depth)
                         .SetImageSpeed(bodySpeed)
                         .Build();
-        Enemy returner = new PunchyBag(name, def, atk, maxHp, maxHp, spr);
+        Icon ico = new Icon(iconAsset, 0f);
+        Dictionary<string, Sprite> complexion = new()
+            {
+                { Enemy.BodyName, spr },
+            };
+        Enemy returner = new EnemyBuilder<PunchyBag>()
+                            .SetAtk(atk)
+                            .SetDef(def)
+                            .SetFace(ico)
+                            .SetName(name)
+                            .SetHp(maxHp)
+                            .SetBody(complexion)
+                            .Build();
         return returner;
     }
     private int x;
@@ -36,6 +48,7 @@ public class PunchyBagFactory: IEnemyFactory
     private readonly string bodyAsset = "punchy_bag2";
     private readonly float bodySpeed = 0.25f;
     private readonly string name = "Punchy Bag";
+    private readonly string iconAsset = "punchy";
     private readonly int def = 0;
     private readonly int atk = 0;
     private readonly int maxHp = 15;

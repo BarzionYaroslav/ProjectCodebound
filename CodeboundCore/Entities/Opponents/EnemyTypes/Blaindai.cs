@@ -1,46 +1,37 @@
+using System.Runtime;
 using Codebound.Drawing;
 using Codebound.System;
 namespace Codebound.Entities.Opponents;
 
 public class Blaindai : Enemy
 {
-    public Sprite Halo
+    public Blaindai() : base()
     {
-        get { return halo; }
-        set
-        {
-            if (value != null)
-                halo = value;
-            else
-                throw new NullReferenceException();
-        }
+        Expectations.Add(HaloName);
+        body.ChangeExpectations(Expectations);
     }
-    public Blaindai(string name, int def, int atk, int hp, int maxHp, Sprite body, Sprite halo)
-    : base(name, def, atk, hp, maxHp, body)
+
+    public override void AfterPrep()
     {
-        GameManager.UpdateStarted += UpdateValues;
-        if (halo != null)
-            this.halo = halo;
-        else
-            this.halo = new Sprite();
-        prevX = Body.X;
-        prevY = Body.Y;
+        base.AfterPrep();
+        prevX = body[BodyName].X;
+        prevY = body[BodyName].Y;
     }
 
     public override void UpdateValues()
     {
-        Halo.X = prevX;
-        Halo.Y = prevY;
-        prevX = Body.X;
-        prevY = Body.Y;
-        var sinner = (GameManager.Siner + Body.Depth * depthOffset) * (MathF.PI / 180);
-        var change = Math.Sin(sinner * waveSpeed) * waveYMagnitude;
-        Body.Y = Body.StartY + (int)change;
-        change = Math.Cos(sinner * waveSpeed * waveXMult) * waveXMagnitude;
-        Body.X = Body.StartX + (int)change;
+        Sprite bod = body[BodyName];
+        Sprite halo = body[HaloName];
+        halo.X = prevX;
+        halo.Y = prevY;
+        prevX = bod.X;
+        prevY = bod.Y;
+        var sinner = GameManager.Siner + bod.Depth * depthOffset;
+        var change = GameManager.DSin(sinner * waveSpeed) * waveYMagnitude;
+        bod.Y = bod.StartY + (int)change;
+        change = GameManager.DSin(sinner * waveSpeed * waveXMult) * waveXMagnitude;
+        bod.X = bod.StartX + (int)change;
     }
-
-    private Sprite halo;
     private int prevX;
     private int prevY;
     private readonly int depthOffset = 15;
@@ -48,4 +39,5 @@ public class Blaindai : Enemy
     private readonly int waveXMagnitude = 8;
     private readonly int waveSpeed = 2;
     private readonly int waveXMult = 3;
+    static public readonly string HaloName = "halo";
 }

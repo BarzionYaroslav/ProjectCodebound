@@ -4,50 +4,30 @@ namespace Codebound.Entities.Opponents;
 
 public class Ibiruaider : Enemy
 {
-    public Sprite Head
+
+    public Ibiruaider() : base()
     {
-        get { return head; }
-        set
-        {
-            if (value != null)
-                head = value;
-            else
-                throw new NullReferenceException();
-        }
+        Expectations.Add(MidName);
+        Expectations.Add(HeadName);
+        body.ChangeExpectations(Expectations);
     }
-    public Sprite Middle
+
+    public override void AfterPrep()
     {
-        get { return middle; }
-        set
-        {
-            if (value != null)
-                middle = value;
-            else
-                throw new NullReferenceException();
-        }
-    }
-    public Ibiruaider(string name, int def, int atk, int hp, int maxHp, Sprite body, Sprite middle, Sprite head)
-    : base(name, def, atk, hp, maxHp, body)
-    {
-        GameManager.UpdateStarted += UpdateValues;
-        if (middle != null)
-            this.middle = middle;
-        else
-            this.middle = new Sprite();
-        if (head != null)
-            this.head = head;
-        else
-            this.head = new Sprite();
+        base.AfterPrep();
         for (int i = 0; i < posCount; i++)
         {
-            positions.Add((Body.X, Body.Y, Body.ImageIndex));
+            positions.Add((body[BodyName].X, body[BodyName].Y, body[BodyName].ImageIndex));
         }
     }
     public override void UpdateValues()
     {
-        int bodyChangeX = (int)(Math.Sin(GameManager.Siner * (MathF.PI / 180) * 3) * 8);
-        int bodyChangeY = (int)(Math.Sin((GameManager.Siner + Body.Depth*15) * (MathF.PI / 180) * 3) * 2);
-        int turnChange = (int)(Math.Cos(GameManager.Siner * (MathF.PI / 180) * 3) * 8);
+        Sprite bod = body[BodyName];
+        Sprite mid = body[MidName];
+        Sprite head = body[HeadName];
+        int bodyChangeX = (int)(GameManager.DSin(GameManager.Siner * 3) * 8);
+        int bodyChangeY = (int)(GameManager.DSin((GameManager.Siner + bod.Depth*15) * 3) * 2);
+        int turnChange = (int)(GameManager.DCos(GameManager.Siner * 3) * 8);
         int headFrameOffset;
         if (turnChange > 1)
             headFrameOffset = 2;
@@ -55,22 +35,22 @@ public class Ibiruaider : Enemy
             headFrameOffset = 1;
         else
             headFrameOffset = 0;
-        Body.X = Body.StartX + bodyChangeX;
-        Body.Y = Body.StartY + bodyChangeY;
-        positions.Insert(0, (Body.X, Body.Y, Body.ImageIndex));
+        bod.X = bod.StartX + bodyChangeX;
+        bod.Y = bod.StartY + bodyChangeY;
+        positions.Insert(0, (bod.X, bod.Y, bod.ImageIndex));
         positions.RemoveAt(posCount);
-        Middle.X = positions[midIndex].X;
-        Middle.Y = positions[midIndex].Y + 7;
-        Middle.ImageIndex = Body.ImageIndex;
-        Head.X = positions[headIndex].X;
-        Head.Y = positions[headIndex].Y + 14;
-        Head.ImageIndex = Body.ImageIndex + headFrameOffset*Body.ImageCount;
+        mid.X = positions[midIndex].X;
+        mid.Y = positions[midIndex].Y + 7;
+        mid.ImageIndex = bod.ImageIndex;
+        head.X = positions[headIndex].X;
+        head.Y = positions[headIndex].Y + 14;
+        head.ImageIndex = bod.ImageIndex + headFrameOffset*bod.ImageCount;
     }
 
     private List<(int X, int Y, float Frame)> positions = new List<(int X, int Y, float Frame)>();
-    private Sprite middle;
-    private Sprite head;
     private readonly int posCount = 120;
-    private readonly int midIndex = 20;
-    private readonly int headIndex = 40;
+    private readonly int midIndex = 10;
+    private readonly int headIndex = 20;
+    static public readonly string MidName = "mid";
+    static public readonly string HeadName = "head";
 }

@@ -68,6 +68,7 @@ public class GameManager
                     .SetHp(40)
                     .SetMana(40)
                     .SetName("Rika")
+                    .SetFace("rika_extra")
                     .Build();
         QuitDelay = 5;
         QuitChange = 10;
@@ -80,7 +81,7 @@ public class GameManager
         Siner = 0;
         stage = new StageImage((uint)StageWidth, (uint)StageHeight);
         CurrentWave = new Wave();
-        mainPanel = new Panel(NativeX * 1 / 4, NativeX * 3 / 4, 16, "RIKA!!!");
+        mainPanel = new Panel(NativeX, 16, "RIKA!!!");
         Random rand = new Random((int)DateTime.Now.Ticks);
         var checker = rand.Next(18);
         switch (checker)
@@ -386,6 +387,36 @@ public class GameManager
     public void EndGame()
     {
         gameStopped = true;
+    }
+
+    public static double DSin(int a)
+    {
+        return Math.Sin(a * (MathF.PI / 180));
+    }
+
+    public static double DCos(int a)
+    {
+        return Math.Cos(a * (MathF.PI / 180));
+    }
+
+    public static double DSin(float a)
+    {
+        return Math.Sin(a * (MathF.PI / 180));
+    }
+
+    public static double DCos(float a)
+    {
+        return Math.Cos(a * (MathF.PI / 180));
+    }
+
+    public static double DSin(double a)
+    {
+        return Math.Sin(a * (MathF.PI / 180));
+    }
+
+    public static double DCos(double a)
+    {
+        return Math.Cos(a * (MathF.PI / 180));
     }
 
     static public event KeyEventHandler? KeyPressed;

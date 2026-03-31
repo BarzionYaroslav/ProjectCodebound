@@ -6,33 +6,32 @@ public class PunchyBadHand : Enemy
 {
     public bool Flip {get { return flip; } set { flip = value; }}
     private bool flip;
-    public PunchyBadHand(string name, int def, int atk, int hp, int maxHp, Sprite body, bool flip)
-    : base(name, def, atk, hp, maxHp, body)
+
+    public PunchyBadHand()
     {
-        GameManager.UpdateStarted += UpdateValues;
-        Flip = flip;
+        flip = false;
     }
-    
     public override void UpdateValues()
     {
         double change;
+        Sprite bod = body[BodyName];
         if (!flip)
         {
-            change = Math.Sin((MathF.PI / 180) * GameManager.Siner * 5) * 4;
-            Body.Z = (int)change;
-            change = Math.Cos((MathF.PI / 180) * GameManager.Siner * 5) * 3;
-            Body.X = Body.StartX + (int)change;
-            change = Math.Sin((MathF.PI / 180) * GameManager.Siner * 5) * 2;
-            Body.Y = Body.StartY + (int)change;
+            change = GameManager.DSin(GameManager.Siner * 5) * 4;
+            bod.Z = (int)change;
+            change = GameManager.DCos(GameManager.Siner * 5) * 3;
+            bod.X = bod.StartX + (int)change;
+            change = GameManager.DSin(GameManager.Siner * 5) * 2;
+            bod.Y = bod.StartY + (int)change;
         }
         else
         {
-            change = Math.Sin(180+(MathF.PI / 180) * GameManager.Siner * 5) * 4;
-            Body.Z = (int)change;
-            change = Math.Cos((MathF.PI / 180) * GameManager.Siner * 5) * 3;
-            Body.X = Body.StartX + (int)change;
-            change = Math.Sin((MathF.PI / 180) * GameManager.Siner * 5) * 2;
-            Body.Y = Body.StartY + (int)change;
+            change = GameManager.DSin(180+GameManager.Siner * 5) * 4;
+            bod.Z = (int)change;
+            change = GameManager.DCos(GameManager.Siner * 5) * 3;
+            bod.X = bod.StartX + (int)change;
+            change = GameManager.DSin(GameManager.Siner * 5) * 2;
+            bod.Y = bod.StartY + (int)change;
         }
         
     }

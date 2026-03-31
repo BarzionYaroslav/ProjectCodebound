@@ -43,14 +43,16 @@ public class Sprite: IDrawableDynamic
     public int Z { get { return z; } set { z = value; } }
     public int StartX { get { return startX; } set { startX = value; } }
     public int StartY { get { return startY; } set { startY = value; } }
-    public int Depth {
+    public int Depth
+    {
         get { return depth; }
         set
         {
             if (value >= 0)
                 depth = value;
-        } 
+        }
     }
+    public bool Vanish { get { return vanish; } set { vanish = value; } }
     public MagickImage Frame { get { return GetFrame(); } }
     public Sprite()
     {
@@ -74,6 +76,11 @@ public class Sprite: IDrawableDynamic
     }
     public void UpdateValues()
     {
+        if (Vanish)
+        {
+            if (ImageIndex + ImageSpeed >= ImageCount)
+                Dispose();
+        }
         ImageIndex += ImageSpeed;
     }
     public MagickImage GetFrame()
@@ -109,18 +116,18 @@ public class Sprite: IDrawableDynamic
     public List<string> GetLines()
     {
         List<string> answer = new List<string>();
+        IPixelCollection<byte> pixels = this.Frame.GetPixels();
         for (int num = 0; num < this.Frame.Height; num++)
-            answer.Add(GetLine(num));
+            answer.Add(GetLine(num, pixels));
         return answer;
     }
-    public string GetLine(int num)
+    public string GetLine(int num, IPixelCollection<byte> pixels)
     {
         uint imageWidth = this.Frame.Width;
         uint imageHeight = this.Frame.Height;
         if (num > imageHeight)
             return "  ";
         string text = "";
-        IPixelCollection<byte> pixels = this.Frame.GetPixels();
         for (int x = 0; x < imageWidth; x++)
             text += GetPixelText(x, num,pixels);
         return text;
@@ -178,5 +185,6 @@ public class Sprite: IDrawableDynamic
     private int startX = 0;
     private int startY = 0;
     private int depth = 0;
+    private bool vanish = false;
     private readonly int darkener = 5;
 }

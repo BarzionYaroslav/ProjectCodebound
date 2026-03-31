@@ -28,11 +28,24 @@ public class MekaiFactory: IEnemyFactory
                         .SetImageSpeed(bladeSpeed)
                         .Build();;
         Sprite spr = new SpriteBuilder().SetSprite(bodyAsset)
-                        .SetPosition(X,Y)
+                        .SetPosition(X, Y)
                         .SetDepth(Depth)
                         .SetImageSpeed(bodySpeed)
                         .Build();
-        Enemy returner = new Mekai(name, def, atk, maxHp, maxHp, spr, spr2);
+        Icon ico = new Icon(iconAsset, 0f);
+        Dictionary<string, Sprite> complexion = new()
+        {
+            { Enemy.BodyName, spr },
+            { Mekai.BladeName, spr2 },
+        };
+        Enemy returner = new EnemyBuilder<Mekai>()
+                            .SetAtk(atk)
+                            .SetDef(def)
+                            .SetFace(ico)
+                            .SetName(name)
+                            .SetHp(maxHp)
+                            .SetBody(complexion)
+                            .Build();
         return returner;
     }
     private int x;
@@ -43,6 +56,7 @@ public class MekaiFactory: IEnemyFactory
     private readonly float bodySpeed = 0.2f;
     private readonly float bladeSpeed = 0.4f;
     private readonly string name = "Mek-AI Mk.I";
+    private readonly string iconAsset = "mekai";
     private readonly int def = 0;
     private readonly int atk = 0;
     private readonly int maxHp = 15;

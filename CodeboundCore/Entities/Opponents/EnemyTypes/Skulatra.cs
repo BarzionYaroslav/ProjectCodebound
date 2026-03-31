@@ -5,65 +5,43 @@ namespace Codebound.Entities.Opponents;
 
 public class Skulatra : Enemy
 {
-    public Sprite Head
+    public Skulatra() : base()
     {
-        get { return head; }
-        set
-        {
-            if (value != null)
-                head = value;
-            else
-                throw new NullReferenceException();
-        }
-    }
-    public int Shmoves
-    {
-        get { return shmoves; }
-        set
-        {
-            if (value >= 0)
-                shmoves = value;
-        }
-    }
-    public Skulatra(string name, int def, int atk, int hp, int maxHp, Sprite body, Sprite head)
-    : base(name, def, atk, hp, maxHp, body)
-    {
+        Expectations.Add(HeadName);
+        body.ChangeExpectations(Expectations);
         Random rnd = new Random();
-        GameManager.UpdateStarted += UpdateValues;
-        if (head != null)
-            this.head = head;
-        else
-            this.head = new Sprite();
         shmoves = rnd.Next(2);
     }
 
     public override void UpdateValues()
     {
-        var degree = (360 / Body.ImageCount) * Body.ImageIndex;
-        var change = Math.Sin(degree * (MathF.PI / 180)) * 2;
+        Sprite bod = body[BodyName];
+        Sprite head = body[HeadName];
+        var degree = (360 / bod.ImageCount) * bod.ImageIndex;
+        var change = GameManager.DSin(degree) * 2;
         if (shmoves != 1)
         {
-            Head.X = Head.StartX - (int)change;
+            head.X = head.StartX - (int)change;
             if (change >= 1)
-                Head.ImageIndex = 3;
+                head.ImageIndex = 3;
             else if (change <= -1)
-                Head.ImageIndex = 1;
+                head.ImageIndex = 1;
             else
-                Head.ImageIndex = 0;
+                head.ImageIndex = 0;
         }
         else
         {
-            Head.X = Head.StartX + (int)change;
+            head.X = head.StartX + (int)change;
             if (change >= 1)
-                Head.ImageIndex = 1;
+                head.ImageIndex = 1;
             else if (change <= -1)
-                Head.ImageIndex = 3;
+                head.ImageIndex = 3;
             else
-                Head.ImageIndex = 0;
+                head.ImageIndex = 0;
         }
-        change = Math.Abs(Math.Cos(degree * (MathF.PI / 180)) * 2);
-        Head.Y = Head.StartY - (int)change;
+        change = Math.Abs(GameManager.DCos(degree) * 2);
+        head.Y = head.StartY - (int)change;
     }
-    private Sprite head;
     private int shmoves;
+    static public readonly string HeadName = "head";
 }

@@ -57,7 +57,6 @@ public class Hero: BaseEntity
         return $"Name: {name}\nDEF: {Def}\nATK: {Atk}\nHP: {hp}/{maxHp}\nMANA: {mana}/{maxMana}";
     }
     private BaseWeapon? weapon = null;
-    private IItem? armor = null;
     private int mana = DefaultMana;
     private int maxMana = DefaultMana;
     const int DefaultMana = 10;

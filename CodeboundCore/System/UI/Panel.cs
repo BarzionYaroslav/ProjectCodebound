@@ -3,6 +3,8 @@ using Codebound.Drawing;
 using Codebound.Entities.Opponents;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using Codebound.Entities;
+using Codebound.Items.Weapons;
 namespace Codebound.System.UI;
 
 public class Panel
@@ -71,6 +73,7 @@ public class Panel
     private string rtext = "UNOWEN";
     private int height;
     private int width;
+    public int state = 0;
 
     public Panel(int width, int height, string rtext)
     {
@@ -240,17 +243,31 @@ public class Panel
         List<string> enlines = new List<string>();
         List<string> enmDat = new List<string>();
         int enmMax = 0;
+        List<string> wtext = new List<string>();
         if (secondaryButtons!=null)
         {
-            enText = GameManager.Instance.CurrentWave[secondaryButtons.Choice].Face.GetImageText();
-            enlines = [.. enText.Split('\n')];
-            enmDat = [.. GameManager.Instance.CurrentWave[secondaryButtons.Choice].ToString().Split('\n')];
-            foreach (var i in enmDat)
+            if (state == 1)
             {
-                if (i.Length>enmMax)
+                enText = GameManager.Instance.CurrentWave[secondaryButtons.Choice].Face.GetImageText();
+                enlines = [.. enText.Split('\n')];
+                enmDat = [.. GameManager.Instance.CurrentWave[secondaryButtons.Choice].ToString().Split('\n')];
+                foreach (var i in enmDat)
                 {
-                    enmMax = i.Length;
+                    if (i.Length > enmMax)
+                    {
+                        enmMax = i.Length;
+                    }
                 }
+            }
+            if (state == 2)
+            {
+                var wep = testList[secondaryButtons.Choice];
+                if (wep != null)
+                    wtext = [.. wep.GetDescription().Split('\n')];
+                else
+                    wtext = new List<string>(["Unequip your weapon"]);
+                enmMax = 82;
+                wtext = StringToLines(wtext, enmMax - 6, height - 2);
             }
         }
         
@@ -268,9 +285,17 @@ public class Panel
             }
             else
             {
-                text += MakePanelPart(i, width - lenCounter - (rik.DrawWidth * 2) - 2 - (enmMax+4) - 2, height, secondaryButtons, PanelContinueOptions.Both);
-                text += MakePanelPart(i, enmMax + 4, height, enmDat, PanelContinueOptions.Both);
-                text += MakePanelPart(i, rik.DrawWidth * 2, height, enlines, PanelContinueOptions.Left, false);
+                if (state == 1)
+                {
+                    text += MakePanelPart(i, width - lenCounter - (rik.DrawWidth * 2) - 2 - (enmMax + 4) - 2, height, secondaryButtons, PanelContinueOptions.Both);
+                    text += MakePanelPart(i, enmMax + 4, height, enmDat, PanelContinueOptions.Both);
+                    text += MakePanelPart(i, rik.DrawWidth * 2, height, enlines, PanelContinueOptions.Left, false);
+                }
+                if (state==2)
+                {
+                    text += MakePanelPart(i, width - lenCounter - (enmMax + 4) - 2, height, secondaryButtons, PanelContinueOptions.Both);
+                    text += MakePanelPart(i, enmMax + 4, height, wtext, PanelContinueOptions.Left);
+                }
             }
         }
         Console.Write(text);
@@ -305,6 +330,24 @@ public class Panel
         return answer;
     }
 
+    static List<string> StringToLines(List<string> text, int size, int maxLines)
+    {
+        List<string> answer = new List<string>();
+        int counter = 0;
+        foreach (var i in text)
+        {
+            var tempAns = Panel.StringToLines(i, size, maxLines);
+            foreach (var n in tempAns)
+            {
+                answer.Add(n);
+                counter += 1;
+                if (counter >= maxLines)
+                    return answer;
+            }
+        }
+        return answer;
+    }
+
     public static void RunCommand(Panel? panel)
     {
         if (panel != null)
@@ -325,9 +368,48 @@ public class Panel
                     Button btn = new Button($"{i.Name}", EnemyAttackCommand);
                     panel.SecondaryButtons.Add(btn);
                 }
+                panel.state = 1;
             }
             else
                 SoundManager.PlaySound("Nuhuh");
+        }
+    }
+    public static void InventoryCommand(Panel? panel)
+    {
+        if (panel != null)
+        {
+            if (panel.testList.Count != 0)
+            {
+                SoundManager.PlaySound("CursorMove");
+                panel.SecondaryButtons = new ButtonCollection(panel);
+                foreach (var i in panel.testList)
+                {
+                    Button btn;
+                    if (i == null)
+                        btn = new Button($"Unequip", WeaponCommand);
+                    else
+                        btn = new Button($"{i.GetName()}", WeaponCommand);
+                    panel.SecondaryButtons.Add(btn);
+                }
+                panel.state = 2;
+            }
+            else
+                SoundManager.PlaySound("Nuhuh");
+        }
+    }
+
+    public static void WeaponCommand(Panel? panel)
+    {
+        if (panel != null)
+        {
+            if (panel.SecondaryButtons != null)
+            {
+                int ind = panel.SecondaryButtons.Choice;
+                Hero character = GameManager.Instance.MainChar;
+                character.Weapon = panel.testList[ind];
+                panel.SecondaryButtons = null;
+                panel.state = 0;
+            }
         }
     }
     
@@ -340,19 +422,26 @@ public class Panel
                 int ind = panel.SecondaryButtons.Choice;
                 Wave wave = GameManager.Instance.CurrentWave;
                 Enemy enm = wave[ind];
-                SoundManager.PlaySound("punch");
-                new SpriteBuilder().SetSprite("punch_fx")
-                    .SetImageSpeed(1f)
-                    .SetPosition(
-                        enm.Body[Enemy.BodyName].X + (enm.Body[Enemy.BodyName].DrawWidth/2) - 8,
-                        enm.Body[Enemy.BodyName].Y + (enm.Body[Enemy.BodyName].DrawHeight/2) - 8
-                        )
-                    .SetDepth(0)
-                    .SetVanish(true)
-                    .Build();
-                int dmg = enm.Hurt(GameManager.Instance.MainChar.Atk);
+                Hero character = GameManager.Instance.MainChar;
+                if (character.Weapon != null)
+                    character.Weapon.Use(character, enm);
+                else
+                {
+                    SoundManager.PlaySound("punch");
+                    new SpriteBuilder().SetSprite("punch_fx")
+                        .SetImageSpeed(1f)
+                        .SetPosition(
+                            enm.Body[Enemy.BodyName].X + (enm.Body[Enemy.BodyName].DrawWidth/2) - 8,
+                            enm.Body[Enemy.BodyName].Y + (enm.Body[Enemy.BodyName].DrawHeight/2) - 8
+                            )
+                        .SetDepth(0)
+                        .SetVanish(true)
+                        .Build();
+                }
+                int dmg = enm.Hurt(character.Atk);
                 panel.RText = $"You attacked {enm.Name} for {dmg} HP! It didn't really like that!";
                 panel.SecondaryButtons = null;
+                panel.state = 0;
             }
         }
     }
@@ -361,9 +450,19 @@ public class Panel
         [
         new Button("FIGHT", FightCommand),
         new Button("SPELL"),
-        new Button("INVENTORY"),
+        new Button("INVENTORY", InventoryCommand),
         new Button("DEFEND"),
         new Button("RUN", RunCommand)
+        ]
+    );
+    public readonly List<BaseWeapon?> testList = new List<BaseWeapon?>(
+        [
+            null,
+            new DamageDecorator(new Sword("Strong Sword", "A decorated sword!", 5),2),
+            new DamageDecorator(new Sword("Weaker Sword", "A decorated sword, but worse!", 5),-2),
+            new HealthDecorator(new Sword("Double Sword", "Literally double-edged sword!", 5),-2),
+            new HealthDecorator(new DamageDecorator(new Sword("Thorn Sword", "Eye for an Eye", 5),10),-10),
+            new HealthDecorator(new HealthDecorator(new DamageDecorator(new Sword("Health Check", "Extreme eye for an eye", 5),99),-20),-10),
         ]
     );
 

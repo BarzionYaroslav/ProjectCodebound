@@ -11,13 +11,13 @@ public class EnemyBuilder<T> : IEnemyBuilder<T> where T: Enemy, new()
 
     public EnemyBuilder<T> SetDef(int def)
     {
-        _enemy.Def = def;
+        _enemy.BaseDef = def;
         return this;
     }
 
     public EnemyBuilder<T> SetAtk(int atk)
     {
-        _enemy.Atk = atk;
+        _enemy.BaseAtk = atk;
         return this;
     }
 

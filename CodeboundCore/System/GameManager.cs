@@ -58,6 +58,7 @@ public class GameManager
     public Hero MainChar;
     private Panel mainPanel;
     private StageImage stage;
+    public IRandomProvider Randomizer;
     private string prepText;
     private List<IEnemyFactory> prepFactories;
 
@@ -82,9 +83,8 @@ public class GameManager
         stage = new StageImage((uint)StageWidth, (uint)StageHeight);
         CurrentWave = new Wave();
         mainPanel = new Panel(NativeX, 16, "RIKA!!!");
-        Random rand = new Random((int)DateTime.Now.Ticks);
-        var checker = rand.Next(18);
-        switch (checker)
+        Randomizer = new RandomAdapter();
+        switch (Randomizer.GetInt(18))
         {
             case 0:
                 prepText = "THEY OPENED THE GAME!!! RATTLE 'EM BOYS!!!";
@@ -97,7 +97,7 @@ public class GameManager
                 );
                 break;
             case 1:
-                switch (rand.Next(5))
+                switch (Randomizer.GetInt(5))
                 {
                     case 0:
                         prepText = "Punchy Bad accidentally blocked your path. You intentionally started the fight!";

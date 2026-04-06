@@ -1,4 +1,5 @@
 using Codebound.Drawing;
+using Codebound.System;
 
 namespace Codebound.Entities.Opponents;
 public class SkulatraFactory: IEnemyFactory
@@ -22,9 +23,8 @@ public class SkulatraFactory: IEnemyFactory
     }
     public Enemy Create()
     {
-        Random rand = new Random();
         string name;
-        switch (rand.Next(2))
+        switch (GameManager.Instance.Randomizer.GetInt(2))
         {
             case 0:
                 name = name1;

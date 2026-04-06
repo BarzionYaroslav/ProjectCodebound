@@ -1,5 +1,9 @@
 # Project Codebound
 
+## Comment to Task 8
+
+For Task 8, adapter was chosen. Since the game will need quite a bit of randomness, it would be good to put that in one randomizer class. So far not much of the game actually *uses* randomness, except, like, Skulatra and GameManager, but I do suspect it will be more needed later.
+
 ## Description
 
 Simple RPG game project in `C#` made as part of study material. Concrete list of features will vary with the study session. 

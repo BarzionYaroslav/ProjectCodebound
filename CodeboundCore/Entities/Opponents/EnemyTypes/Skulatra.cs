@@ -9,8 +9,7 @@ public class Skulatra : Enemy
     {
         Expectations.Add(HeadName);
         body.ChangeExpectations(Expectations);
-        Random rnd = new Random();
-        shmoves = rnd.Next(2);
+        shmoves = GameManager.Instance.Randomizer.GetInt(2);
     }
 
     public override void UpdateValues()

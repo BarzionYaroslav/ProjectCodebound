@@ -7,7 +7,9 @@ public class PunchyBag : Enemy
     public override void UpdateValues()
     {
         Sprite bod = body[BodyName];
-        var change = GameManager.DSin(GameManager.Siner * 2) * 2;
-        bod.Y = bod.StartY + (int)change;
+        var changeY = GameManager.DSin(GameManager.Siner * waveSpeed) * waveMagnitude;
+        bod.Y = bod.StartY + (int)changeY;
     }
+    private readonly int waveSpeed = 2;
+    private readonly int waveMagnitude = 2;
 }

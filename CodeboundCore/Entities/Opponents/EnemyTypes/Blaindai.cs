@@ -27,10 +27,10 @@ public class Blaindai : Enemy
         prevX = bod.X;
         prevY = bod.Y;
         var sinner = GameManager.Siner + bod.Depth * depthOffset;
-        var change = GameManager.DSin(sinner * waveSpeed) * waveYMagnitude;
-        bod.Y = bod.StartY + (int)change;
-        change = GameManager.DSin(sinner * waveSpeed * waveXMult) * waveXMagnitude;
-        bod.X = bod.StartX + (int)change;
+        var changeY = GameManager.DSin(sinner * waveSpeed) * waveYMagnitude;
+        bod.Y = bod.StartY + (int)changeY;
+        var changeX = GameManager.DSin(sinner * waveSpeed * waveXMult) * waveXMagnitude;
+        bod.X = bod.StartX + (int)changeX;
     }
     private int prevX;
     private int prevY;

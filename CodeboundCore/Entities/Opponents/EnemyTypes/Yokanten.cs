@@ -24,15 +24,15 @@ public class Yokanten : Enemy
         Sprite bod = body[BodyName];
         Sprite mid = body[MidName];
         Sprite tail = body[TailName];
-        int bodyChange = (int)(GameManager.DSin(GameManager.Siner * 3) * 8);
-        int turnChange = (int)(GameManager.DCos(GameManager.Siner * 3) * 8);
-        if (turnChange > 2)
-            bod.ImageIndex = 1;
-        else if (turnChange < -2)
-            bod.ImageIndex = 2;
+        int bodyChangeX = (int)(GameManager.DSin(GameManager.Siner * waveSpeed) * waveMagnitude);
+        int turnChange = (int)(GameManager.DCos(GameManager.Siner * waveSpeed) * waveMagnitude);
+        if (turnChange > turnTreshold)
+            bod.ImageIndex = rightImageIndex;
+        else if (turnChange < -turnTreshold)
+            bod.ImageIndex = leftImageIndex;
         else
-            bod.ImageIndex = 0;
-        bod.X = bod.StartX + bodyChange;
+            bod.ImageIndex = defaultImageIndex;
+        bod.X = bod.StartX + bodyChangeX;
         positions.Insert(0, (bod.X, bod.Y, bod.ImageIndex));
         positions.RemoveAt(posCount);
         mid.X = positions[midIndex].X;
@@ -44,6 +44,12 @@ public class Yokanten : Enemy
     }
 
     private List<(int X, int Y, float Frame)> positions = new List<(int X, int Y, float Frame)>();
+    private readonly int waveSpeed = 3;
+    private readonly int waveMagnitude = 8;
+    private readonly int turnTreshold = 2;
+    private readonly int defaultImageIndex = 0;
+    private readonly int leftImageIndex = 2;
+    private readonly int rightImageIndex = 1;
     private readonly int posCount = 120;
     private readonly int midIndex = 15;
     private readonly int tailIndex = 25;

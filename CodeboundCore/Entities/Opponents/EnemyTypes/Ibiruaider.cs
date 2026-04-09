@@ -25,29 +25,40 @@ public class Ibiruaider : Enemy
         Sprite bod = body[BodyName];
         Sprite mid = body[MidName];
         Sprite head = body[HeadName];
-        int bodyChangeX = (int)(GameManager.DSin(GameManager.Siner * 3) * 8);
-        int bodyChangeY = (int)(GameManager.DSin((GameManager.Siner + bod.Depth*15) * 3) * 2);
-        int turnChange = (int)(GameManager.DCos(GameManager.Siner * 3) * 8);
+        int bodyChangeX = (int)(GameManager.DSin(GameManager.Siner * waveXSpeed) * waveXMagnitude);
+        int bodyChangeY = (int)(GameManager.DSin((GameManager.Siner + bod.Depth*depthOffset) * waveYSpeed) * waveYMagnitude);
+        int turnChange = (int)(GameManager.DCos(GameManager.Siner * waveXSpeed) * waveXMagnitude);
         int headFrameOffset;
-        if (turnChange > 1)
-            headFrameOffset = 2;
-        else if (turnChange < -1)
-            headFrameOffset = 1;
+        if (turnChange > headTreshold)
+            headFrameOffset = rightFrameOffset;
+        else if (turnChange < -headTreshold)
+            headFrameOffset = leftFrameOffset;
         else
-            headFrameOffset = 0;
+            headFrameOffset = defaultFrameOffset;
         bod.X = bod.StartX + bodyChangeX;
         bod.Y = bod.StartY + bodyChangeY;
         positions.Insert(0, (bod.X, bod.Y, bod.ImageIndex));
         positions.RemoveAt(posCount);
         mid.X = positions[midIndex].X;
-        mid.Y = positions[midIndex].Y + 7;
+        mid.Y = positions[midIndex].Y + midOffset;
         mid.ImageIndex = bod.ImageIndex;
         head.X = positions[headIndex].X;
-        head.Y = positions[headIndex].Y + 14;
+        head.Y = positions[headIndex].Y + headOffset;
         head.ImageIndex = bod.ImageIndex + headFrameOffset*bod.ImageCount;
     }
 
     private List<(int X, int Y, float Frame)> positions = new List<(int X, int Y, float Frame)>();
+    private readonly int depthOffset = 15;
+    private readonly int waveXMagnitude = 8;
+    private readonly int waveYMagnitude = 2;
+    private readonly int waveXSpeed = 3;
+    private readonly int waveYSpeed = 3;
+    private readonly int headTreshold = 1;
+    private readonly int midOffset = 7;
+    private readonly int headOffset = 14;
+    private readonly int defaultFrameOffset = 0;
+    private readonly int leftFrameOffset = 1;
+    private readonly int rightFrameOffset = 2;
     private readonly int posCount = 120;
     private readonly int midIndex = 10;
     private readonly int headIndex = 20;

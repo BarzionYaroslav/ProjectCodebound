@@ -64,6 +64,17 @@ public class Icon: IDrawable
         GameManager.UpdateStarted += UpdateValues;
     }
 
+    public Icon(string name)
+    {
+        string path = AssetManager.GetMiscSpritePath(name);
+        if (File.Exists(path))
+            Image = new MagickImageCollection(path);
+        ImageSpeed = 0f;
+        DrawHeight = (int)Image[0].Height;
+        DrawWidth = (int)Image[0].Width;
+        GameManager.UpdateStarted += UpdateValues;
+    }
+
     public void Dispose()
     {
         GameManager.UpdateStarted -= UpdateValues;

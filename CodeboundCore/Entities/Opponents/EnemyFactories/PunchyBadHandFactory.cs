@@ -24,8 +24,8 @@ public class PunchyBadHandFactory : IEnemyFactory
     public Enemy Create()
     {
         PunchyBadHand returner;
-        Icon ico = new Icon(iconAsset, 0f);
-        if (X>45)
+        Icon ico = new Icon(iconAsset);
+        if (X>flipTreshold)
         {
             Sprite spr = new SpriteBuilder().SetSprite(bodyAsset2)
                         .SetPosition(X,Y)
@@ -76,6 +76,7 @@ public class PunchyBadHandFactory : IEnemyFactory
     private readonly float bodySpeed = 0.25f;
     private readonly string name = "Punchy Hand";
     private readonly string iconAsset = "handbad";
+    private readonly int flipTreshold = 45;
     private readonly int def = 0;
     private readonly int atk = 0;
     private readonly int maxHp = 15;

@@ -32,7 +32,7 @@ public class MekaiFactory: IEnemyFactory
                         .SetDepth(Depth)
                         .SetImageSpeed(bodySpeed)
                         .Build();
-        Icon ico = new Icon(iconAsset, 0f);
+        Icon ico = new Icon(iconAsset);
         Dictionary<string, Sprite> complexion = new()
         {
             { Enemy.BodyName, spr },

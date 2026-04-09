@@ -43,7 +43,7 @@ public class SkulatraFactory: IEnemyFactory
                         .SetDepth(Depth)
                         .SetImageSpeed(headSpeed)
                         .Build();
-        Icon ico = new Icon(iconAsset, 0f);
+        Icon ico = new Icon(iconAsset);
         Dictionary<string, Sprite> complexion = new()
             {
                 { Enemy.BodyName, bodySpr },

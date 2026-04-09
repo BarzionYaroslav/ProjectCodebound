@@ -37,7 +37,7 @@ public class BlaindaiFactory: IEnemyFactory
             { Enemy.BodyName, spr },
             { Blaindai.HaloName, spr2 }
         };
-        Icon ico = new Icon(iconAsset, 0f);
+        Icon ico = new Icon(iconAsset);
         Enemy returner = new EnemyBuilder<Blaindai>()
                             .SetAtk(atk)
                             .SetDef(def)

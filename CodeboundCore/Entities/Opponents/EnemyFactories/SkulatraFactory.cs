@@ -2,26 +2,15 @@ using Codebound.Drawing;
 using Codebound.System;
 
 namespace Codebound.Entities.Opponents;
-public class SkulatraFactory: IEnemyFactory
+public class SkulatraFactory: BaseEnemyFactory
 {
-    public int X { get { return x; } set { x = value; } }
-    public int Y { get { return y; } set { y = value; } }
-    public int Depth {
-        get { return depth; }
-        set
-        {
-            if (value >= 0)
-                depth = value;
-        } 
-    }
-
     public SkulatraFactory(int x, int y, int depth)
     {
         X = x;
         Y = y;
         Depth = depth;
     }
-    public Enemy Create()
+    public override Enemy Create()
     {
         string name;
         switch (GameManager.Instance.Randomizer.GetInt(2))
@@ -33,11 +22,7 @@ public class SkulatraFactory: IEnemyFactory
                 name = name2;
                 break;
         }
-        Sprite bodySpr = new SpriteBuilder().SetSprite(bodyAsset)
-                        .SetPosition(X,Y)
-                        .SetDepth(Depth)
-                        .SetImageSpeed(bodySpeed)
-                        .Build();
+        Sprite bodySpr = MakeSprite(bodyAsset, bodySpeed);
         Sprite headSpr = new SpriteBuilder().SetSprite(headAsset)
                         .SetPosition(X + headXOffset, Y + headYOffset)
                         .SetDepth(Depth)
@@ -59,9 +44,6 @@ public class SkulatraFactory: IEnemyFactory
                             .Build();
         return returner;
     }
-    private int x;
-    private int y;
-    private int depth;
     private readonly string bodyAsset = "skulatra_body";
     private readonly float bodySpeed = 0.75f;
     private readonly string headAsset = "skulatra_head";

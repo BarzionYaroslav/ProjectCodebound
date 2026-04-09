@@ -1,42 +1,23 @@
 using Codebound.Drawing;
 
 namespace Codebound.Entities.Opponents;
-public class MekaiFactory: IEnemyFactory
+public class MekaiFactory: BaseEnemyFactory
 {
-    public int X { get { return x; } set { x = value; } }
-    public int Y { get { return y; } set { y = value; } }
-    public int Depth {
-        get { return depth; }
-        set
-        {
-            if (value >= 0)
-                depth = value;
-        } 
-    }
-
     public MekaiFactory(int x, int y, int depth)
     {
         X = x;
         Y = y;
         Depth = depth;
     }
-    public Enemy Create()
+    public override Enemy Create()
     {
-        Sprite spr2 = new SpriteBuilder().SetSprite(bladeAsset)
-                        .SetPosition(X,Y)
-                        .SetDepth(Depth)
-                        .SetImageSpeed(bladeSpeed)
-                        .Build();;
-        Sprite spr = new SpriteBuilder().SetSprite(bodyAsset)
-                        .SetPosition(X, Y)
-                        .SetDepth(Depth)
-                        .SetImageSpeed(bodySpeed)
-                        .Build();
+        Sprite bladeSprite = MakeSprite(bladeAsset, bladeSpeed);
+        Sprite bodySprite = MakeSprite(bodyAsset, bodySpeed);
         Icon ico = new Icon(iconAsset);
         Dictionary<string, Sprite> complexion = new()
         {
-            { Enemy.BodyName, spr },
-            { Mekai.BladeName, spr2 },
+            { Enemy.BodyName, bodySprite },
+            { Mekai.BladeName, bladeSprite },
         };
         Enemy returner = new EnemyBuilder<Mekai>()
                             .SetAtk(atk)
@@ -48,9 +29,6 @@ public class MekaiFactory: IEnemyFactory
                             .Build();
         return returner;
     }
-    private int x;
-    private int y;
-    private int depth;
     private readonly string bodyAsset = "mekai_body";
     private readonly string bladeAsset = "mekai_blades";
     private readonly float bodySpeed = 0.2f;

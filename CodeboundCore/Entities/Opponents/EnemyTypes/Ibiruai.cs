@@ -7,7 +7,7 @@ public class Ibiruai : Enemy
     public override void UpdateValues()
     {
         Sprite bod = body[BodyName];
-        var changeY = GameManager.DSin((GameManager.Siner + bod.Depth * depthOffset) * waveSpeed) * waveMagnitude;
+        var changeY = MathFunctions.DSin((GameManager.Siner + bod.Depth * depthOffset) * waveSpeed) * waveMagnitude;
         bod.Y = bod.StartY + (int)changeY;
     }
     

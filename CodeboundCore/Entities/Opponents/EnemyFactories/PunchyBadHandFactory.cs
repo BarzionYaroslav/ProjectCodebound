@@ -34,7 +34,7 @@ public class PunchyBadHandFactory : BaseEnemyFactory
     private readonly string bodyAsset1 = "bad_arm1";
     private readonly string bodyAsset2 = "bad_arm2";
     private readonly float bodySpeed = 0.25f;
-    private readonly string name = "Punchy Hand";
+    private readonly string name = "Handbad";
     private readonly string iconAsset = "handbad";
     private readonly int flipTreshold = 45;
     private readonly int def = 0;

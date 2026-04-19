@@ -26,14 +26,14 @@ public class Skulatra : Enemy
                 DefaultDance(degree, defaultHeadIndex, leftHeadIndex, rightHeadIndex);
                 break;
         }
-        var changeY = Math.Abs(GameManager.DCos(degree) * waveYMagnitude);
+        var changeY = Math.Abs(MathFunctions.DCos(degree) * waveYMagnitude);
         head.Y = head.StartY - (int)changeY;
     }
 
     private void DefaultDance(float degrees, int defaultIndex, int leftIndex, int rightIndex)
     {
         Sprite head = body[HeadName];
-        var changeX = GameManager.DSin(degrees) * waveXMagnitude;
+        var changeX = MathFunctions.DSin(degrees) * waveXMagnitude;
         head.X = head.StartX - (int)changeX;
         if (changeX >= changeXTreshold)
             head.ImageIndex = rightIndex;

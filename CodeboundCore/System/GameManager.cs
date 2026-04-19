@@ -84,7 +84,9 @@ public class GameManager
         CurrentWave = new Wave();
         mainPanel = new Panel(NativeX, 16, "RIKA!!!");
         Randomizer = new RandomAdapter();
-        switch (Randomizer.GetInt(18))
+        int choice = Randomizer.GetInt(18);
+        choice = 1;
+        switch (choice)
         {
             case 0:
                 prepText = "THEY OPENED THE GAME!!! RATTLE 'EM BOYS!!!";
@@ -120,9 +122,9 @@ public class GameManager
                 }
                 prepFactories = new List<IEnemyFactory>(
                     [
-                    new PunchyBadHandFactory(0,-3,0),
-                    new PunchyBadFactory(32,-6,1),
-                    new PunchyBadHandFactory(90-32,-3,0)
+                    new PunchyBadHandFactory(0,-3,1),
+                    new PunchyBadFactory(30,-16,0),
+                    new PunchyBadHandFactory(90-32,-3,1)
                     ]
                 );
                 break;
@@ -387,36 +389,6 @@ public class GameManager
     public void EndGame()
     {
         gameStopped = true;
-    }
-
-    public static double DSin(int a)
-    {
-        return Math.Sin(a * (MathF.PI / 180));
-    }
-
-    public static double DCos(int a)
-    {
-        return Math.Cos(a * (MathF.PI / 180));
-    }
-
-    public static double DSin(float a)
-    {
-        return Math.Sin(a * (MathF.PI / 180));
-    }
-
-    public static double DCos(float a)
-    {
-        return Math.Cos(a * (MathF.PI / 180));
-    }
-
-    public static double DSin(double a)
-    {
-        return Math.Sin(a * (MathF.PI / 180));
-    }
-
-    public static double DCos(double a)
-    {
-        return Math.Cos(a * (MathF.PI / 180));
     }
 
     static public event KeyEventHandler? KeyPressed;

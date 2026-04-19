@@ -14,12 +14,12 @@ public class PunchyBadHand : Enemy
     public override void UpdateValues()
     {
         Sprite bod = body[BodyName];
-        double changeX = GameManager.DCos(GameManager.Siner * waveSpeed) * waveXMagnitude;
-        double changeY = GameManager.DSin(GameManager.Siner * waveSpeed) * waveYMagnitude;
-        double changeZ = GameManager.DSin(GameManager.Siner * waveSpeed) * waveZMagnitude;
+        double changeX = MathFunctions.DCos(GameManager.Siner * waveSpeed) * waveXMagnitude;
+        double changeY = MathFunctions.DSin(GameManager.Siner * waveSpeed) * waveYMagnitude;
+        double changeZ = MathFunctions.DSin(GameManager.Siner * waveSpeed) * waveZMagnitude;
         if (flip)
         {
-            changeZ = GameManager.DSin(flipOffset + GameManager.Siner * waveSpeed) * waveZMagnitude;
+            changeZ = MathFunctions.DSin(flipOffset + GameManager.Siner * waveSpeed) * waveZMagnitude;
         }
         bod.Z = (int)changeZ;
         bod.X = bod.StartX + (int)changeX;

@@ -15,7 +15,7 @@ public class Mekai : Enemy
         Sprite bod = body[BodyName];
         Sprite blades = body[BladeName];
         var sinner = GameManager.Siner + bod.Depth * depthOffset;
-        var changeY = GameManager.DSin(sinner * waveSpeed) * waveYMagnitude;
+        var changeY = MathFunctions.DSin(sinner * waveSpeed) * waveYMagnitude;
         bod.Y = bod.StartY + Math.Clamp((int)changeY, -maxChange, maxChange);
         blades.X = bod.X;
         blades.Y = bod.Y;

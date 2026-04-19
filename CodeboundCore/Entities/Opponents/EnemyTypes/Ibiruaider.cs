@@ -25,9 +25,9 @@ public class Ibiruaider : Enemy
         Sprite bod = body[BodyName];
         Sprite mid = body[MidName];
         Sprite head = body[HeadName];
-        int bodyChangeX = (int)(GameManager.DSin(GameManager.Siner * waveXSpeed) * waveXMagnitude);
-        int bodyChangeY = (int)(GameManager.DSin((GameManager.Siner + bod.Depth*depthOffset) * waveYSpeed) * waveYMagnitude);
-        int turnChange = (int)(GameManager.DCos(GameManager.Siner * waveXSpeed) * waveXMagnitude);
+        int bodyChangeX = (int)(MathFunctions.DSin(GameManager.Siner * waveXSpeed) * waveXMagnitude);
+        int bodyChangeY = (int)(MathFunctions.DSin((GameManager.Siner + bod.Depth*depthOffset) * waveYSpeed) * waveYMagnitude);
+        int turnChange = (int)(MathFunctions.DCos(GameManager.Siner * waveXSpeed) * waveXMagnitude);
         int headFrameOffset;
         if (turnChange > headTreshold)
             headFrameOffset = rightFrameOffset;

@@ -7,8 +7,10 @@ public class PunchyBad : Enemy
     public override void UpdateValues()
     {
         Sprite bod = body[BodyName];
-        var changeY = GameManager.DSin(GameManager.Siner * waveSpeed) * waveMagnitude;
+        var changeY = MathFunctions.DSin(GameManager.Siner * waveSpeed) * waveMagnitude;
+        var changeX = -MathFunctions.DCos((bod.ImageIndex / bod.ImageCount) * 360) * waveMagnitude;
         bod.Y = bod.StartY + (int)changeY;
+        bod.X = bod.StartX + (int)changeX;
     }
 
     private readonly int waveSpeed = 4;

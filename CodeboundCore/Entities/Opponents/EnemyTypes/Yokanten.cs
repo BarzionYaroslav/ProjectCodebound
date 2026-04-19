@@ -24,8 +24,8 @@ public class Yokanten : Enemy
         Sprite bod = body[BodyName];
         Sprite mid = body[MidName];
         Sprite tail = body[TailName];
-        int bodyChangeX = (int)(GameManager.DSin(GameManager.Siner * waveSpeed) * waveMagnitude);
-        int turnChange = (int)(GameManager.DCos(GameManager.Siner * waveSpeed) * waveMagnitude);
+        int bodyChangeX = (int)(MathFunctions.DSin(GameManager.Siner * waveSpeed) * waveMagnitude);
+        int turnChange = (int)(MathFunctions.DCos(GameManager.Siner * waveSpeed) * waveMagnitude);
         if (turnChange > turnTreshold)
             bod.ImageIndex = rightImageIndex;
         else if (turnChange < -turnTreshold)

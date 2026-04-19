@@ -3,8 +3,7 @@ using System.Threading;
 using System.Diagnostics;
 using Codebound.System.UI;
 using Codebound.Drawing;
-using Codebound.Entities.Opponents;
-using Codebound.Entities;
+using Codebound.System.Randomness;
 
 namespace Codebound.System;
 
@@ -90,15 +89,7 @@ public class GameManager
             var watch = Stopwatch.StartNew();
             Input();
             Update();
-            CheckBufferSize();
-            //Bandaid solution for the time being. I'll figure it out later
-            if (bufferSize[0] < NativeX || bufferSize[1] < NativeY)
-            {
-                Console.SetCursorPosition(0, 0);
-                Console.Write(bufferErrorMessage);
-            }
-            else
-                Render();
+            Render();
             watch.Stop();
             var timeTaken = (int)watch.ElapsedMilliseconds;
             int waitTime = (1000 / Fps) - timeTaken;
@@ -112,10 +103,7 @@ public class GameManager
             SoundManager.Kill();
             var watch = Stopwatch.StartNew();
             stage.Alpha -= QuitChange;
-            CheckBufferSize();
-            //Bandaid solution for the time being. I'll figure it out later
-            if (!(bufferSize[0] < NativeX || bufferSize[1] < NativeY))
-                Render();
+            Render();
             watch.Stop();
             var timeTaken = (int)watch.ElapsedMilliseconds;
             int waitTime = QuitDelay - timeTaken;
@@ -144,14 +132,22 @@ public class GameManager
 
     private void Render()
     {
-
-        for (int i = MaxDepth; i >= 0; i--)
-            RenderStarted?.Invoke(stage, i);
-        var text = stage.GetImageText();
-        Console.SetCursorPosition(0, 0);
-        Console.Write(text);
-        MainPanel.DrawUi();
-        Console.ResetColor();
+        CheckBufferSize();
+        if (bufferSize[0] < NativeX || bufferSize[1] < NativeY)
+        {
+            Console.SetCursorPosition(0, 0);
+            Console.Write(bufferErrorMessage);
+        }
+        else
+        {
+            for (int i = MaxDepth; i >= 0; i--)
+                RenderStarted?.Invoke(stage, i);
+            var text = stage.GetImageText();
+            Console.SetCursorPosition(0, 0);
+            Console.Write(text);
+            MainPanel.DrawUi();
+            Console.ResetColor();
+        }
     }
 
     private void Input()

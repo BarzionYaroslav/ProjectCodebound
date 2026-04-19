@@ -1,6 +1,7 @@
 using Codebound.Entities.Opponents;
 using Codebound.Entities;
 namespace Codebound.System;
+using Codebound.System.Randomness;
 
 public class BattleManager
 {
@@ -18,7 +19,7 @@ public class BattleManager
     }
     public Wave CurrentWave;
     public Hero MainChar;
-    private string prepText;
+    private RandomList<string> prepText;
     private List<IEnemyFactory> prepFactories;
     private BattleManager()
     {
@@ -35,7 +36,7 @@ public class BattleManager
         switch (choice)
         {
             case 0:
-                prepText = "THEY OPENED THE GAME!!! RATTLE 'EM BOYS!!!";
+                prepText = new RandomList<string>(["THEY OPENED THE GAME!!! RATTLE 'EM BOYS!!!"]);
                 prepFactories = new List<IEnemyFactory>(
                     [
                     new SkulatraFactory(0,-2,0),
@@ -45,27 +46,14 @@ public class BattleManager
                 );
                 break;
             case 1:
-                switch (random.GetInt(5))
-                {
-                    case 0:
-                        prepText = "Punchy Bad accidentally blocked your path. You intentionally started the fight!";
-                        break;
-                    case 1:
-                        prepText = "Punchy Bad fills his Handbads with horseshoes.";
-                        break;
-                    case 2:
-                        prepText = "Punchy Bad contemplates his name for a moment. Bad Punch blocks your path!";
-                        break;
-                    case 3:
-                        prepText = "Punchy Bad considers sandbagging, but remembers that he isn't a Desert Boss.";
-                        break;
-                    case 4:
-                        prepText = "Punchy Bad wonders when Yaroslav will finish the screen resize code. He easily gets distracted with a fight!";
-                        break;
-                    default:
-                        prepText = "Punchy Bad swings in like a wrecking ball!";
-                        break;
-                }
+                prepText = new RandomList<string>([
+                    "Punchy Bad accidentally blocked your path. You intentionally started the fight!",
+                    "Punchy Bad fills his Handbads with horseshoes.",
+                    "Punchy Bad contemplates his name for a moment. Bad Punch blocks your path!",
+                    "Punchy Bad considers sandbagging, but remembers that he isn't a Desert Boss.",
+                    "Punchy Bad wonders when Yaroslav will finish the screen resize code. He easily gets distracted with a fight!",
+                    "Punchy Bad swings in like a wrecking ball!"
+                    ]);
                 prepFactories = new List<IEnemyFactory>(
                     [
                     new PunchyBadHandFactory(0,-3,1),
@@ -75,7 +63,7 @@ public class BattleManager
                 );
                 break;
             case 3:
-                prepText = "I spy with my floating eye something ending with this fight.";
+                prepText = new RandomList<string>(["I spy with my floating eye something ending with this fight."]);
                 prepFactories = new List<IEnemyFactory>(
                     [
                     new IbiruaiFactory(2,6,2),
@@ -85,7 +73,7 @@ public class BattleManager
                 );
                 break;
             case 4:
-                prepText = "It stares at you through the stitches.";
+                prepText = new RandomList<string>(["It stares at you through the stitches."]);
                 prepFactories = new List<IEnemyFactory>(
                     [
                     new BlaindaiFactory(30,7,0)
@@ -93,7 +81,7 @@ public class BattleManager
                 );
                 break;
             case 5:
-                prepText = "Amblyopia.";
+                prepText = new RandomList<string>(["Amblyopia."]);
                 prepFactories = new List<IEnemyFactory>(
                     [
                     new IbiruaiFactory(2,6,1),
@@ -103,7 +91,7 @@ public class BattleManager
                 );
                 break;
             case 6:
-                prepText = "Sleep eternal quiescent dreams.";
+                prepText = new RandomList<string>(["Sleep eternal quiescent dreams."]);
                 prepFactories = new List<IEnemyFactory>(
                     [
                     new BlaindaiFactory(2,6,1),
@@ -113,7 +101,7 @@ public class BattleManager
                 );
                 break;
             case 7:
-                prepText = "Uneasy alliance.";
+                prepText = new RandomList<string>(["Uneasy alliance."]);
                 prepFactories = new List<IEnemyFactory>(
                     [
                     new SkulatraFactory(0,-2,1),
@@ -123,7 +111,7 @@ public class BattleManager
                 );
                 break;
             case 8:
-                prepText = "Not again...";
+                prepText = new RandomList<string>(["Not again..."]);
                 prepFactories = new List<IEnemyFactory>(
                     [
                     new SkulatraFactory(0,-2,1),
@@ -133,7 +121,7 @@ public class BattleManager
                 );
                 break;
             case 9:
-                prepText = "Ibiruai would take revenge, if only context for it was provided.";
+                prepText = new RandomList<string>(["Ibiruai would take revenge, if only context for it was provided."]);
                 prepFactories = new List<IEnemyFactory>(
                     [
                     new IbiruaiFactory(2,6,2),
@@ -143,7 +131,7 @@ public class BattleManager
                 );
                 break;
             case 10:
-                prepText = "THEY OPENED THE GAME!!! RATTLE 'EM... boys...?";
+                prepText = new RandomList<string>(["THEY OPENED THE GAME!!! RATTLE 'EM... boys...?"]);
                 prepFactories = new List<IEnemyFactory>(
                     [
                     new BlaindaiFactory(2,6,2),
@@ -153,7 +141,7 @@ public class BattleManager
                 );
                 break;
             case 11:
-                prepText = "Yokanten slides in!";
+                prepText = new RandomList<string>(["Yokanten slides in!"]);
                 prepFactories = new List<IEnemyFactory>(
                     [
                     new YokantenFactory(37,15,0)
@@ -161,7 +149,7 @@ public class BattleManager
                 );
                 break;
             case 12:
-                prepText = "Early Game Enemy convention.";
+                prepText = new RandomList<string>(["Early Game Enemy convention."]);
                 prepFactories = new List<IEnemyFactory>(
                     [
                     new IbiruaiFactory(2,6,2),
@@ -171,7 +159,7 @@ public class BattleManager
                 );
                 break;
             case 13:
-                prepText = "Maybe the true enemies were the friends we made along the way...";
+                prepText = new RandomList<string>(["Maybe the true enemies were the friends we made along the way..."]);
                 prepFactories = new List<IEnemyFactory>(
                     [
                     new IbiruaiderFactory(30,-6,0)
@@ -179,7 +167,7 @@ public class BattleManager
                 );
                 break;
             case 14:
-                prepText = "Kneel before the Great Ibiruai Tamer! Let his matcha colors be known across the lands!";
+                prepText = new RandomList<string>(["Kneel before the Great Ibiruai Tamer! Let his matcha colors be known across the lands!"]);
                 prepFactories = new List<IEnemyFactory>(
                     [
                     new IbiruaiFactory(2,6,2),
@@ -189,7 +177,7 @@ public class BattleManager
                 );
                 break;
             case 15:
-                prepText = "Desu Mashin: Mk.I flies in!";
+                prepText = new RandomList<string>(["Desu Mashin: Mk.I flies in!"]);
                 prepFactories = new List<IEnemyFactory>(
                     [
                     new MekaiFactory(30,1,0)
@@ -197,7 +185,7 @@ public class BattleManager
                 );
                 break;
             case 16:
-                prepText = "An Ibiruai, a Mek-AI and a Blaindai walk into a bar...";
+                prepText = new RandomList<string>(["An Ibiruai, a Mek-AI and a Blaindai walk into a bar..."]);
                 prepFactories = new List<IEnemyFactory>(
                     [
                     new IbiruaiFactory(2,6,2),
@@ -207,7 +195,7 @@ public class BattleManager
                 );
                 break;
             case 17:
-                prepText = "Finally an eye who understands...";
+                prepText = new RandomList<string>(["Finally an eye who understands..."]);
                 prepFactories = new List<IEnemyFactory>(
                     [
                     new SkulatraFactory(0,-2,1),
@@ -217,7 +205,7 @@ public class BattleManager
                 );
                 break;
             default:
-                prepText = "Punchy Bag swings in like a fluff-filled pinata!";
+                prepText = new RandomList<string>(["Punchy Bag swings in like a fluff-filled pinata!"]);
                 prepFactories = new List<IEnemyFactory>(
                     [
                     new PunchyBagFactory((90-20)/2,-6,0)
@@ -229,7 +217,7 @@ public class BattleManager
 
     public void PrepareFight()
     {
-        GameManager.Instance.MainPanel.RText = prepText;
+        GameManager.Instance.MainPanel.RText = prepText.GetRandom();
         foreach (IEnemyFactory i in prepFactories)
         {
             CurrentWave.Add(i.Create());

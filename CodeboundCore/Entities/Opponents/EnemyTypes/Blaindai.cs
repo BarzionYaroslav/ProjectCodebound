@@ -1,6 +1,6 @@
-using System.Runtime;
 using Codebound.Drawing;
 using Codebound.System;
+using Codebound.System.Functions;
 namespace Codebound.Entities.Opponents;
 
 public class Blaindai : Enemy

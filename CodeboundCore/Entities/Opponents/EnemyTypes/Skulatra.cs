@@ -1,6 +1,6 @@
 using Codebound.Drawing;
 using Codebound.System;
-using System;
+using Codebound.System.Functions;
 namespace Codebound.Entities.Opponents;
 
 public class Skulatra : Enemy

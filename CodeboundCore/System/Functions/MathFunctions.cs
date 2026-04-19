@@ -1,4 +1,4 @@
-namespace Codebound.System;
+namespace Codebound.System.Functions;
 public static class MathFunctions
 {
     public static double DSin(int a)

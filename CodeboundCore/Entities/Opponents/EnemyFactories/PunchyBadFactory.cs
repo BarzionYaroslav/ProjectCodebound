@@ -28,7 +28,7 @@ public class PunchyBadFactory: BaseEnemyFactory
         return returner;
     }
     private readonly string bodyAsset = "punchy_bad_new";
-    private readonly float bodySpeed = 0.35f;
+    private readonly float bodySpeed = 0.4f;
     private readonly string name = "Punchy Bad";
     private readonly string iconAsset = "badsurprise";
     private readonly float iconSpeed = 0.1f;

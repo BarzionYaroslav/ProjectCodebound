@@ -1,7 +1,7 @@
 using ImageMagick;
 using Codebound.System;
 namespace Codebound.Drawing;
-public class Sprite: IDrawableDynamic
+public class Sprite: IDrawableDynamic, IDisposable
 {
     public MagickImageCollection Image {
         get { return image; }

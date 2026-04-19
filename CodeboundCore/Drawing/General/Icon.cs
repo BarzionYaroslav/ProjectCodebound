@@ -2,7 +2,7 @@ using ImageMagick;
 using Codebound.System;
 namespace Codebound.Drawing;
 
-public class Icon: IDrawable
+public class Icon: IDrawable, IDisposable
 {
     public MagickImageCollection Image
     {
@@ -86,18 +86,7 @@ public class Icon: IDrawable
     }
     public MagickImage GetFrame()
     {
-        MagickImage tempFrame = (MagickImage)Image[(int)ImageIndex];
-        MagickImage answer = new MagickImage(
-            new MagickColor(0, 0, 0, 0),
-            tempFrame.Width,
-            tempFrame.Height);
-        answer.CopyPixels(tempFrame);
-        answer.Resize(
-            (uint)DrawWidth,
-            (uint)DrawHeight,
-            FilterType.Point
-            );
-        return answer;
+        return (MagickImage)Image[(int)ImageIndex];
     }
     public List<string> GetLines()
     {

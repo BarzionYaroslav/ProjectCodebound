@@ -8,7 +8,7 @@ public class PunchyBad : Enemy
     {
         Sprite bod = body[BodyName];
         var changeY = MathFunctions.DSin(GameManager.Siner * waveSpeed) * waveMagnitude;
-        var changeX = -MathFunctions.DCos((bod.ImageIndex / bod.ImageCount) * 360) * waveMagnitude;
+        var changeX = MathFunctions.DSin((bod.ImageIndex / bod.ImageCount) * 360) * waveMagnitude;
         bod.Y = bod.StartY + (int)changeY;
         bod.X = bod.StartX + (int)changeX;
     }

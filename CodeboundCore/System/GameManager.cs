@@ -40,8 +40,8 @@ public class GameManager
     }
     static private int siner;
     private bool gameStopped = false;
-    private List<uint> bufferSize = new List<uint>();
-    private uint[] bufferSizePrev = [0, 0];
+    private List<int> bufferSize = new List<int>([0,0]);
+    private List<int> bufferSizePrev = new List<int>([0,0]);
     private static GameManager? _instance;
     public static GameManager Instance
     {
@@ -80,6 +80,10 @@ public class GameManager
         NativeY = 50;
         MaxDepth = 16;
         Siner = 0;
+        bufferErrorMessage =
+            "Due to the resize code being unfinished, it's " +
+            $"impossible to render the game at the buffer size less than {NativeX} X {NativeY}\n" +
+            "Please make sure it's at least that by editing the console settings!\n";
         stage = new StageImage((uint)StageWidth, (uint)StageHeight);
         CurrentWave = new Wave();
         mainPanel = new Panel(NativeX, 16, "RIKA!!!");
@@ -285,11 +289,7 @@ public class GameManager
     {
         Console.Clear();
         Console.CursorVisible = false;
-        bufferSize = new List<uint>(
-            [Convert.ToUInt16(Math.Min(Console.BufferWidth,NativeX)),
-            Convert.ToUInt16(Math.Min(Console.BufferHeight,NativeY))]
-            );
-        bufferSize.CopyTo(bufferSizePrev);
+        CheckBufferSize();
         Delta = 0;
         PrepareFight(prepText, prepFactories);
         while (!gameStopped)
@@ -302,9 +302,7 @@ public class GameManager
             if (bufferSize[0] < NativeX || bufferSize[1] < NativeY)
             {
                 Console.SetCursorPosition(0, 0);
-                Console.Write($"Due to the resize code being unfinished, it's impossible to render the game at the buffer size less than {NativeX} X {NativeY}\n");
-                Console.Write("Please make sure it's at least that by editing the console settings!\n");
-                Console.Write($"Current Buffer Size: {bufferSize[0]} X {bufferSize[1]}");
+                Console.Write(bufferErrorMessage);
             }
             else
                 Render();
@@ -345,13 +343,12 @@ public class GameManager
 
     private void CheckBufferSize()
     {
-        bufferSize = new List<uint>(
-            [Convert.ToUInt16(Math.Min(Console.BufferWidth,NativeX)),
-            Convert.ToUInt16(Math.Min(Console.BufferHeight,NativeY))]
-            );
+        bufferSize[0] = Math.Min(Console.BufferWidth, NativeX);
+        bufferSize[1] = Math.Min(Console.BufferHeight,NativeY);
         if (!Enumerable.SequenceEqual(bufferSize, bufferSizePrev))
             Console.Clear();
-        bufferSize.CopyTo(bufferSizePrev);
+        bufferSizePrev[0] = bufferSize[0];
+        bufferSizePrev[1] = bufferSize[1];
         BufferChanged?.Invoke((int)bufferSize[0], (int)bufferSize[1]);
     }
 
@@ -395,4 +392,6 @@ public class GameManager
     static public event RenderEventHandler? RenderStarted;
     static public event UpdateEventHandler? UpdateStarted;
     static public event BufferChangeEventHandler? BufferChanged;
+
+    private readonly string bufferErrorMessage;
 }

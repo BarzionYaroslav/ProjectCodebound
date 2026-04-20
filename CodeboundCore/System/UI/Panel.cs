@@ -74,6 +74,7 @@ public class Panel
     private int height;
     private int width;
     public int state = 0;
+    public bool Active = true;
 
     public Panel(int width, int height, string rtext)
     {
@@ -90,31 +91,34 @@ public class Panel
 
     public void HandleControls(ConsoleKey key)
     {
-        ButtonCollection curButtons;
-        if (secondaryButtons == null)
-            curButtons = Buttons;
-        else
-            curButtons = secondaryButtons;
-        switch (key)
+        if (Active)
         {
-            case ConsoleKey.T:
-                RText = $"{Console.BufferWidth} X {Console.BufferHeight}";
-                break;
-            case ConsoleKey.UpArrow:
-                curButtons.SubstractChoice(true);
-                break;
-            case ConsoleKey.DownArrow:
-                curButtons.AddChoice(true);
-                break;
-            case ConsoleKey.X:
-                if (secondaryButtons != null)
-                    secondaryButtons = null;
-                break;
-            case ConsoleKey.Z:
-                curButtons.ExecuteChoice();
-                break;
-            default:
-                break;
+            ButtonCollection curButtons;
+            if (secondaryButtons == null)
+                curButtons = Buttons;
+            else
+                curButtons = secondaryButtons;
+            switch (key)
+            {
+                case ConsoleKey.T:
+                    RText = $"{Console.BufferWidth} X {Console.BufferHeight}";
+                    break;
+                case ConsoleKey.UpArrow:
+                    curButtons.SubstractChoice(true);
+                    break;
+                case ConsoleKey.DownArrow:
+                    curButtons.AddChoice(true);
+                    break;
+                case ConsoleKey.X:
+                    if (secondaryButtons != null)
+                        secondaryButtons = null;
+                    break;
+                case ConsoleKey.Z:
+                    curButtons.ExecuteChoice();
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
@@ -221,9 +225,9 @@ public class Panel
     //Yeeeeeaaaaaah, I need to redo that one
     public void DrawUi()
     {
-        var rik = GameManager.Instance.MainChar.Face;
+        var rik = BattleManager.Instance.MainChar.Face;
         string text = "";
-        List<string> playerDat = [.. GameManager.Instance.MainChar.ToString().Split('\n')];
+        List<string> playerDat = [.. BattleManager.Instance.MainChar.ToString().Split('\n')];
         int datMax = 0;
         foreach (var i in playerDat)
         {
@@ -248,9 +252,9 @@ public class Panel
         {
             if (state == 1)
             {
-                enText = GameManager.Instance.CurrentWave[secondaryButtons.Choice].Face.GetImageText();
+                enText = BattleManager.Instance.CurrentWave[secondaryButtons.Choice].Face.GetImageText();
                 enlines = [.. enText.Split('\n')];
-                enmDat = [.. GameManager.Instance.CurrentWave[secondaryButtons.Choice].ToString().Split('\n')];
+                enmDat = [.. BattleManager.Instance.CurrentWave[secondaryButtons.Choice].ToString().Split('\n')];
                 foreach (var i in enmDat)
                 {
                     if (i.Length > enmMax)
@@ -359,11 +363,11 @@ public class Panel
     {
         if (panel != null)
         {
-            if (GameManager.Instance.CurrentWave.Count != 0)
+            if (BattleManager.Instance.CurrentWave.Count != 0)
             {
                 SoundManager.PlaySound("CursorMove");
                 panel.SecondaryButtons = new ButtonCollection(panel);
-                foreach (Enemy i in GameManager.Instance.CurrentWave)
+                foreach (Enemy i in BattleManager.Instance.CurrentWave)
                 {
                     Button btn = new Button($"{i.Name}", EnemyAttackCommand);
                     panel.SecondaryButtons.Add(btn);
@@ -405,10 +409,11 @@ public class Panel
             if (panel.SecondaryButtons != null)
             {
                 int ind = panel.SecondaryButtons.Choice;
-                Hero character = GameManager.Instance.MainChar;
+                Hero character = BattleManager.Instance.MainChar;
                 character.Weapon = panel.testList[ind];
                 panel.SecondaryButtons = null;
                 panel.state = 0;
+                BattleManager.Instance.StartEnemyTurn();
             }
         }
     }
@@ -420,28 +425,21 @@ public class Panel
             if (panel.SecondaryButtons!=null)
             {
                 int ind = panel.SecondaryButtons.Choice;
-                Wave wave = GameManager.Instance.CurrentWave;
+                Wave wave = BattleManager.Instance.CurrentWave;
                 Enemy enm = wave[ind];
-                Hero character = GameManager.Instance.MainChar;
+                Hero character = BattleManager.Instance.MainChar;
                 if (character.Weapon != null)
                     character.Weapon.Use(character, enm);
                 else
                 {
                     SoundManager.PlaySound("punch");
-                    new SpriteBuilder().SetSprite("punch_fx")
-                        .SetImageSpeed(1f)
-                        .SetPosition(
-                            enm.Body[Enemy.BodyName].X + (enm.Body[Enemy.BodyName].DrawWidth/2) - 8,
-                            enm.Body[Enemy.BodyName].Y + (enm.Body[Enemy.BodyName].DrawHeight/2) - 8
-                            )
-                        .SetDepth(0)
-                        .SetVanish(true)
-                        .Build();
+                    BattleManager.Instance.AddEffect(ind, "punch_fx", 1f);
                 }
                 int dmg = enm.Hurt(character.Atk);
                 panel.RText = $"You attacked {enm.Name} for {dmg} HP! It didn't really like that!";
                 panel.SecondaryButtons = null;
                 panel.state = 0;
+                BattleManager.Instance.StartEnemyTurn();
             }
         }
     }

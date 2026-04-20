@@ -1,9 +1,11 @@
 using Codebound.Drawing;
 using Codebound.System;
+using Codebound.System.Randomness;
 namespace Codebound.Entities.Opponents;
 
 public class Enemy : BaseEntity
 {
+    public List<IEnemyActionStrategy> ActionList => actionList.ToList();
     public ComplexSpriterHollow Body
     {
         get { return new ComplexSpriterHollow(body); }
@@ -13,10 +15,45 @@ public class Enemy : BaseEntity
     {
         Expectations.Add(BodyName);
         this.body = new ComplexSpriter(Expectations);
+        actionList = defaultActionList;
+        currentAction = defaultAction;
+        RandomizeAction();
         GameManager.UpdateStarted += UpdateValues;
     }
 
     public virtual void AfterPrep() { }
+
+    public virtual int DoAction()
+    {
+        if (hp == 0)
+            return 0;
+        if (currentAction == null)
+            GameManager.Instance.MainPanel.RText = fallbackText;
+        else
+        {
+            currentAction.Act(this);
+            return currentAction.Delay;
+        }
+        return 0;
+    }
+
+    public virtual void RandomizeAction()
+    {
+        currentAction = actionList.GetRandom();
+    }
+
+    public virtual void SetAction(IEnemyActionStrategy action)
+    {
+        currentAction = action;
+    }
+
+    public virtual void ChangeActionList(IRandomList<IEnemyActionStrategy> list)
+    {
+        if (list!=null)
+        {
+            actionList = list;
+        }
+    }
 
     public override int Hurt(int dmg, bool defIgnore = false)
     {
@@ -30,8 +67,8 @@ public class Enemy : BaseEntity
         }
         else
         {
-            Hp -= 1;
-            return 1;
+            Hp -= chipDamage;
+            return chipDamage;
         }
     }
     public void ReplaceBody(ComplexSpriter bodyNew)
@@ -46,6 +83,16 @@ public class Enemy : BaseEntity
     }
 
     protected ComplexSpriter body;
+    private IRandomList<IEnemyActionStrategy> actionList;
+    private IEnemyActionStrategy currentAction;
     public HashSet<string> Expectations { get; private set; } = new HashSet<string>();
+    private readonly IRandomList<IEnemyActionStrategy> defaultActionList =
+        new RandomList<IEnemyActionStrategy>([
+            new EnemyPunchStrategy(),
+            new EnemySkipStrategy()
+            ]);
+    private readonly IEnemyActionStrategy defaultAction = new EnemySkipStrategy();
+    private readonly string fallbackText = "Enemy doesn't know what it's doing.";
+    private readonly int chipDamage = 1;
     static public readonly string BodyName = "body";
 }

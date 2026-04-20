@@ -3,8 +3,7 @@ using System.Threading;
 using System.Diagnostics;
 using Codebound.System.UI;
 using Codebound.Drawing;
-using Codebound.Entities.Opponents;
-using Codebound.Entities;
+using Codebound.System.Randomness;
 
 namespace Codebound.System;
 
@@ -40,8 +39,8 @@ public class GameManager
     }
     static private int siner;
     private bool gameStopped = false;
-    private List<uint> bufferSize = new List<uint>();
-    private uint[] bufferSizePrev = [0, 0];
+    private List<int> bufferSize = new List<int>([0,0]);
+    private List<int> bufferSizePrev = new List<int>([0,0]);
     private static GameManager? _instance;
     public static GameManager Instance
     {
@@ -54,23 +53,12 @@ public class GameManager
             return _instance;
         }
     }
-    public Wave CurrentWave;
-    public Hero MainChar;
-    private Panel mainPanel;
+    public Panel MainPanel;
     private StageImage stage;
     public IRandomProvider Randomizer;
-    private string prepText;
-    private List<IEnemyFactory> prepFactories;
 
     private GameManager()
     {
-        MainChar = new HeroBuilder().SetAtk(5)
-                    .SetDef(2)
-                    .SetHp(40)
-                    .SetMana(40)
-                    .SetName("Rika")
-                    .SetFace("rika_extra")
-                    .Build();
         QuitDelay = 5;
         QuitChange = 10;
         Fps = 60;
@@ -80,232 +68,28 @@ public class GameManager
         NativeY = 50;
         MaxDepth = 16;
         Siner = 0;
+        bufferErrorMessage =
+            "Due to the resize code being unfinished, it's " +
+            $"impossible to render the game at the buffer size less than {NativeX} X {NativeY}\n" +
+            "Please make sure it's at least that by editing the console settings!\n";
         stage = new StageImage((uint)StageWidth, (uint)StageHeight);
-        CurrentWave = new Wave();
-        mainPanel = new Panel(NativeX, 16, "RIKA!!!");
+        MainPanel = new Panel(NativeX, 16, "RIKA!!!");
         Randomizer = new RandomAdapter();
-        switch (Randomizer.GetInt(18))
-        {
-            case 0:
-                prepText = "THEY OPENED THE GAME!!! RATTLE 'EM BOYS!!!";
-                prepFactories = new List<IEnemyFactory>(
-                    [
-                    new SkulatraFactory(0,-2,0),
-                    new SkulatraFactory(30,-1,0),
-                    new SkulatraFactory(60,-2,0)
-                    ]
-                );
-                break;
-            case 1:
-                switch (Randomizer.GetInt(5))
-                {
-                    case 0:
-                        prepText = "Punchy Bad accidentally blocked your path. You intentionally started the fight!";
-                        break;
-                    case 1:
-                        prepText = "Punchy Bad fills his Handbads with horseshoes.";
-                        break;
-                    case 2:
-                        prepText = "Punchy Bad contemplates his name for a moment. Bad Punch blocks your path!";
-                        break;
-                    case 3:
-                        prepText = "Punchy Bad considers sandbagging, but remembers that he isn't a Desert Boss.";
-                        break;
-                    case 4:
-                        prepText = "Punchy Bad wonders when Yaroslav will finish the screen resize code. He easily gets distracted with a fight!";
-                        break;
-                    default:
-                        prepText = "Punchy Bad swings in like a wrecking ball!";
-                        break;
-                }
-                prepFactories = new List<IEnemyFactory>(
-                    [
-                    new PunchyBadHandFactory(0,-3,0),
-                    new PunchyBadFactory(32,-6,1),
-                    new PunchyBadHandFactory(90-32,-3,0)
-                    ]
-                );
-                break;
-            case 3:
-                prepText = "I spy with my floating eye something ending with this fight.";
-                prepFactories = new List<IEnemyFactory>(
-                    [
-                    new IbiruaiFactory(2,6,2),
-                    new IbiruaiFactory(30,10,0),
-                    new IbiruaiFactory(58,6,2)
-                    ]
-                );
-                break;
-            case 4:
-                prepText = "It stares at you through the stitches.";
-                prepFactories = new List<IEnemyFactory>(
-                    [
-                    new BlaindaiFactory(30,7,0)
-                    ]
-                );
-                break;
-            case 5:
-                prepText = "Amblyopia.";
-                prepFactories = new List<IEnemyFactory>(
-                    [
-                    new IbiruaiFactory(2,6,1),
-                    new BlaindaiFactory(30,7,0),
-                    new IbiruaiFactory(58,6,2)
-                    ]
-                );
-                break;
-            case 6:
-                prepText = "Sleep eternal quiescent dreams.";
-                prepFactories = new List<IEnemyFactory>(
-                    [
-                    new BlaindaiFactory(2,6,1),
-                    new BlaindaiFactory(30,7,0),
-                    new BlaindaiFactory(58,6,1)
-                    ]
-                );
-                break;
-            case 7:
-                prepText = "Uneasy alliance.";
-                prepFactories = new List<IEnemyFactory>(
-                    [
-                    new SkulatraFactory(0,-2,1),
-                    new BlaindaiFactory(30,7,0),
-                    new SkulatraFactory(60,-2,1)
-                    ]
-                );
-                break;
-            case 8:
-                prepText = "Not again...";
-                prepFactories = new List<IEnemyFactory>(
-                    [
-                    new SkulatraFactory(0,-2,1),
-                    new IbiruaiFactory(30,7,0),
-                    new SkulatraFactory(60,-2,1)
-                    ]
-                );
-                break;
-            case 9:
-                prepText = "Ibiruai would take revenge, if only context for it was provided.";
-                prepFactories = new List<IEnemyFactory>(
-                    [
-                    new IbiruaiFactory(2,6,2),
-                    new SkulatraFactory(30,-1,0),
-                    new IbiruaiFactory(58,6,2)
-                    ]
-                );
-                break;
-            case 10:
-                prepText = "THEY OPENED THE GAME!!! RATTLE 'EM... boys...?";
-                prepFactories = new List<IEnemyFactory>(
-                    [
-                    new BlaindaiFactory(2,6,2),
-                    new SkulatraFactory(30,-1,0),
-                    new IbiruaiFactory(58,6,2)
-                    ]
-                );
-                break;
-            case 11:
-                prepText = "Yokanten slides in!";
-                prepFactories = new List<IEnemyFactory>(
-                    [
-                    new YokantenFactory(37,15,0)
-                    ]
-                );
-                break;
-            case 12:
-                prepText = "Early Game Enemy convention.";
-                prepFactories = new List<IEnemyFactory>(
-                    [
-                    new IbiruaiFactory(2,6,2),
-                    new YokantenFactory(37,15,0),
-                    new IbiruaiFactory(58,6,2)
-                    ]
-                );
-                break;
-            case 13:
-                prepText = "Maybe the true enemies were the friends we made along the way...";
-                prepFactories = new List<IEnemyFactory>(
-                    [
-                    new IbiruaiderFactory(30,-6,0)
-                    ]
-                );
-                break;
-            case 14:
-                prepText = "Kneel before the Great Ibiruai Tamer! Let his matcha colors be known across the lands!";
-                prepFactories = new List<IEnemyFactory>(
-                    [
-                    new IbiruaiFactory(2,6,2),
-                    new IbiruaiderFactory(30,-6,0),
-                    new IbiruaiFactory(58,6,2)
-                    ]
-                );
-                break;
-            case 15:
-                prepText = "Desu Mashin: Mk.I flies in!";
-                prepFactories = new List<IEnemyFactory>(
-                    [
-                    new MekaiFactory(30,1,0)
-                    ]
-                );
-                break;
-            case 16:
-                prepText = "An Ibiruai, a Mek-AI and a Blaindai walk into a bar...";
-                prepFactories = new List<IEnemyFactory>(
-                    [
-                    new IbiruaiFactory(2,6,2),
-                    new MekaiFactory(30,1,0),
-                    new BlaindaiFactory(58,6,2)
-                    ]
-                );
-                break;
-            case 17:
-                prepText = "Finally an eye who understands...";
-                prepFactories = new List<IEnemyFactory>(
-                    [
-                    new SkulatraFactory(0,-2,1),
-                    new MekaiFactory(30,1,0),
-                    new SkulatraFactory(60,-2,1)
-                    ]
-                );
-                break;
-            default:
-                prepText = "Punchy Bag swings in like a fluff-filled pinata!";
-                prepFactories = new List<IEnemyFactory>(
-                    [
-                    new PunchyBagFactory((90-20)/2,-6,0)
-                    ]
-                );
-                break;
-        }
     }
 
     public void GameLoop()
     {
         Console.Clear();
         Console.CursorVisible = false;
-        bufferSize = new List<uint>(
-            [Convert.ToUInt16(Math.Min(Console.BufferWidth,NativeX)),
-            Convert.ToUInt16(Math.Min(Console.BufferHeight,NativeY))]
-            );
-        bufferSize.CopyTo(bufferSizePrev);
+        CheckBufferSize();
         Delta = 0;
-        PrepareFight(prepText, prepFactories);
+        BattleManager.Instance.PrepareFight();
         while (!gameStopped)
         {
             var watch = Stopwatch.StartNew();
             Input();
             Update();
-            CheckBufferSize();
-            //Bandaid solution for the time being. I'll figure it out later
-            if (bufferSize[0] < NativeX || bufferSize[1] < NativeY)
-            {
-                Console.SetCursorPosition(0, 0);
-                Console.Write($"Due to the resize code being unfinished, it's impossible to render the game at the buffer size less than {NativeX} X {NativeY}\n");
-                Console.Write("Please make sure it's at least that by editing the console settings!\n");
-                Console.Write($"Current Buffer Size: {bufferSize[0]} X {bufferSize[1]}");
-            }
-            else
-                Render();
+            Render();
             watch.Stop();
             var timeTaken = (int)watch.ElapsedMilliseconds;
             int waitTime = (1000 / Fps) - timeTaken;
@@ -319,10 +103,7 @@ public class GameManager
             SoundManager.Kill();
             var watch = Stopwatch.StartNew();
             stage.Alpha -= QuitChange;
-            CheckBufferSize();
-            //Bandaid solution for the time being. I'll figure it out later
-            if (!(bufferSize[0] < NativeX || bufferSize[1] < NativeY))
-                Render();
+            Render();
             watch.Stop();
             var timeTaken = (int)watch.ElapsedMilliseconds;
             int waitTime = QuitDelay - timeTaken;
@@ -332,24 +113,14 @@ public class GameManager
         }
     }
 
-    private void PrepareFight(string text, List<IEnemyFactory> factories)
-    {
-        mainPanel.RText = text;
-        foreach (IEnemyFactory i in factories)
-        {
-            CurrentWave.Add(i.Create());
-        }
-    }
-
     private void CheckBufferSize()
     {
-        bufferSize = new List<uint>(
-            [Convert.ToUInt16(Math.Min(Console.BufferWidth,NativeX)),
-            Convert.ToUInt16(Math.Min(Console.BufferHeight,NativeY))]
-            );
+        bufferSize[0] = Math.Min(Console.BufferWidth, NativeX);
+        bufferSize[1] = Math.Min(Console.BufferHeight,NativeY);
         if (!Enumerable.SequenceEqual(bufferSize, bufferSizePrev))
             Console.Clear();
-        bufferSize.CopyTo(bufferSizePrev);
+        bufferSizePrev[0] = bufferSize[0];
+        bufferSizePrev[1] = bufferSize[1];
         BufferChanged?.Invoke((int)bufferSize[0], (int)bufferSize[1]);
     }
 
@@ -361,14 +132,22 @@ public class GameManager
 
     private void Render()
     {
-
-        for (int i = MaxDepth; i >= 0; i--)
-            RenderStarted?.Invoke(stage, i);
-        var text = stage.GetImageText();
-        Console.SetCursorPosition(0, 0);
-        Console.Write(text);
-        mainPanel.DrawUi();
-        Console.ResetColor();
+        CheckBufferSize();
+        if (bufferSize[0] < NativeX || bufferSize[1] < NativeY)
+        {
+            Console.SetCursorPosition(0, 0);
+            Console.Write(bufferErrorMessage);
+        }
+        else
+        {
+            for (int i = MaxDepth; i >= 0; i--)
+                RenderStarted?.Invoke(stage, i);
+            var text = stage.GetImageText();
+            Console.SetCursorPosition(0, 0);
+            Console.Write(text);
+            MainPanel.DrawUi();
+            Console.ResetColor();
+        }
     }
 
     private void Input()
@@ -389,38 +168,10 @@ public class GameManager
         gameStopped = true;
     }
 
-    public static double DSin(int a)
-    {
-        return Math.Sin(a * (MathF.PI / 180));
-    }
-
-    public static double DCos(int a)
-    {
-        return Math.Cos(a * (MathF.PI / 180));
-    }
-
-    public static double DSin(float a)
-    {
-        return Math.Sin(a * (MathF.PI / 180));
-    }
-
-    public static double DCos(float a)
-    {
-        return Math.Cos(a * (MathF.PI / 180));
-    }
-
-    public static double DSin(double a)
-    {
-        return Math.Sin(a * (MathF.PI / 180));
-    }
-
-    public static double DCos(double a)
-    {
-        return Math.Cos(a * (MathF.PI / 180));
-    }
-
     static public event KeyEventHandler? KeyPressed;
     static public event RenderEventHandler? RenderStarted;
     static public event UpdateEventHandler? UpdateStarted;
     static public event BufferChangeEventHandler? BufferChanged;
+
+    private readonly string bufferErrorMessage;
 }

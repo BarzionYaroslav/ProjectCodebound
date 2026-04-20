@@ -125,7 +125,7 @@ public abstract class BaseEntity : IEntity
     private protected int baseAtk = DefaultAtk;
     private protected int hp = DefaultHp;
     private protected int maxHp = DefaultHp;
-    private protected Icon face = new Icon(DefaultIcon, 0f);
+    private protected Icon face = new Icon(DefaultIcon);
 
     const int MaxNameSize = 16;
     const string DefaultName = "??UNOWEN??";

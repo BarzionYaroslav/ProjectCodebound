@@ -1,27 +1,17 @@
 using Codebound.Drawing;
+using Codebound.System.Randomness;
 using Codebound.System;
 
 namespace Codebound.Entities.Opponents;
-public class SkulatraFactory: IEnemyFactory
+public class SkulatraFactory: BaseEnemyFactory
 {
-    public int X { get { return x; } set { x = value; } }
-    public int Y { get { return y; } set { y = value; } }
-    public int Depth {
-        get { return depth; }
-        set
-        {
-            if (value >= 0)
-                depth = value;
-        } 
-    }
-
     public SkulatraFactory(int x, int y, int depth)
     {
         X = x;
         Y = y;
         Depth = depth;
     }
-    public Enemy Create()
+    public override Enemy Create()
     {
         string name;
         switch (GameManager.Instance.Randomizer.GetInt(2))
@@ -33,22 +23,25 @@ public class SkulatraFactory: IEnemyFactory
                 name = name2;
                 break;
         }
-        Sprite bodySpr = new SpriteBuilder().SetSprite(bodyAsset)
-                        .SetPosition(X,Y)
-                        .SetDepth(Depth)
-                        .SetImageSpeed(bodySpeed)
-                        .Build();
+        Sprite bodySpr = MakeSprite(bodyAsset, bodySpeed);
         Sprite headSpr = new SpriteBuilder().SetSprite(headAsset)
                         .SetPosition(X + headXOffset, Y + headYOffset)
                         .SetDepth(Depth)
                         .SetImageSpeed(headSpeed)
                         .Build();
-        Icon ico = new Icon(iconAsset, 0f);
+        Icon ico = new Icon(iconAsset);
         Dictionary<string, Sprite> complexion = new()
             {
                 { Enemy.BodyName, bodySpr },
                 { Skulatra.HeadName, headSpr },
             };
+        IRandomList<IEnemyActionStrategy> actions = new RandomList<IEnemyActionStrategy>(
+            [
+                new EnemyPunchStrategy(),
+                new EnemySkipStrategy(),
+                new EnemyAttackBuffStrategy()
+            ]
+        );
         Enemy returner = new EnemyBuilder<Skulatra>()
                             .SetAtk(atk)
                             .SetDef(def)
@@ -56,12 +49,10 @@ public class SkulatraFactory: IEnemyFactory
                             .SetName(name)
                             .SetHp(maxHp)
                             .SetBody(complexion)
+                            .SetActionList(actions)
                             .Build();
         return returner;
     }
-    private int x;
-    private int y;
-    private int depth;
     private readonly string bodyAsset = "skulatra_body";
     private readonly float bodySpeed = 0.75f;
     private readonly string headAsset = "skulatra_head";
@@ -71,7 +62,7 @@ public class SkulatraFactory: IEnemyFactory
     private readonly string name1 = "Mr. Skulatra";
     private readonly string name2 = "Ms. Skulatra";
     private readonly string iconAsset = "skulatra";
-    private readonly int def = 0;
-    private readonly int atk = 0;
-    private readonly int maxHp = 15;
+    private readonly int def = 6;
+    private readonly int atk = 8;
+    private readonly int maxHp = 40;
 }

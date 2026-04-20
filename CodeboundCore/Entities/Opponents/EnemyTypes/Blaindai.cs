@@ -1,6 +1,6 @@
-using System.Runtime;
 using Codebound.Drawing;
 using Codebound.System;
+using Codebound.System.Functions;
 namespace Codebound.Entities.Opponents;
 
 public class Blaindai : Enemy
@@ -27,10 +27,10 @@ public class Blaindai : Enemy
         prevX = bod.X;
         prevY = bod.Y;
         var sinner = GameManager.Siner + bod.Depth * depthOffset;
-        var change = GameManager.DSin(sinner * waveSpeed) * waveYMagnitude;
-        bod.Y = bod.StartY + (int)change;
-        change = GameManager.DSin(sinner * waveSpeed * waveXMult) * waveXMagnitude;
-        bod.X = bod.StartX + (int)change;
+        var changeY = MathFunctions.DSin(sinner * waveSpeed) * waveYMagnitude;
+        bod.Y = bod.StartY + (int)changeY;
+        var changeX = MathFunctions.DSin(sinner * waveSpeed * waveXMult) * waveXMagnitude;
+        bod.X = bod.StartX + (int)changeX;
     }
     private int prevX;
     private int prevY;

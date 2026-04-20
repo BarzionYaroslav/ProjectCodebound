@@ -16,6 +16,11 @@ Starting ideas are as follows:
 
 - *Boss-rush* type gameplay (game consisting mostly of enemy waves with little rest in-between)
 
+## Docs
+Strategy code can be found at Entities/Opponents/EnemyActions. It is used by the Enemy class and gets called in System/BattleManager to make the turns work.
+
+The tests are small, since most of the actions are tied to BattleManager or to randomness (mostly to randomness), so they are harder to test.
+
 ## Launch
 
 Project can be accessed via command line with `dotnet run --project CodeboundCore`

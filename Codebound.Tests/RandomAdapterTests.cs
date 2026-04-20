@@ -1,4 +1,4 @@
-using Codebound.System;
+using Codebound.System.Randomness;
 namespace Codebound.Tests;
 public class RandomAdapterTests
 {

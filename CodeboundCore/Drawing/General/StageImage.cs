@@ -2,7 +2,7 @@ using ImageMagick;
 using Codebound.System;
 namespace Codebound.Drawing;
 
-public class StageImage: IDrawable
+public class StageImage: IDrawable, IDisposable
 {
     public MagickImageCollection Image
     {
@@ -118,13 +118,7 @@ public class StageImage: IDrawable
 
     public MagickImage GetFrame()
     {
-        MagickImage answer = (MagickImage)Image[(int)ImageIndex];
-        answer.Resize(
-            (uint)DrawWidth,
-            (uint)DrawHeight,
-            FilterType.Point
-            );
-        return answer;
+        return (MagickImage)Image[(int)ImageIndex];
     }
 
     public List<string> GetLines()

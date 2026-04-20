@@ -1,5 +1,6 @@
 using Codebound.Drawing;
 using Codebound.System;
+using Codebound.System.Functions;
 namespace Codebound.Entities.Opponents;
 
 public class Ibiruai : Enemy
@@ -7,7 +8,11 @@ public class Ibiruai : Enemy
     public override void UpdateValues()
     {
         Sprite bod = body[BodyName];
-        var change = GameManager.DSin((GameManager.Siner + bod.Depth*15) * 2) * 2;
-        bod.Y = bod.StartY + (int)change;
+        var changeY = MathFunctions.DSin((GameManager.Siner + bod.Depth * depthOffset) * waveSpeed) * waveMagnitude;
+        bod.Y = bod.StartY + (int)changeY;
     }
+    
+    private readonly int depthOffset = 15;
+    private readonly int waveMagnitude = 6;
+    private readonly int waveSpeed = 2;
 }

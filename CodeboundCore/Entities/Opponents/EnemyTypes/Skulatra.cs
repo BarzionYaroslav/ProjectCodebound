@@ -1,6 +1,6 @@
 using Codebound.Drawing;
 using Codebound.System;
-using System;
+using Codebound.System.Functions;
 namespace Codebound.Entities.Opponents;
 
 public class Skulatra : Enemy
@@ -9,7 +9,7 @@ public class Skulatra : Enemy
     {
         Expectations.Add(HeadName);
         body.ChangeExpectations(Expectations);
-        shmoves = GameManager.Instance.Randomizer.GetInt(2);
+        danceChoice = GameManager.Instance.Randomizer.GetInt(danceNumber);
     }
 
     public override void UpdateValues()
@@ -17,30 +17,38 @@ public class Skulatra : Enemy
         Sprite bod = body[BodyName];
         Sprite head = body[HeadName];
         var degree = (360 / bod.ImageCount) * bod.ImageIndex;
-        var change = GameManager.DSin(degree) * 2;
-        if (shmoves != 1)
+        switch (danceChoice)
         {
-            head.X = head.StartX - (int)change;
-            if (change >= 1)
-                head.ImageIndex = 3;
-            else if (change <= -1)
-                head.ImageIndex = 1;
-            else
-                head.ImageIndex = 0;
+            case 1:
+                DefaultDance(degree, defaultHeadIndex, rightHeadIndex, leftHeadIndex);
+                break;
+            default:
+                DefaultDance(degree, defaultHeadIndex, leftHeadIndex, rightHeadIndex);
+                break;
         }
-        else
-        {
-            head.X = head.StartX + (int)change;
-            if (change >= 1)
-                head.ImageIndex = 1;
-            else if (change <= -1)
-                head.ImageIndex = 3;
-            else
-                head.ImageIndex = 0;
-        }
-        change = Math.Abs(GameManager.DCos(degree) * 2);
-        head.Y = head.StartY - (int)change;
+        var changeY = Math.Abs(MathFunctions.DCos(degree) * waveYMagnitude);
+        head.Y = head.StartY - (int)changeY;
     }
-    private int shmoves;
+
+    private void DefaultDance(float degrees, int defaultIndex, int leftIndex, int rightIndex)
+    {
+        Sprite head = body[HeadName];
+        var changeX = MathFunctions.DSin(degrees) * waveXMagnitude;
+        head.X = head.StartX - (int)changeX;
+        if (changeX >= changeXTreshold)
+            head.ImageIndex = rightIndex;
+        else if (changeX <= -changeXTreshold)
+            head.ImageIndex = leftIndex;
+        else
+            head.ImageIndex = defaultIndex;
+    }
+    private int danceChoice;
+    private readonly int danceNumber = 2;
+    private readonly int changeXTreshold = 1;
+    private readonly int defaultHeadIndex = 0;
+    private readonly int leftHeadIndex = 1;
+    private readonly int rightHeadIndex = 3;
+    private readonly int waveYMagnitude = 2;
+    private readonly int waveXMagnitude = 2;
     static public readonly string HeadName = "head";
 }

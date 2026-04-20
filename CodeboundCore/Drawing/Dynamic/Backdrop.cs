@@ -2,7 +2,7 @@ using ImageMagick;
 using Codebound.System;
 namespace Codebound.Drawing;
 
-public class Backdrop : IDrawableDynamic
+public class Backdrop : IDrawableDynamic, IDisposable
 {
     public MagickImageCollection Image
     {

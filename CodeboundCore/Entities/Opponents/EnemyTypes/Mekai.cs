@@ -1,5 +1,6 @@
 using Codebound.Drawing;
 using Codebound.System;
+using Codebound.System.Functions;
 namespace Codebound.Entities.Opponents;
 
 public class Mekai : Enemy
@@ -15,8 +16,8 @@ public class Mekai : Enemy
         Sprite bod = body[BodyName];
         Sprite blades = body[BladeName];
         var sinner = GameManager.Siner + bod.Depth * depthOffset;
-        var change = GameManager.DSin(sinner * waveSpeed) * waveYMagnitude;
-        bod.Y = bod.StartY + Math.Clamp((int)change, -maxChange, maxChange);
+        var changeY = MathFunctions.DSin(sinner * waveSpeed) * waveYMagnitude;
+        bod.Y = bod.StartY + Math.Clamp((int)changeY, -maxChange, maxChange);
         blades.X = bod.X;
         blades.Y = bod.Y;
     }

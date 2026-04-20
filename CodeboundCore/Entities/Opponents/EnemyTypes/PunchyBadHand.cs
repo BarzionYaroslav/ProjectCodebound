@@ -1,5 +1,6 @@
 using Codebound.Drawing;
 using Codebound.System;
+using Codebound.System.Functions;
 namespace Codebound.Entities.Opponents;
 
 public class PunchyBadHand : Enemy
@@ -13,26 +14,22 @@ public class PunchyBadHand : Enemy
     }
     public override void UpdateValues()
     {
-        double change;
         Sprite bod = body[BodyName];
-        if (!flip)
+        double changeX = MathFunctions.DCos(GameManager.Siner * waveSpeed) * waveXMagnitude;
+        double changeY = MathFunctions.DSin(GameManager.Siner * waveSpeed) * waveYMagnitude;
+        double changeZ = MathFunctions.DSin(GameManager.Siner * waveSpeed) * waveZMagnitude;
+        if (flip)
         {
-            change = GameManager.DSin(GameManager.Siner * 5) * 4;
-            bod.Z = (int)change;
-            change = GameManager.DCos(GameManager.Siner * 5) * 3;
-            bod.X = bod.StartX + (int)change;
-            change = GameManager.DSin(GameManager.Siner * 5) * 2;
-            bod.Y = bod.StartY + (int)change;
+            changeZ = MathFunctions.DSin(flipOffset + GameManager.Siner * waveSpeed) * waveZMagnitude;
         }
-        else
-        {
-            change = GameManager.DSin(180+GameManager.Siner * 5) * 4;
-            bod.Z = (int)change;
-            change = GameManager.DCos(GameManager.Siner * 5) * 3;
-            bod.X = bod.StartX + (int)change;
-            change = GameManager.DSin(GameManager.Siner * 5) * 2;
-            bod.Y = bod.StartY + (int)change;
-        }
-        
+        bod.Z = (int)changeZ;
+        bod.X = bod.StartX + (int)changeX;
+        bod.Y = bod.StartY + (int)changeY;
     }
+
+    private readonly int flipOffset = 180;
+    private readonly int waveSpeed = 5;
+    private readonly int waveZMagnitude = 4;
+    private readonly int waveXMagnitude = 3;
+    private readonly int waveYMagnitude = 2;
 }

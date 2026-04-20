@@ -221,9 +221,9 @@ public class Panel
     //Yeeeeeaaaaaah, I need to redo that one
     public void DrawUi()
     {
-        var rik = GameManager.Instance.MainChar.Face;
+        var rik = BattleManager.Instance.MainChar.Face;
         string text = "";
-        List<string> playerDat = [.. GameManager.Instance.MainChar.ToString().Split('\n')];
+        List<string> playerDat = [.. BattleManager.Instance.MainChar.ToString().Split('\n')];
         int datMax = 0;
         foreach (var i in playerDat)
         {
@@ -248,9 +248,9 @@ public class Panel
         {
             if (state == 1)
             {
-                enText = GameManager.Instance.CurrentWave[secondaryButtons.Choice].Face.GetImageText();
+                enText = BattleManager.Instance.CurrentWave[secondaryButtons.Choice].Face.GetImageText();
                 enlines = [.. enText.Split('\n')];
-                enmDat = [.. GameManager.Instance.CurrentWave[secondaryButtons.Choice].ToString().Split('\n')];
+                enmDat = [.. BattleManager.Instance.CurrentWave[secondaryButtons.Choice].ToString().Split('\n')];
                 foreach (var i in enmDat)
                 {
                     if (i.Length > enmMax)
@@ -359,11 +359,11 @@ public class Panel
     {
         if (panel != null)
         {
-            if (GameManager.Instance.CurrentWave.Count != 0)
+            if (BattleManager.Instance.CurrentWave.Count != 0)
             {
                 SoundManager.PlaySound("CursorMove");
                 panel.SecondaryButtons = new ButtonCollection(panel);
-                foreach (Enemy i in GameManager.Instance.CurrentWave)
+                foreach (Enemy i in BattleManager.Instance.CurrentWave)
                 {
                     Button btn = new Button($"{i.Name}", EnemyAttackCommand);
                     panel.SecondaryButtons.Add(btn);
@@ -405,7 +405,7 @@ public class Panel
             if (panel.SecondaryButtons != null)
             {
                 int ind = panel.SecondaryButtons.Choice;
-                Hero character = GameManager.Instance.MainChar;
+                Hero character = BattleManager.Instance.MainChar;
                 character.Weapon = panel.testList[ind];
                 panel.SecondaryButtons = null;
                 panel.state = 0;
@@ -420,9 +420,9 @@ public class Panel
             if (panel.SecondaryButtons!=null)
             {
                 int ind = panel.SecondaryButtons.Choice;
-                Wave wave = GameManager.Instance.CurrentWave;
+                Wave wave = BattleManager.Instance.CurrentWave;
                 Enemy enm = wave[ind];
-                Hero character = GameManager.Instance.MainChar;
+                Hero character = BattleManager.Instance.MainChar;
                 if (character.Weapon != null)
                     character.Weapon.Use(character, enm);
                 else

@@ -1,4 +1,4 @@
-namespace Codebound.System;
+namespace Codebound.System.Randomness;
 public class RandomAdapter: IRandomProvider
 {
     private Random _adaptee;

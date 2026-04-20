@@ -30,8 +30,8 @@ public class Enemy : BaseEntity
         }
         else
         {
-            Hp -= 1;
-            return 1;
+            Hp -= chipDamage;
+            return chipDamage;
         }
     }
     public void ReplaceBody(ComplexSpriter bodyNew)
@@ -47,5 +47,6 @@ public class Enemy : BaseEntity
 
     protected ComplexSpriter body;
     public HashSet<string> Expectations { get; private set; } = new HashSet<string>();
+    private readonly int chipDamage = 1;
     static public readonly string BodyName = "body";
 }

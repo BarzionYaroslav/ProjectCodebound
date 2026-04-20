@@ -1,36 +1,21 @@
 using Codebound.Drawing;
 
 namespace Codebound.Entities.Opponents;
-public class IbiruaiFactory: IEnemyFactory
+public class IbiruaiFactory: BaseEnemyFactory
 {
-    public int X { get { return x; } set { x = value; } }
-    public int Y { get { return y; } set { y = value; } }
-    public int Depth {
-        get { return depth; }
-        set
-        {
-            if (value >= 0)
-                depth = value;
-        } 
-    }
-
     public IbiruaiFactory(int x, int y, int depth)
     {
         X = x;
         Y = y;
         Depth = depth;
     }
-    public Enemy Create()
+    public override Enemy Create()
     {
-        Sprite spr = new SpriteBuilder().SetSprite(bodyAsset)
-                        .SetPosition(X, Y)
-                        .SetDepth(Depth)
-                        .SetImageSpeed(bodySpeed)
-                        .Build();
-        Icon ico = new Icon(iconAsset, 0f);
+        Sprite bodySprite = MakeSprite(bodyAsset, bodySpeed);
+        Icon ico = new Icon(iconAsset);
         Dictionary<string, Sprite> complexion = new()
         {
-            { Enemy.BodyName, spr },
+            { Enemy.BodyName, bodySprite },
         };
         Enemy returner = new EnemyBuilder<Ibiruai>()
                             .SetAtk(atk)
@@ -42,9 +27,6 @@ public class IbiruaiFactory: IEnemyFactory
                             .Build();
         return returner;
     }
-    private int x;
-    private int y;
-    private int depth;
     private readonly string bodyAsset = "Ibiruai";
     private readonly float bodySpeed = 0.35f;
     private readonly string name = "Ibiruai";

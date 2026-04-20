@@ -2,6 +2,7 @@ using Codebound.Entities.Opponents;
 using Codebound.Entities;
 namespace Codebound.System;
 using Codebound.System.Randomness;
+using Codebound.Drawing;
 
 public class BattleManager
 {
@@ -223,4 +224,61 @@ public class BattleManager
             CurrentWave.Add(i.Create());
         }
     }
+
+    public void StartEnemyTurn()
+    {
+        GameManager.Instance.MainPanel.Active = false;
+        GameManager.UpdateStarted += EnemyTurn;
+        sleepyTime = defaultPlayerTurnLength;
+    }
+
+    public void EnemyTurn()
+    {
+        if (sleepyTime == 0)
+        {
+            if (currentEnemyIndex < CurrentWave.Count)
+            {
+                sleepyTime = CurrentWave[currentEnemyIndex].DoAction();
+                CurrentWave[currentEnemyIndex].RandomizeAction();
+                currentEnemyIndex++;
+            }
+            else
+            {
+                currentEnemyIndex = 0;
+                EndEnemyTurn();
+            }
+        }
+        else
+        {
+            sleepyTime--;
+        }
+    }
+
+    public void EndEnemyTurn()
+    {
+        GameManager.Instance.MainPanel.RText = prepText.GetRandom();
+        GameManager.Instance.MainPanel.Active = true;
+        GameManager.UpdateStarted -= EnemyTurn;
+    }
+
+    public Sprite AddEffect(int enemyIndex, string effectAsset, float animateSpeed)
+    {
+        Enemy enemyInUse = CurrentWave[enemyIndex];
+        Sprite effect = new SpriteBuilder().SetSprite(effectAsset)
+            .SetImageSpeed(animateSpeed)
+            .SetPosition(
+                enemyInUse.Body[Enemy.BodyName].X + (enemyInUse.Body[Enemy.BodyName].DrawWidth / 2),
+                enemyInUse.Body[Enemy.BodyName].Y + (enemyInUse.Body[Enemy.BodyName].DrawHeight / 2)
+                )
+            .SetDepth(0)
+            .SetVanish(true)
+            .Build();
+        effect.X -= effect.DrawWidth / 2;
+        effect.Y -= effect.DrawHeight / 2;
+        return effect;
+    }
+
+    private int sleepyTime = 0;
+    private int currentEnemyIndex = 0;
+    private readonly int defaultPlayerTurnLength = 40;
 }

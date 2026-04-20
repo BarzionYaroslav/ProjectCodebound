@@ -74,6 +74,7 @@ public class Panel
     private int height;
     private int width;
     public int state = 0;
+    public bool Active = true;
 
     public Panel(int width, int height, string rtext)
     {
@@ -90,31 +91,34 @@ public class Panel
 
     public void HandleControls(ConsoleKey key)
     {
-        ButtonCollection curButtons;
-        if (secondaryButtons == null)
-            curButtons = Buttons;
-        else
-            curButtons = secondaryButtons;
-        switch (key)
+        if (Active)
         {
-            case ConsoleKey.T:
-                RText = $"{Console.BufferWidth} X {Console.BufferHeight}";
-                break;
-            case ConsoleKey.UpArrow:
-                curButtons.SubstractChoice(true);
-                break;
-            case ConsoleKey.DownArrow:
-                curButtons.AddChoice(true);
-                break;
-            case ConsoleKey.X:
-                if (secondaryButtons != null)
-                    secondaryButtons = null;
-                break;
-            case ConsoleKey.Z:
-                curButtons.ExecuteChoice();
-                break;
-            default:
-                break;
+            ButtonCollection curButtons;
+            if (secondaryButtons == null)
+                curButtons = Buttons;
+            else
+                curButtons = secondaryButtons;
+            switch (key)
+            {
+                case ConsoleKey.T:
+                    RText = $"{Console.BufferWidth} X {Console.BufferHeight}";
+                    break;
+                case ConsoleKey.UpArrow:
+                    curButtons.SubstractChoice(true);
+                    break;
+                case ConsoleKey.DownArrow:
+                    curButtons.AddChoice(true);
+                    break;
+                case ConsoleKey.X:
+                    if (secondaryButtons != null)
+                        secondaryButtons = null;
+                    break;
+                case ConsoleKey.Z:
+                    curButtons.ExecuteChoice();
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
@@ -409,6 +413,7 @@ public class Panel
                 character.Weapon = panel.testList[ind];
                 panel.SecondaryButtons = null;
                 panel.state = 0;
+                BattleManager.Instance.StartEnemyTurn();
             }
         }
     }
@@ -428,20 +433,13 @@ public class Panel
                 else
                 {
                     SoundManager.PlaySound("punch");
-                    new SpriteBuilder().SetSprite("punch_fx")
-                        .SetImageSpeed(1f)
-                        .SetPosition(
-                            enm.Body[Enemy.BodyName].X + (enm.Body[Enemy.BodyName].DrawWidth/2) - 8,
-                            enm.Body[Enemy.BodyName].Y + (enm.Body[Enemy.BodyName].DrawHeight/2) - 8
-                            )
-                        .SetDepth(0)
-                        .SetVanish(true)
-                        .Build();
+                    BattleManager.Instance.AddEffect(ind, "punch_fx", 1f);
                 }
                 int dmg = enm.Hurt(character.Atk);
                 panel.RText = $"You attacked {enm.Name} for {dmg} HP! It didn't really like that!";
                 panel.SecondaryButtons = null;
                 panel.state = 0;
+                BattleManager.Instance.StartEnemyTurn();
             }
         }
     }

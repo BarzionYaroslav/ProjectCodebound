@@ -39,7 +39,7 @@ public class IbiruaiderFactory: BaseEnemyFactory
     private readonly float headSpeed = 0f;
     private readonly string name = "Ibiruaider (I&Y)";
     private readonly string iconAsset = "ibiruaider";
-    private readonly int def = 0;
-    private readonly int atk = 0;
-    private readonly int maxHp = 15;
+    private readonly int def = 6;
+    private readonly int atk = 5;
+    private readonly int maxHp = 25;
 }

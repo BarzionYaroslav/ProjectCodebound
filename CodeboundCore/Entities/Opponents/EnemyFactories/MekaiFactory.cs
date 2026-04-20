@@ -36,7 +36,7 @@ public class MekaiFactory: BaseEnemyFactory
     private readonly string name = "Mek-AI Mk.I";
     private readonly string iconAsset = "mekai";
     private readonly int def = 0;
-    private readonly int atk = 0;
-    private readonly int maxHp = 15;
+    private readonly int atk = 20;
+    private readonly int maxHp = 50;
 
 }

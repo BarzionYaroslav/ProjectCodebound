@@ -35,8 +35,8 @@ public class BlaindaiFactory: BaseEnemyFactory
     private readonly float haloSpeed = 0.4f;
     private readonly string name = "Blaindai";
     private readonly string iconAsset = "blaindai";
-    private readonly int def = 0;
-    private readonly int atk = 0;
-    private readonly int maxHp = 15;
+    private readonly int def = 5;
+    private readonly int atk = 6;
+    private readonly int maxHp = 35;
 
 }

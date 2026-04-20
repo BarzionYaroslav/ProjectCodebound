@@ -1,4 +1,5 @@
 using Codebound.Drawing;
+using Codebound.System.Randomness;
 using Codebound.System;
 
 namespace Codebound.Entities.Opponents;
@@ -34,6 +35,13 @@ public class SkulatraFactory: BaseEnemyFactory
                 { Enemy.BodyName, bodySpr },
                 { Skulatra.HeadName, headSpr },
             };
+        IRandomList<IEnemyActionStrategy> actions = new RandomList<IEnemyActionStrategy>(
+            [
+                new EnemyPunchStrategy(),
+                new EnemySkipStrategy(),
+                new EnemyAttackBuffStrategy()
+            ]
+        );
         Enemy returner = new EnemyBuilder<Skulatra>()
                             .SetAtk(atk)
                             .SetDef(def)
@@ -41,6 +49,7 @@ public class SkulatraFactory: BaseEnemyFactory
                             .SetName(name)
                             .SetHp(maxHp)
                             .SetBody(complexion)
+                            .SetActionList(actions)
                             .Build();
         return returner;
     }
@@ -53,7 +62,7 @@ public class SkulatraFactory: BaseEnemyFactory
     private readonly string name1 = "Mr. Skulatra";
     private readonly string name2 = "Ms. Skulatra";
     private readonly string iconAsset = "skulatra";
-    private readonly int def = 0;
-    private readonly int atk = 0;
-    private readonly int maxHp = 15;
+    private readonly int def = 6;
+    private readonly int atk = 8;
+    private readonly int maxHp = 40;
 }

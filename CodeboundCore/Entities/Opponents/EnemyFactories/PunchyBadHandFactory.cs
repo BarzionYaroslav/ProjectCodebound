@@ -1,4 +1,5 @@
 using Codebound.Drawing;
+using Codebound.System.Randomness;
 namespace Codebound.Entities.Opponents;
 
 public class PunchyBadHandFactory : BaseEnemyFactory
@@ -20,6 +21,13 @@ public class PunchyBadHandFactory : BaseEnemyFactory
         {
             { Enemy.BodyName, bodySprite },
         };
+        IRandomList<IEnemyActionStrategy> actions = new RandomList<IEnemyActionStrategy>(
+            [
+                new EnemyPunchStrategy(),
+                new EnemySkipStrategy(),
+                new EnemyStrongPunchStrategy()
+            ]
+        );
         returner = new EnemyBuilder<PunchyBadHand>()
             .SetAtk(atk)
             .SetDef(def)
@@ -27,6 +35,7 @@ public class PunchyBadHandFactory : BaseEnemyFactory
             .SetName(name)
             .SetHp(maxHp)
             .SetBody(complexion)
+            .SetActionList(actions)
             .Build();
         returner.Flip = tresholdReached;
         return returner;
@@ -37,7 +46,7 @@ public class PunchyBadHandFactory : BaseEnemyFactory
     private readonly string name = "Handbad";
     private readonly string iconAsset = "handbad";
     private readonly int flipTreshold = 45;
-    private readonly int def = 0;
-    private readonly int atk = 0;
-    private readonly int maxHp = 15;
+    private readonly int def = 6;
+    private readonly int atk = 10;
+    private readonly int maxHp = 50;
 }

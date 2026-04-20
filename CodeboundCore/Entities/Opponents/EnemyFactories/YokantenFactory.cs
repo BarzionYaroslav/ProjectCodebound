@@ -39,7 +39,7 @@ public class YokantenFactory: BaseEnemyFactory
     private readonly float tailSpeed = 0f;
     private readonly string name = "Yokanten";
     private readonly string iconAsset = "yokanten";
-    private readonly int def = 0;
-    private readonly int atk = 0;
+    private readonly int def = 1;
+    private readonly int atk = 4;
     private readonly int maxHp = 15;
 }

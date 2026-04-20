@@ -69,6 +69,10 @@ public class RandomList<T>: IRandomList<T>
     {
         return _list.GetEnumerator();
     }
+    public List<T> ToList()
+    {
+        return [.. _list];
+    }
     public T GetRandom()
     {
         return this[randomizer.GetInt(Count)];

@@ -1,8 +1,10 @@
 using Codebound.Drawing;
+using Codebound.System.Randomness;
 
 namespace Codebound.Entities.Opponents;
 public class EnemyBuilder<T> : IEnemyBuilder<T> where T: Enemy, new()
 {
+    private IRandomList<IEnemyActionStrategy>? actionList;
     public EnemyBuilder<T> SetName(string name)
     {
         _enemy.Name = name;
@@ -34,6 +36,12 @@ public class EnemyBuilder<T> : IEnemyBuilder<T> where T: Enemy, new()
         return this;
     }
 
+    public EnemyBuilder<T> SetActionList(IRandomList<IEnemyActionStrategy> actions)
+    {
+        actionList = actions;
+        return this;
+    }
+
     public EnemyBuilder<T> SetBody(Dictionary<string, Sprite> dict)
     {
         ComplexSpriter newBody = new ComplexSpriter(_enemy.Expectations);
@@ -45,6 +53,8 @@ public class EnemyBuilder<T> : IEnemyBuilder<T> where T: Enemy, new()
     public T Build()
     {
         _enemy.AfterPrep();
+        if (actionList!=null)
+            _enemy.ChangeActionList(actionList);
         return _enemy;
     }
 

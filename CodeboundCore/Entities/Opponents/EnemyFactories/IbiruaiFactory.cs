@@ -31,7 +31,7 @@ public class IbiruaiFactory: BaseEnemyFactory
     private readonly float bodySpeed = 0.35f;
     private readonly string name = "Ibiruai";
     private readonly string iconAsset = "ibiruai";
-    private readonly int def = 0;
-    private readonly int atk = 0;
-    private readonly int maxHp = 15;
+    private readonly int def = 2;
+    private readonly int atk = 5;
+    private readonly int maxHp = 20;
 }

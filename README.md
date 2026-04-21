@@ -17,9 +17,19 @@ Starting ideas are as follows:
 - *Boss-rush* type gameplay (game consisting mostly of enemy waves with little rest in-between)
 
 ## Docs
-Strategy code can be found at Entities/Opponents/EnemyActions. It is used by the Enemy class and gets called in System/BattleManager to make the turns work.
+***Strategy*** code can be found at `Entities/Opponents/EnemyActions`. It is used by the Enemy class and gets called in `System/BattleManager` to make the turns work.
 
-The tests are small, since most of the actions are tied to BattleManager or to randomness (mostly to randomness), so they are harder to test.
+***Observer*** code can be found in `System/GameManager`. Events are used for rendering, update, input and change to buffer size. Rendering is mostly used by `IDrawableDynamic` classes, update is used mostly by `IEntity` classes
+
+***Adapter*** code can be found at `System/Randomness/RandomAdapter`, where C#'s `Random` is adapted to `IRandomProvider`
+
+***Decorator*** code can be found at `Items/Weapons/Decorators`, where Decorators are used for weapons. The testing "inventory" is located in `System/UI/Panel` for the time being
+
+***Builder*** code can be found at `Entities`, where it is used for both enemies in `Entities/Opponents` and Hero
+
+***Factory*** code can be found at `Entities/Opponents/EnemyFactories`, where it is used for each enemy type in `Entities/Opponents/EnemyTypes`
+
+***Singleton*** is used in both `GameManager` and `BattleManager` classes at `System`
 
 ## Launch
 

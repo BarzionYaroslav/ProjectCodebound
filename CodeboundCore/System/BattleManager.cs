@@ -33,7 +33,7 @@ public class BattleManager
                     .Build();
         CurrentWave = new Wave();
         IRandomProvider random = GameManager.Instance.Randomizer;
-        int choice = random.GetInt(18);
+        int choice = random.GetInt(17);
         switch (choice)
         {
             case 0:
@@ -63,7 +63,7 @@ public class BattleManager
                     ]
                 );
                 break;
-            case 3:
+            case 2:
                 prepText = new RandomList<string>(["I spy with my floating eye something ending with this fight."]);
                 prepFactories = new List<IEnemyFactory>(
                     [
@@ -73,7 +73,7 @@ public class BattleManager
                     ]
                 );
                 break;
-            case 4:
+            case 3:
                 prepText = new RandomList<string>(["It stares at you through the stitches."]);
                 prepFactories = new List<IEnemyFactory>(
                     [
@@ -81,7 +81,7 @@ public class BattleManager
                     ]
                 );
                 break;
-            case 5:
+            case 4:
                 prepText = new RandomList<string>(["Amblyopia."]);
                 prepFactories = new List<IEnemyFactory>(
                     [
@@ -91,7 +91,7 @@ public class BattleManager
                     ]
                 );
                 break;
-            case 6:
+            case 5:
                 prepText = new RandomList<string>(["Sleep eternal quiescent dreams."]);
                 prepFactories = new List<IEnemyFactory>(
                     [
@@ -101,7 +101,7 @@ public class BattleManager
                     ]
                 );
                 break;
-            case 7:
+            case 6:
                 prepText = new RandomList<string>(["Uneasy alliance."]);
                 prepFactories = new List<IEnemyFactory>(
                     [
@@ -111,7 +111,7 @@ public class BattleManager
                     ]
                 );
                 break;
-            case 8:
+            case 7:
                 prepText = new RandomList<string>(["Not again..."]);
                 prepFactories = new List<IEnemyFactory>(
                     [
@@ -121,7 +121,7 @@ public class BattleManager
                     ]
                 );
                 break;
-            case 9:
+            case 8:
                 prepText = new RandomList<string>(["Ibiruai would take revenge, if only context for it was provided."]);
                 prepFactories = new List<IEnemyFactory>(
                     [
@@ -131,7 +131,7 @@ public class BattleManager
                     ]
                 );
                 break;
-            case 10:
+            case 9:
                 prepText = new RandomList<string>(["THEY OPENED THE GAME!!! RATTLE 'EM... boys...?"]);
                 prepFactories = new List<IEnemyFactory>(
                     [
@@ -141,7 +141,7 @@ public class BattleManager
                     ]
                 );
                 break;
-            case 11:
+            case 10:
                 prepText = new RandomList<string>(["Yokanten slides in!"]);
                 prepFactories = new List<IEnemyFactory>(
                     [
@@ -149,7 +149,7 @@ public class BattleManager
                     ]
                 );
                 break;
-            case 12:
+            case 11:
                 prepText = new RandomList<string>(["Early Game Enemy convention."]);
                 prepFactories = new List<IEnemyFactory>(
                     [
@@ -159,7 +159,7 @@ public class BattleManager
                     ]
                 );
                 break;
-            case 13:
+            case 12:
                 prepText = new RandomList<string>(["Maybe the true enemies were the friends we made along the way..."]);
                 prepFactories = new List<IEnemyFactory>(
                     [
@@ -167,7 +167,7 @@ public class BattleManager
                     ]
                 );
                 break;
-            case 14:
+            case 13:
                 prepText = new RandomList<string>(["Kneel before the Great Ibiruai Tamer! Let his matcha colors be known across the lands!"]);
                 prepFactories = new List<IEnemyFactory>(
                     [
@@ -177,7 +177,7 @@ public class BattleManager
                     ]
                 );
                 break;
-            case 15:
+            case 14:
                 prepText = new RandomList<string>(["Desu Mashin: Mk.I flies in!"]);
                 prepFactories = new List<IEnemyFactory>(
                     [
@@ -185,7 +185,7 @@ public class BattleManager
                     ]
                 );
                 break;
-            case 16:
+            case 15:
                 prepText = new RandomList<string>(["An Ibiruai, a Mek-AI and a Blaindai walk into a bar..."]);
                 prepFactories = new List<IEnemyFactory>(
                     [
@@ -195,7 +195,7 @@ public class BattleManager
                     ]
                 );
                 break;
-            case 17:
+            case 16:
                 prepText = new RandomList<string>(["Finally an eye who understands..."]);
                 prepFactories = new List<IEnemyFactory>(
                     [

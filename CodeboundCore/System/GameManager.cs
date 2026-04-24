@@ -19,7 +19,7 @@ public class GameManager
         get
         {
             if (RenderStarted != null)
-                return RenderStarted!.GetInvocationList().Count();
+                return RenderStarted.GetInvocationList().Count();
             return 0;
         }
     }

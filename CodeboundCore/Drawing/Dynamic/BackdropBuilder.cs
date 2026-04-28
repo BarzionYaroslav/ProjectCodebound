@@ -36,5 +36,11 @@ public class BackdropBuilder
         return this;
     }
 
+    public BackdropBuilder SetScrollSpeed(float speed)
+    {
+        _backdrop.ScrollSpeed = speed;
+        return this;
+    }
+
     public Backdrop Build() => _backdrop;
 }

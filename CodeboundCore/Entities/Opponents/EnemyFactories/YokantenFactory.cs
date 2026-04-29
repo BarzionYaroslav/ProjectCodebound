@@ -11,8 +11,8 @@ public class YokantenFactory: BaseEnemyFactory
     }
     public override Enemy Create()
     {
-        Sprite tailSprite = MakeSprite(tailAsset, tailSpeed);
-        Sprite middleSprite = MakeSprite(midAsset, midSpeed);
+        Sprite tailSprite = MakeSprite(tailAsset, tailSpeed,2);
+        Sprite middleSprite = MakeSprite(midAsset, midSpeed,1);
         Sprite headSprite = MakeSprite(headAsset, headSpeed);
         Icon ico = new Icon(iconAsset);
         Dictionary<string, Sprite> complexion = new()

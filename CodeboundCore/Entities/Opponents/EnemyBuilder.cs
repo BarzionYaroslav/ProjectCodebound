@@ -33,6 +33,7 @@ public class EnemyBuilder<T> : IEnemyBuilder<T> where T: Enemy, new()
     public EnemyBuilder<T> SetFace(Icon icon)
     {
         _enemy.Face = icon;
+        icon.Init();
         return this;
     }
 

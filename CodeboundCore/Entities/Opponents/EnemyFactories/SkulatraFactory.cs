@@ -23,7 +23,7 @@ public class SkulatraFactory: BaseEnemyFactory
                 name = name2;
                 break;
         }
-        Sprite bodySpr = MakeSprite(bodyAsset, bodySpeed);
+        Sprite bodySpr = MakeSprite(bodyAsset, bodySpeed,1);
         Sprite headSpr = new SpriteBuilder().SetSprite(headAsset)
                         .SetPosition(X + headXOffset, Y + headYOffset)
                         .SetDepth(Depth)

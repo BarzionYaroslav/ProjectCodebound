@@ -1,6 +1,6 @@
 namespace Codebound.System;
 using SDL3;
-public class SoundHolder
+public class SoundHolder: IDisposable
 {
     private nint audio;
     private nint track;
@@ -10,7 +10,7 @@ public class SoundHolder
         track = Mixer.CreateTrack(mixer);
         Mixer.SetTrackAudio(track, audio);
     }
-    public void Kill()
+    public void Dispose()
     {
         Mixer.DestroyTrack(track);
         Mixer.DestroyAudio(audio);

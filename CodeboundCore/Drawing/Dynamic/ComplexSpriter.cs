@@ -34,6 +34,12 @@ public class ComplexSpriter: IDisposable
         Fill();
     }
 
+    public void Init()
+    {
+        foreach (var val in _sprites.Values)
+            val.Init();
+    }
+
     public void ChangeExpectations(HashSet<string> expectations)
     {
         expectedValues = expectations;
@@ -60,9 +66,9 @@ public class ComplexSpriter: IDisposable
 
     public void Dispose()
     {
-        var values = _sprites.Values;
-        foreach (var val in values)
+        foreach (var val in _sprites.Values)
             val.Dispose();
+        _sprites.Clear();
     }
 
     public void Add(string name, Sprite spr)

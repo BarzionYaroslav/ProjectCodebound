@@ -8,5 +8,5 @@ public interface IEnemyFactory
     int Y { get; set; }
     int Depth { get; set; }
     Enemy Create();
-    Sprite MakeSprite(string asset, float imageSpeed);
+    Sprite MakeSprite(string asset, float imageSpeed, int depth);
 }

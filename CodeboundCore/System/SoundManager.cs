@@ -42,7 +42,7 @@ static public class SoundManager
     {
         foreach (string i in loadedSounds.Keys)
         {
-            loadedSounds[i].Kill();
+            loadedSounds[i].Dispose();
             loadedSounds.Remove(i);
         }
     }
@@ -66,7 +66,7 @@ static public class SoundManager
     {
         var snd = AssetManager.GetMusicPath(asset);
         if (CurrentSong != null)
-            CurrentSong.Kill();
+            CurrentSong.Dispose();
         CurrentSong = new SoundHolder(snd, MusicMixer);
         CurrentSong.PlayLooped();
     }
@@ -75,7 +75,7 @@ static public class SoundManager
     {
         ClearSounds();
         if (CurrentSong != null)
-            CurrentSong.Kill();
+            CurrentSong.Dispose();
         Mixer.Quit();
         SDL.Quit();
     }

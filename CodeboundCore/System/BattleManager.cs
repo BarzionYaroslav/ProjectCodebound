@@ -20,8 +20,8 @@ public class BattleManager
     }
     public Wave CurrentWave;
     public Hero MainChar;
-    private RandomList<string> prepText;
-    private List<IEnemyFactory> prepFactories;
+    private RandomList<string> prepText = new RandomList<string>();
+    private List<IEnemyFactory> prepFactories = new List<IEnemyFactory>();
     private BattleManager()
     {
         MainChar = new HeroBuilder().SetAtk(5)
@@ -32,6 +32,11 @@ public class BattleManager
                     .SetFace("rika_extra")
                     .Build();
         CurrentWave = new Wave();
+        RandomizeWave();
+    }
+
+    public void RandomizeWave()
+    {
         IRandomProvider random = GameManager.Instance.Randomizer;
         int choice = random.GetInt(17);
         switch (choice)
@@ -216,6 +221,13 @@ public class BattleManager
         }
     }
 
+    public void RerollWave()
+    {
+        CurrentWave.Clear();
+        RandomizeWave();
+        PrepareFight();
+    }
+
     public void PrepareFight()
     {
         GameManager.Instance.MainPanel.RText = prepText.GetRandom();
@@ -275,6 +287,7 @@ public class BattleManager
             .Build();
         effect.X -= effect.DrawWidth / 2;
         effect.Y -= effect.DrawHeight / 2;
+        effect.Init();
         return effect;
     }
 

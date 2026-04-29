@@ -20,6 +20,26 @@ public class Wave
         _list.Add(enm);
     }
 
+    public void RemoveAt(int ind)
+    {
+        if (ind >= 0 && ind < Count)
+        {
+            _list[ind].Dispose();
+            _list.RemoveAt(ind);
+        }
+        else
+            throw new ArgumentOutOfRangeException();
+    }
+
+    public void Clear()
+    {
+        foreach (var i in _list)
+        {
+            i.Dispose();
+        }
+        _list.Clear();
+    }
+
     public IEnumerator<Enemy> GetEnumerator()
     {
         return _list.GetEnumerator();

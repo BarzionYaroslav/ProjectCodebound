@@ -1,7 +1,7 @@
 namespace Codebound.Drawing;
 public class ComplexSpriterHollow
 {
-    private Dictionary<string, Sprite> _sprites = new Dictionary<string, Sprite>();
+    private Dictionary<string, SpriteHollow> _sprites = new Dictionary<string, SpriteHollow>();
     public SpriteHollow this[string name]
     {
         get
@@ -9,7 +9,7 @@ public class ComplexSpriterHollow
             if (name == null)
                 throw new NullReferenceException();
             if (_sprites.ContainsKey(name))
-                return new SpriteHollow(_sprites[name]);
+                return _sprites[name];
             else
                 throw new KeyNotFoundException();
         }
@@ -19,7 +19,7 @@ public class ComplexSpriterHollow
     {
         foreach (var i in spriter.Keys)
         {
-            _sprites.Add(i, spriter[i]);
+            _sprites.Add(i, new SpriteHollow(spriter[i]));
         }
     }
 }

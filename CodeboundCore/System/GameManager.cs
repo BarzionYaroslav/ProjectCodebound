@@ -4,6 +4,7 @@ using System.Diagnostics;
 using Codebound.System.UI;
 using Codebound.Drawing;
 using Codebound.System.Randomness;
+using System.Reflection;
 
 namespace Codebound.System;
 
@@ -20,6 +21,15 @@ public class GameManager
         {
             if (RenderStarted != null)
                 return RenderStarted.GetInvocationList().Count();
+            return 0;
+        }
+    }
+    public int UpdateAmount
+    {
+        get
+        {
+            if (UpdateStarted != null)
+                return UpdateStarted.GetInvocationList().Count();
             return 0;
         }
     }
@@ -156,9 +166,14 @@ public class GameManager
         {
             var key = Console.ReadKey(true).Key;
             KeyPressed?.Invoke(key);
-            if (key == ConsoleKey.Escape)
+            switch (key)
             {
-                EndGame();
+                case ConsoleKey.Escape:
+                    EndGame();
+                    break;
+                case ConsoleKey.R:
+                    BattleManager.Instance.RerollWave();
+                    break;
             }
         }
     }

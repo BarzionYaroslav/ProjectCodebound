@@ -68,9 +68,19 @@ public class Backdrop : IDrawableDynamic, IDisposable
     {
         DrawHeight = (int)Image[0].Height;
         DrawWidth = (int)Image[0].Width;
+    }
+    public void Init()
+    {
         GameManager.UpdateStarted += UpdateValues;
         GameManager.RenderStarted += Draw;
     }
+
+    public void Deinit()
+    {
+        GameManager.UpdateStarted -= UpdateValues;
+        GameManager.RenderStarted -= Draw;
+    }
+
     public void Draw(StageImage stage, int depth)
     {
         if (depth == this.Depth)
@@ -83,8 +93,7 @@ public class Backdrop : IDrawableDynamic, IDisposable
     }
     public void Dispose()
     {
-        GameManager.UpdateStarted -= UpdateValues;
-        GameManager.RenderStarted -= Draw;
+        Deinit();
     }
     public void UpdateValues()
     {

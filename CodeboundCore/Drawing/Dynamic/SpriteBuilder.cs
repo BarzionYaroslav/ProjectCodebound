@@ -12,6 +12,7 @@ public class SpriteBuilder
             _sprite.Image = new MagickImageCollection(path);
         _sprite.DrawHeight = (int)_sprite.Image[0].Height;
         _sprite.DrawWidth = (int)_sprite.Image[0].Width;
+        _sprite.Asset = name;
         return this;
     }
 

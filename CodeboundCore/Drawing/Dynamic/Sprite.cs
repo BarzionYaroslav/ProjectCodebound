@@ -43,6 +43,7 @@ public class Sprite: IDrawableDynamic, IDisposable
     public int Z { get { return z; } set { z = value; } }
     public int StartX { get { return startX; } set { startX = value; } }
     public int StartY { get { return startY; } set { startY = value; } }
+    public string Asset = "NONE";
     public int Depth
     {
         get { return depth; }
@@ -58,8 +59,17 @@ public class Sprite: IDrawableDynamic, IDisposable
     {
         DrawHeight = (int)Image[0].Height;
         DrawWidth = (int)Image[0].Width;
+    }
+    public void Init()
+    {
         GameManager.UpdateStarted += UpdateValues;
         GameManager.RenderStarted += Draw;
+    }
+
+    public void Deinit()
+    {
+        GameManager.UpdateStarted -= UpdateValues;
+        GameManager.RenderStarted -= Draw;
     }
     public void Draw(StageImage stage, int depth)
     {
@@ -71,8 +81,8 @@ public class Sprite: IDrawableDynamic, IDisposable
     }
     public void Dispose()
     {
-        GameManager.UpdateStarted -= UpdateValues;
-        GameManager.RenderStarted -= Draw;
+        Deinit();
+        Image.Dispose();
     }
     public void UpdateValues()
     {

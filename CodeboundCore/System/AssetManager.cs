@@ -48,7 +48,7 @@ public static class AssetManager
     {
         return $"{GetSpritesDir()}/{MiscFolder}";
     }
-    const string MainPath = @"./assets";
+    public const string MainPath = @"./assets";
     const string SoundFolder = "sounds";
     const string MusicFolder = "music";
     const string SpritesFolder = "sprites";
@@ -57,5 +57,5 @@ public static class AssetManager
     const string MiscFolder = "misc";
     const string SpriteType = ".gif";
     const string SoundType = ".wav";
-    const string MusicType = ".wav";
+    const string MusicType = ".mp3";
 }

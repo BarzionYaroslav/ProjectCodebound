@@ -11,6 +11,8 @@ public interface IDrawable
     int DrawWidth { get; }
     MagickImage Frame { get { return GetFrame(); } }
     MagickImage GetFrame();
+    void Init();
+    void Deinit();
     void UpdateValues();
     List<string> GetLines();
     string GetLine(int num,IPixelCollection<byte> pixels);

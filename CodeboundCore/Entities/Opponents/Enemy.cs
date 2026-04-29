@@ -3,12 +3,15 @@ using Codebound.System;
 using Codebound.System.Randomness;
 namespace Codebound.Entities.Opponents;
 
-public class Enemy : BaseEntity
+public class Enemy : BaseEntity, IDisposable
 {
     public List<IEnemyActionStrategy> ActionList => actionList.ToList();
     public ComplexSpriterHollow Body
     {
-        get { return new ComplexSpriterHollow(body); }
+        get
+        {
+            return new ComplexSpriterHollow(body);
+        }
     }
 
     public Enemy()
@@ -17,8 +20,17 @@ public class Enemy : BaseEntity
         this.body = new ComplexSpriter(Expectations);
         actionList = defaultActionList;
         currentAction = defaultAction;
+        body.Init();
+        face.Init();
         RandomizeAction();
         GameManager.UpdateStarted += UpdateValues;
+    }
+
+    public override void Dispose()
+    {
+        base.Dispose();
+        body.Dispose();
+        GameManager.UpdateStarted -= UpdateValues;
     }
 
     public virtual void AfterPrep() { }
@@ -74,12 +86,13 @@ public class Enemy : BaseEntity
     public void ReplaceBody(ComplexSpriter bodyNew)
     {
         if (bodyNew != null)
-            {
-                body.Dispose();
-                body = bodyNew;
-            }
-            else
-                throw new NullReferenceException();
+        {
+            body.Dispose();
+            body = bodyNew;
+            body.Init();
+        }
+        else
+            throw new NullReferenceException();
     }
 
     protected ComplexSpriter body;

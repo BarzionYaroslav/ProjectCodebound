@@ -352,105 +352,14 @@ public class Panel
         return answer;
     }
 
-    public static void RunCommand(Panel? panel)
-    {
-        if (panel != null)
-            panel.RText = "And so, you ran away...";
-        GameManager.Instance.EndGame();
-    }
-
-    public static void FightCommand(Panel? panel)
-    {
-        if (panel != null)
-        {
-            if (BattleManager.Instance.CurrentWave.Count != 0)
-            {
-                SoundManager.PlaySound("CursorMove");
-                panel.SecondaryButtons = new ButtonCollection(panel);
-                foreach (Enemy i in BattleManager.Instance.CurrentWave)
-                {
-                    Button btn = new Button($"{i.Name}", EnemyAttackCommand);
-                    panel.SecondaryButtons.Add(btn);
-                }
-                panel.state = 1;
-            }
-            else
-                SoundManager.PlaySound("Nuhuh");
-        }
-    }
-    public static void InventoryCommand(Panel? panel)
-    {
-        if (panel != null)
-        {
-            if (panel.testList.Count != 0)
-            {
-                SoundManager.PlaySound("CursorMove");
-                panel.SecondaryButtons = new ButtonCollection(panel);
-                foreach (var i in panel.testList)
-                {
-                    Button btn;
-                    if (i == null)
-                        btn = new Button($"Unequip", WeaponCommand);
-                    else
-                        btn = new Button($"{i.GetName()}", WeaponCommand);
-                    panel.SecondaryButtons.Add(btn);
-                }
-                panel.state = 2;
-            }
-            else
-                SoundManager.PlaySound("Nuhuh");
-        }
-    }
-
-    public static void WeaponCommand(Panel? panel)
-    {
-        if (panel != null)
-        {
-            if (panel.SecondaryButtons != null)
-            {
-                int ind = panel.SecondaryButtons.Choice;
-                Hero character = BattleManager.Instance.MainChar;
-                character.Weapon = panel.testList[ind];
-                panel.SecondaryButtons = null;
-                panel.state = 0;
-                BattleManager.Instance.StartEnemyTurn();
-            }
-        }
-    }
-    
-    public static void EnemyAttackCommand(Panel? panel)
-    {
-        if (panel != null)
-        {
-            if (panel.SecondaryButtons!=null)
-            {
-                int ind = panel.SecondaryButtons.Choice;
-                Wave wave = BattleManager.Instance.CurrentWave;
-                Enemy enm = wave[ind];
-                Hero character = BattleManager.Instance.MainChar;
-                if (character.Weapon != null)
-                    character.Weapon.Use(character, enm);
-                else
-                {
-                    SoundManager.PlaySound("punch");
-                    BattleManager.Instance.AddEffect(ind, "punch_fx", 1f);
-                }
-                int dmg = enm.Hurt(character.Atk);
-                panel.RText = $"You attacked {enm.Name} for {dmg} HP! It didn't really like that!";
-                panel.SecondaryButtons = null;
-                panel.state = 0;
-                BattleManager.Instance.StartEnemyTurn();
-            }
-        }
-    }
 
     readonly IEnumerable<Button> DefaultButtons = new List<Button>(
         [
-        new Button("FIGHT", FightCommand),
+        new Button("FIGHT", new FightButtonStrategy()),
         new Button("SPELL"),
-        new Button("INVENTORY", InventoryCommand),
+        new Button("INVENTORY", new InventoryButtonStrategy()),
         new Button("DEFEND"),
-        new Button("RUN", RunCommand)
+        new Button("RUN", new RunButtonStrategy())
         ]
     );
     public readonly List<BaseWeapon?> testList = new List<BaseWeapon?>(

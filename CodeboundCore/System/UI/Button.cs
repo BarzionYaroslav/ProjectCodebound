@@ -1,15 +1,8 @@
 using Codebound.Entities.Opponents;
 namespace Codebound.System.UI;
 
-public delegate void ButtonAction(Panel panel);
 public class Button
 {
-    public ButtonAction Action
-    {
-        get { return action; }
-        set { action = value; }
-    }
-
     public string Text
     {
         get { return text; }
@@ -33,19 +26,30 @@ public class Button
     {
         this.Text = text;
     }
-
-    public Button(string text, ButtonAction action)
+    public Button(string text, IButtonStrategy context)
     {
         this.Text = text;
-        this.Action = action;
+        this._strategy = context;
     }
 
-    public static void DefaultAction(Panel panel)
+    public void Execute(Panel? panel, int index)
     {
-        SoundManager.PlaySound(soundPath);
+        if (_strategy == null)
+        {
+            SoundManager.PlaySound(soundPath);
+        }
+        else
+        {
+            _strategy.Execute(panel, index);
+        }
     }
 
-    private ButtonAction action = DefaultAction;
+    public void SetStrategy(IButtonStrategy context)
+    {
+        _strategy = context;
+    }
+
+    private IButtonStrategy? _strategy;
     private string text = "UNOWEN";
     private readonly int MaxTextSize = 32;
     private static readonly string soundPath = "Nuhuh";

@@ -41,7 +41,7 @@ public class HeroBuilder
 
     public HeroBuilder SetFace(string faceAsset, float imageSpeed = 0f)
     {
-        _hero.Face.Dispose();
+        _hero.Face.Deinit();
         _hero.Face = new Icon(faceAsset, imageSpeed);
         return this;
     }

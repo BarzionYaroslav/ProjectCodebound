@@ -16,11 +16,11 @@ public abstract class BaseEnemyFactory : IEnemyFactory
     }
 
     public abstract Enemy Create();
-    public virtual Sprite MakeSprite(string asset, float imageSpeed)
+    public virtual Sprite MakeSprite(string asset, float imageSpeed, int depth = 0)
     {
         Sprite spr = new SpriteBuilder().SetSprite(asset)
                 .SetPosition(X, Y)
-                .SetDepth(Depth)
+                .SetDepth(Depth+depth)
                 .SetImageSpeed(imageSpeed)
                 .Build();
         return spr;

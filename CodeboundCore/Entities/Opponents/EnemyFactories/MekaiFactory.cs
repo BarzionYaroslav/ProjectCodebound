@@ -11,7 +11,7 @@ public class MekaiFactory: BaseEnemyFactory
     }
     public override Enemy Create()
     {
-        Sprite bladeSprite = MakeSprite(bladeAsset, bladeSpeed);
+        Sprite bladeSprite = MakeSprite(bladeAsset, bladeSpeed,1);
         Sprite bodySprite = MakeSprite(bodyAsset, bodySpeed);
         Icon ico = new Icon(iconAsset);
         Dictionary<string, Sprite> complexion = new()

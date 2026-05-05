@@ -2,7 +2,7 @@ using Codebound.Drawing;
 
 namespace Codebound.Entities;
 
-public abstract class BaseEntity : IEntity
+public abstract class BaseEntity : IEntity, IDisposable
 {
     public string Name
     {
@@ -76,13 +76,21 @@ public abstract class BaseEntity : IEntity
         set
         {
             if (value != null)
+            {
+                face.Dispose();
                 face = value;
+            }
             else
                 throw new NullReferenceException();
         }
     }
 
-    public virtual void UpdateValues() {}
+    public virtual void UpdateValues() { }
+    
+    public virtual void Dispose()
+    {
+        face.Dispose();
+    }
 
     public virtual int Hurt(int dmg, bool defIgnore = false)
     {

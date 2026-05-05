@@ -88,7 +88,7 @@ public class ButtonCollection
 
     public void ExecuteChoice()
     {
-        _list[choice].Action(link!);
+        _list[choice].Execute(link!, choice);
     }
 
     public string GetTextColor(int ind)

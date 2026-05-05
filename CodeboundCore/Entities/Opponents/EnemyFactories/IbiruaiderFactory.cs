@@ -11,8 +11,8 @@ public class IbiruaiderFactory: BaseEnemyFactory
     }
     public override Enemy Create()
     {
-        Sprite bodySprite = MakeSprite(bodyAsset, bodySpeed);
-        Sprite middleSprite = MakeSprite(midAsset, midSpeed);
+        Sprite bodySprite = MakeSprite(bodyAsset, bodySpeed,2);
+        Sprite middleSprite = MakeSprite(midAsset, midSpeed,1);
         Sprite headSprite = MakeSprite(headAsset, headSpeed);
         Icon ico = new Icon(iconAsset);
         Dictionary<string, Sprite> complexion = new()

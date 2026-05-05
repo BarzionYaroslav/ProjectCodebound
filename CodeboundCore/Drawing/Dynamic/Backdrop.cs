@@ -57,31 +57,55 @@ public class Backdrop : IDrawableDynamic, IDisposable
                 depth = value;
         }
     }
+    public float ScrollSpeed
+    {
+        get { return scrollSpeed; }
+        set { scrollSpeed = value; }
+    }
     public MagickImage Frame { get { return GetFrame(); } }
 
     public Backdrop()
     {
         DrawHeight = (int)Image[0].Height;
         DrawWidth = (int)Image[0].Width;
+    }
+    public void Init()
+    {
         GameManager.UpdateStarted += UpdateValues;
         GameManager.RenderStarted += Draw;
     }
+
+    public void Deinit()
+    {
+        GameManager.UpdateStarted -= UpdateValues;
+        GameManager.RenderStarted -= Draw;
+    }
+
     public void Draw(StageImage stage, int depth)
     {
         if (depth == this.Depth)
         {
             var temp = stage.GetFrame();
-            temp.Composite(GetFrame(), X, Y, CompositeOperator.Over);
+            temp.Composite(GetFrame(), X+(int)scrollChange, Y, CompositeOperator.Over);
+            if (scrollSpeed!=0)
+                temp.Composite(GetFrame(), X+(int)scrollChange + DrawWidth, Y, CompositeOperator.Over);
         }
     }
     public void Dispose()
     {
-        GameManager.UpdateStarted -= UpdateValues;
-        GameManager.RenderStarted -= Draw;
+        Deinit();
     }
     public void UpdateValues()
     {
         ImageIndex += ImageSpeed;
+        if (scrollSpeed!=0)
+        {
+            scrollChange += ScrollSpeed;
+            if (Math.Abs(scrollChange) > DrawWidth)
+            {
+                scrollChange %= DrawWidth;
+            }
+        }
     }
     public MagickImage GetFrame()
     {
@@ -156,6 +180,8 @@ public class Backdrop : IDrawableDynamic, IDisposable
             )
             ]
         );
+    private float scrollSpeed = 0;
+    private float scrollChange = 0;
     private float imageIndex = 0;
     private float imageSpeed = 0;
     private int drawHeight;

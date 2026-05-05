@@ -11,7 +11,7 @@ public class BlaindaiFactory: BaseEnemyFactory
     }
     public override Enemy Create()
     {
-        Sprite bodySprite = MakeSprite(bodyAsset, bodySpeed);
+        Sprite bodySprite = MakeSprite(bodyAsset, bodySpeed,1);
         Sprite haloSprite = MakeSprite(haloAsset, haloSpeed);
         Dictionary<string, Sprite> complexion = new()
         {

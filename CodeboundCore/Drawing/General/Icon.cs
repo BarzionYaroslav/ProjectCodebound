@@ -1,5 +1,6 @@
 using ImageMagick;
 using Codebound.System;
+using System.ComponentModel;
 namespace Codebound.Drawing;
 
 public class Icon: IDrawable, IDisposable
@@ -44,13 +45,13 @@ public class Icon: IDrawable, IDisposable
                 drawWidth = value;
         }
     }
+    public string Asset = "NONE";
     public MagickImage Frame { get { return GetFrame(); } }
 
     public Icon()
     {
         DrawHeight = (int)Image[0].Height;
         DrawWidth = (int)Image[0].Width;
-        GameManager.UpdateStarted += UpdateValues;
     }
 
     public Icon(string name, float imageSpeed)
@@ -61,7 +62,7 @@ public class Icon: IDrawable, IDisposable
         ImageSpeed = imageSpeed;
         DrawHeight = (int)Image[0].Height;
         DrawWidth = (int)Image[0].Width;
-        GameManager.UpdateStarted += UpdateValues;
+        Asset = name;
     }
 
     public Icon(string name)
@@ -72,12 +73,21 @@ public class Icon: IDrawable, IDisposable
         ImageSpeed = 0f;
         DrawHeight = (int)Image[0].Height;
         DrawWidth = (int)Image[0].Width;
+        Asset = name;
+    }
+    public void Init()
+    {
         GameManager.UpdateStarted += UpdateValues;
+    }
+
+    public void Deinit()
+    {
+        GameManager.UpdateStarted -= UpdateValues;
     }
 
     public void Dispose()
     {
-        GameManager.UpdateStarted -= UpdateValues;
+        Deinit();
     }
 
     public void UpdateValues()

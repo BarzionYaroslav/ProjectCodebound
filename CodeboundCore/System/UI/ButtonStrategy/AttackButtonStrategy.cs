@@ -21,8 +21,7 @@ public class AttackButtonStrategy : IButtonStrategy
             }
             int dmg = enm.Hurt(character.Atk);
             panel.RText = $"You attacked {enm.Name} for {dmg} HP! It didn't really like that!";
-            panel.SecondaryButtons = null;
-            panel.state = 0;
+            panel.SetState(new PanelStateBattleMain(panel));
             BattleManager.Instance.StartEnemyTurn();
         }
     }

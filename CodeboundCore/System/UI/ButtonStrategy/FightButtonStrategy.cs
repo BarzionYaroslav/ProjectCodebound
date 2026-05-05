@@ -17,7 +17,7 @@ public class FightButtonStrategy : IButtonStrategy
                     Button btn = new Button($"{i.Name}", new AttackButtonStrategy());
                     panel.SecondaryButtons.Add(btn);
                 }
-                panel.state = 1;
+                panel.SetState(new PanelStateEnemyFight(panel));
             }
             else
                 SoundManager.PlaySound("Nuhuh");

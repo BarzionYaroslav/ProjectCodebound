@@ -22,7 +22,7 @@ public class InventoryButtonStrategy : IButtonStrategy
                         btn = new Button($"{i.GetName()}", new WeaponButtonStrategy());
                     panel.SecondaryButtons.Add(btn);
                 }
-                panel.state = 2;
+                panel.SetState(new PanelStateInventory(panel));
             }
             else
                 SoundManager.PlaySound("Nuhuh");

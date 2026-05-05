@@ -11,8 +11,7 @@ public class WeaponButtonStrategy : IButtonStrategy
         {
             Hero character = BattleManager.Instance.MainChar;
             character.Weapon = panel.testList[index];
-            panel.SecondaryButtons = null;
-            panel.state = 0;
+            panel.SetState(new PanelStateBattleMain(panel));
             BattleManager.Instance.StartEnemyTurn();
         }
     }

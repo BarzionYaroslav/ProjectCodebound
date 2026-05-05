@@ -22,7 +22,13 @@ Project can be accessed via command line with `dotnet run --project CodeboundCor
 
 ### States
 
-#### ***WIP***
+#### Used by
+
+* `System/UI/Panel`
+
+#### Comments
+
+States aren't usually changed by the states themself (except when using X on some menus), but instead are changed by the buttons
 
 ### Strategy
 

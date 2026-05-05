@@ -101,6 +101,11 @@ public class Panel
         _state.SetContext(this);
     }
 
+    public Type GetState()
+    {
+        return _state.GetType();
+    }
+
     public void HandleControls(ConsoleKey key)
     {
         if (Active)
@@ -217,7 +222,6 @@ public class Panel
         return text;
     }
 
-    //Yeeeeeaaaaaah, I need to redo that one
     public void DrawUi()
     {
         _state.DrawUi();

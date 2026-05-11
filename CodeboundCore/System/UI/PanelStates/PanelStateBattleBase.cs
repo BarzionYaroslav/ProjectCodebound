@@ -30,23 +30,6 @@ public abstract class PanelStateBattleBase: PanelStateBase
         text += _context.MakePanelPart(i, buttonWidth, _context.Height, _context.Buttons, PanelContinueOptions.Both);
         return text;
     }
-    public override void HandleControls(ConsoleKey key)
-    {
-        switch (key)
-        {
-            case ConsoleKey.UpArrow:
-                _context.Buttons.SubstractChoice(true);
-                break;
-            case ConsoleKey.DownArrow:
-                _context.Buttons.AddChoice(true);
-                break;
-            case ConsoleKey.Z:
-                _context.Buttons.ExecuteChoice();
-                break;
-            default:
-                break;
-        }
-    }
     public override void ResetVariables()
     {
         base.ResetVariables();

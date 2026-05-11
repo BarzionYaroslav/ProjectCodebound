@@ -1,7 +1,10 @@
 namespace Codebound.System.UI;
 public class PanelStateEnemyFight: PanelStateBattleBase
 {
-    public PanelStateEnemyFight(Panel context) : base(context) { }
+    public PanelStateEnemyFight(Panel context) : base(context)
+    {
+        _activeButtons = _context.SecondaryButtons;
+    }
     public override void PrepareUi()
     {
         base.PrepareUi();
@@ -28,25 +31,9 @@ public class PanelStateEnemyFight: PanelStateBattleBase
         text += _context.MakePanelPart(i, enemyIconWidth, _context.Height, enemyIcon, PanelContinueOptions.Left, false);
         return text;
     }
-    public override void HandleControls(ConsoleKey key)
+    public override void BackAction()
     {
-        switch (key)
-        {
-            case ConsoleKey.UpArrow:
-                _context.SecondaryButtons.SubstractChoice(true);
-                break;
-            case ConsoleKey.DownArrow:
-                _context.SecondaryButtons.AddChoice(true);
-                break;
-            case ConsoleKey.X:
-                _context.SetState(new PanelStateBattleMain(_context));
-                break;
-            case ConsoleKey.Z:
-                _context.SecondaryButtons.ExecuteChoice();
-                break;
-            default:
-                break;
-        }
+        _context.SetState(new PanelStateBattleMain(_context));
     }
     public override void ResetVariables()
     {

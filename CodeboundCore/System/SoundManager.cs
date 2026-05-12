@@ -52,9 +52,9 @@ static public class SoundManager
         var snd = AssetManager.GetSoundPath(asset);
         if (!loadedSounds.ContainsKey(snd))
         {
-            SoundHolder holdah = new SoundHolder(snd, SoundMixer);
-            loadedSounds.Add(snd, holdah);
-            holdah.Play();
+            SoundHolder soundHolder = new SoundHolder(snd, SoundMixer);
+            loadedSounds.Add(snd, soundHolder);
+            soundHolder.Play();
         }
         else
         {

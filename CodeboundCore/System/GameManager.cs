@@ -1,15 +1,12 @@
-using System;
-using System.Threading;
 using System.Diagnostics;
 using Codebound.System.UI;
 using Codebound.Drawing;
 using Codebound.System.Randomness;
-using System.Reflection;
+using Codebound.System.Control;
 
 namespace Codebound.System;
 
 
-public delegate void KeyEventHandler(ConsoleKey key);
 public delegate void UpdateEventHandler();
 public delegate void RenderEventHandler(StageImage stage, int depth);
 public delegate void BufferChangeEventHandler(int width, int height);
@@ -63,9 +60,10 @@ public class GameManager
             return _instance;
         }
     }
-    public Panel MainPanel;
+    public Panel MainPanel { get; private set; }
     private StageImage stage;
-    public IRandomProvider Randomizer;
+    public IRandomProvider Randomizer { get; private set; }
+    public InputHandler inputHandler { get; private set; }
 
     private GameManager()
     {
@@ -85,6 +83,13 @@ public class GameManager
         stage = new StageImage((uint)StageWidth, (uint)StageHeight);
         MainPanel = new Panel(NativeX, 16, "RIKA!!!");
         Randomizer = new RandomAdapter();
+        inputHandler = new InputHandler();
+        inputHandler.BindKey(ConsoleKey.R, new WaveRerollCommand());
+        inputHandler.BindKey(ConsoleKey.Escape, new GameEndCommand());
+        inputHandler.BindKey(ConsoleKey.DownArrow, new PanelDownCommand(MainPanel));
+        inputHandler.BindKey(ConsoleKey.UpArrow, new PanelUpCommand(MainPanel));
+        inputHandler.BindKey(ConsoleKey.Z, new PanelSelectCommand(MainPanel));
+        inputHandler.BindKey(ConsoleKey.X, new PanelBackCommand(MainPanel));
     }
 
     public void GameLoop()
@@ -162,28 +167,13 @@ public class GameManager
 
     private void Input()
     {
-        if (Console.KeyAvailable)
-        {
-            var key = Console.ReadKey(true).Key;
-            KeyPressed?.Invoke(key);
-            switch (key)
-            {
-                case ConsoleKey.Escape:
-                    EndGame();
-                    break;
-                case ConsoleKey.R:
-                    BattleManager.Instance.RerollWave();
-                    break;
-            }
-        }
+        inputHandler.HandleInput();
     }
 
     public void EndGame()
     {
         gameStopped = true;
     }
-
-    static public event KeyEventHandler? KeyPressed;
     static public event RenderEventHandler? RenderStarted;
     static public event UpdateEventHandler? UpdateStarted;
     static public event BufferChangeEventHandler? BufferChanged;

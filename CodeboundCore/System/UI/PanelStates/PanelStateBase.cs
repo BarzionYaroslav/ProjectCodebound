@@ -2,12 +2,14 @@ namespace Codebound.System.UI;
 public abstract class PanelStateBase: IPanelState
 {
     protected Panel _context;
+    protected ButtonCollection _activeButtons;
     public int LengthCounter {get { return lengthCounter; }}
     public int MaxLength {get { return maxLength; }}
     public PanelStateBase(Panel context)
     {
         _context = context;
         maxLength = context.Width;
+        _activeButtons = _context.Buttons;
     }
     public void DrawUi()
     {
@@ -22,7 +24,19 @@ public abstract class PanelStateBase: IPanelState
     }
     public abstract void PrepareUi();
     public abstract string DrawUiLoop(int i);
-    public abstract void HandleControls(ConsoleKey key);
+    public virtual void MoveUpAction()
+    {
+        _activeButtons.SubstractChoice(true);
+    }
+    public virtual void MoveDownAction()
+    {
+        _activeButtons.AddChoice(true);
+    }
+    public virtual void SelectAction()
+    {
+        _activeButtons.ExecuteChoice();
+    }
+    public virtual void BackAction() { }
     public void AddLength(int length)
     {
         lengthCounter += length + borderSize;

@@ -6,7 +6,10 @@ public interface IPanelState
 {
     int LengthCounter { get; }
     int MaxLength { get; }
-    void HandleControls(ConsoleKey key);
+    void MoveUpAction();
+    void MoveDownAction();
+    void SelectAction();
+    void BackAction();
     void AddLength(int length);
     void DrawUi();
     void PrepareUi();

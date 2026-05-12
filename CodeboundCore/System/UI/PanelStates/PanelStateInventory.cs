@@ -1,7 +1,10 @@
 namespace Codebound.System.UI;
 public class PanelStateInventory: PanelStateBattleBase
 {
-    public PanelStateInventory(Panel context) : base(context) { }
+    public PanelStateInventory(Panel context) : base(context)
+    {
+        _activeButtons = _context.SecondaryButtons;
+    }
     public override void PrepareUi()
     {
         base.PrepareUi();
@@ -22,25 +25,9 @@ public class PanelStateInventory: PanelStateBattleBase
         text += _context.MakePanelPart(i, descriptionWidth, _context.Height, descriptionLines, PanelContinueOptions.Left);
         return text;
     }
-    public override void HandleControls(ConsoleKey key)
+    public override void BackAction()
     {
-        switch (key)
-        {
-            case ConsoleKey.UpArrow:
-                _context.SecondaryButtons.SubstractChoice(true);
-                break;
-            case ConsoleKey.DownArrow:
-                _context.SecondaryButtons.AddChoice(true);
-                break;
-            case ConsoleKey.X:
-                _context.SetState(new PanelStateBattleMain(_context));
-                break;
-            case ConsoleKey.Z:
-                _context.SecondaryButtons.ExecuteChoice();
-                break;
-            default:
-                break;
-        }
+        _context.SetState(new PanelStateBattleMain(_context));
     }
     private List<string> descriptionLines = new List<string>();
     private int descriptionWidth = 76;

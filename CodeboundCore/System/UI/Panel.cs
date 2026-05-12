@@ -92,7 +92,6 @@ public class Panel
             buttons.Add(i);
         }
         buttons.Link = this;
-        GameManager.KeyPressed += HandleControls;
     }
 
     public void SetState(IPanelState state)
@@ -106,12 +105,25 @@ public class Panel
         return _state.GetType();
     }
 
-    public void HandleControls(ConsoleKey key)
+    public void MoveUpAction()
     {
         if (Active)
-        {
-            _state.HandleControls(key);
-        }
+            _state.MoveUpAction();
+    }
+    public void MoveDownAction()
+    {
+        if (Active)
+            _state.MoveDownAction();
+    }
+    public void SelectAction()
+    {
+        if (Active)
+            _state.SelectAction();
+    }
+    public void BackAction()
+    {
+        if (Active)
+            _state.BackAction();
     }
 
     public string MakeFloor(int width)

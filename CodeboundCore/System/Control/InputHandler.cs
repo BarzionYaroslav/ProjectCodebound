@@ -28,6 +28,14 @@ public class InputHandler
         }
     }
 
+    public ICommand GetKey(ConsoleKey key)
+    {
+        if (_controls.ContainsKey(key))
+            return _controls[key];
+        else
+            throw new KeyNotFoundException();
+    }
+
     public void HandleInput(ConsoleKey key)
     {
         if (_controls.ContainsKey(key))
